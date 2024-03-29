@@ -42,8 +42,9 @@ class MainActivity : AppCompatActivity() {
         /*Chuyển đổi ảnh*/
         binding.viewFlipper.flipInterval = 4000
         binding.viewFlipper.isAutoStart = true
-        binding.viewFlipper.inAnimation = slide_in
         binding.viewFlipper.inAnimation = slide_out
+        binding.viewFlipper.inAnimation = slide_in
+
 
     }
 }
