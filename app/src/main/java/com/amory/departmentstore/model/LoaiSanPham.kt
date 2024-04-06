@@ -1,6 +1,6 @@
 package com.amory.departmentstore.model
 
-class LoaiSanPham(
+data class LoaiSanPham(
     val tenloaisanpham:String,
     val hinhanh:String
 ) {

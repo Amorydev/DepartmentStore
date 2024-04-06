@@ -7,8 +7,8 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface ApiBanHang {
-    @GET("layloaisanpham.php")
+    @GET("laysanpham.php")
     fun getData(): Call<SanPhamModel>
-    @GET("loaisanpham.php")
+    @GET("layloaisanpham.php")
     fun getLoaisanPham():Call<LoaiSanPhamModel>
 }
