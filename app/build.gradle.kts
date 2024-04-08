@@ -60,5 +60,10 @@ dependencies {
     //Glide
     implementation ("com.github.bumptech.glide:glide:4.11.0")
 
+    //recyclerView
+    implementation ("androidx.recyclerview:recyclerview:1.3.2")
+    // For control over item selection of both touch and mouse driven selection
+    implementation ("androidx.recyclerview:recyclerview-selection:1.1.0")
+
 
 }

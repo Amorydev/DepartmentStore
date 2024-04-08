@@ -16,10 +16,10 @@ import android.widget.TextView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
 
-class RvSanPham(var ds: MutableList<SanPham>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    lateinit var mcontext: Context
+class RvSanPham(private var ds: MutableList<SanPham>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private lateinit var mcontext: Context
 
-    class SanPhamViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView){
+    class SanPhamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         var tensanpham:TextView = itemView.findViewById(R.id.txt_tensanpham)
         var giasanpham:TextView = itemView.findViewById(R.id.txtgiasanpham)
         var hinhanhsanpham:ImageView = itemView.findViewById(R.id.img_sanpham)
@@ -27,7 +27,7 @@ class RvSanPham(var ds: MutableList<SanPham>) : RecyclerView.Adapter<RecyclerVie
     class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     //chuyen sang dinh dang 000.000d
-    fun formatAmount(amount: String): String {
+    private fun formatAmount(amount: String): String {
         val number = amount.toLong()
         val formatter = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${formatter.format(number)}đ"
@@ -40,7 +40,7 @@ class RvSanPham(var ds: MutableList<SanPham>) : RecyclerView.Adapter<RecyclerVie
     }
 
     fun addLoadingView() {
-        //Add loading item
+        //Thêm loading
         Handler().post {
             ds.add(SanPham("", "", ""))
             notifyItemInserted(ds.size - 1)
@@ -48,7 +48,7 @@ class RvSanPham(var ds: MutableList<SanPham>) : RecyclerView.Adapter<RecyclerVie
     }
 
     fun removeLoadingView() {
-        //Remove loading item
+        //Xóa loading
         if (ds.size != 0) {
             ds.removeAt(ds.size - 1)
             notifyItemRemoved(ds.size-1)

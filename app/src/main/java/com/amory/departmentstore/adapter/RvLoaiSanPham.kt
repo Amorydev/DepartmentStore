@@ -1,14 +1,14 @@
 package com.amory.departmentstore.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.databinding.LayoutLoaisanphamBinding
 import com.amory.departmentstore.model.LoaiSanPham
+import com.amory.departmentstore.model.OnClickRvLoaiSanPham
 import com.bumptech.glide.Glide
 
-class RvLoaiSanPham(val ds:List<LoaiSanPham>):RecyclerView.Adapter<RvLoaiSanPham.viewHolder>() {
+class RvLoaiSanPham(val ds:List<LoaiSanPham>, private val onClickRvSanPham: OnClickRvLoaiSanPham):RecyclerView.Adapter<RvLoaiSanPham.viewHolder>() {
 
     inner class viewHolder(private val binding:LayoutLoaisanphamBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(data:LoaiSanPham){
@@ -29,5 +29,8 @@ class RvLoaiSanPham(val ds:List<LoaiSanPham>):RecyclerView.Adapter<RvLoaiSanPham
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
         holder.bind(ds[position])
+        holder.itemView.setOnClickListener{
+            onClickRvSanPham.onClickLoaiSanPham(position)
+        }
     }
 }

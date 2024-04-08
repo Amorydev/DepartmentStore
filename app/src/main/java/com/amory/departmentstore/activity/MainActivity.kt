@@ -2,9 +2,12 @@ package com.amory.departmentstore.activity
 
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 
@@ -22,6 +25,7 @@ import com.amory.departmentstore.databinding.ActivityMainBinding
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_ITEM
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_LOADING
 import com.amory.departmentstore.model.LoaiSanPhamModel
+import com.amory.departmentstore.model.OnClickRvLoaiSanPham
 import com.amory.departmentstore.model.OnLoadMoreListener
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
@@ -47,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         SlideQuangCao()
+        /*onTouch()*/
 
         /*  showSanPham()*/
 
@@ -72,7 +77,19 @@ class MainActivity : AppCompatActivity() {
 
                     val list = response.body()?.result
                     /*Toast.makeText(this@MainActivity, list, Toast.LENGTH_SHORT).show()*/
-                    val adapter = list?.let { RvLoaiSanPham(it) }
+                    val adapter = list?.let {
+                        RvLoaiSanPham(it, object : OnClickRvLoaiSanPham {
+                            override fun onClickLoaiSanPham(position: Int) {
+                                /*Toast.makeText(
+                                    this@MainActivity,
+                                    "Bạn chọn " + list[position].tenloaisanpham,
+                                    Toast.LENGTH_SHORT
+                                ).show()*/
+                                if (list[position].loaisanpham == 1)
+                                    GoToSanPhamGao()
+                            }
+                        })
+                    }
                     binding.rvloaisanpham.adapter = adapter
                     binding.rvloaisanpham.layoutManager = LinearLayoutManager(
                         this@MainActivity,
@@ -154,6 +171,42 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
+    }
+
+    private fun GoToSanPhamGao() {
+        val intnet = Intent(this@MainActivity, GaoActivity::class.java)
+        startActivity(intnet)
+    }
+
+    /*Khi vuoót vào recyclerVIew sanpham*/
+    @SuppressLint("ClickableViewAccessibility")
+    fun onTouch() {
+        val gestureDetector =
+            GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+                override fun onFling(
+                    e1: MotionEvent?,
+                    e2: MotionEvent,
+                    velocityX: Float,
+                    velocityY: Float
+                ): Boolean {
+                    if (velocityY < 0) {
+                        // Vuốt lên
+                        binding.viewFlipper.translationY = -200f // Đẩy ViewFlipper lên trên 200dp
+                        binding.txt.translationY = -200f // Đẩy TextView lên trên 200dp
+                        binding.rvloaisanpham.translationY = -200f
+                    } else {
+                        // Vuốt xuống
+                        binding.viewFlipper.translationY = 0f
+                        binding.txt.translationY = 0f
+                        binding.rvloaisanpham.translationY = 0f
+                    }
+                    return super.onFling(e1, e2, velocityX, velocityY)
+                }
+            })
+        binding.rvSanpham.setOnTouchListener { v, event ->
+            gestureDetector.onTouchEvent(event)
+            false
+        }
     }
 
     private fun setRVLayoutManager() {
