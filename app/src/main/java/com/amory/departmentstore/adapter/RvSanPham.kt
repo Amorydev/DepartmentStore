@@ -16,7 +16,7 @@ import android.widget.TextView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
 
-class RvSanPham(val ds: MutableList<SanPham>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RvSanPham(var ds: MutableList<SanPham>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var mcontext: Context
 
     class SanPhamViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -37,10 +37,6 @@ class RvSanPham(val ds: MutableList<SanPham>) : RecyclerView.Adapter<RecyclerVie
     fun addData(dateView: List<SanPham>) {
         this.ds.addAll(dateView)
         notifyDataSetChanged()
-    }
-
-    fun getItemAtPosition(position: Int): SanPham {
-        return ds[position]
     }
 
     fun addLoadingView() {

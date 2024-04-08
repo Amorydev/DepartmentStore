@@ -5,8 +5,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    lateinit var retrofit: Retrofit
-    val BASE_URL = "http://192.168.1.25/banhang/"
+    private lateinit var retrofit: Retrofit
+    private var BASE_URL = "http://192.168.1.28/banhang/"
     val retrofitInstance: Retrofit
         get() {
             retrofit = Retrofit.Builder()

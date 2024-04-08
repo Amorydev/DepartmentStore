@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.model.OnLoadMoreListener
 
-class RecyclerViewLoadMoreScroll(layoutManager: GridLayoutManager) :
+class RvLoadMoreScroll(layoutManager: GridLayoutManager) :
     RecyclerView.OnScrollListener() {
 
     private var visibleItem = 0
@@ -12,6 +12,8 @@ class RecyclerViewLoadMoreScroll(layoutManager: GridLayoutManager) :
     private var isLoading: Boolean = false
     private var firstVisibleItem = 0
     private var totalItemCount = 0
+    private var previousTotal = 0
+    private val visibleThreshold = 0// Số lượng item còn lại trước khi load thêm
     private var mLayoutManager: RecyclerView.LayoutManager = layoutManager
 
     fun setLoaded() {
@@ -41,22 +43,11 @@ class RecyclerViewLoadMoreScroll(layoutManager: GridLayoutManager) :
             firstVisibleItem = (mLayoutManager as GridLayoutManager).findFirstVisibleItemPosition()
         }
 
-        if (!isLoading && firstVisibleItem >= 0 && (visibleItem + firstVisibleItem) >= totalItemCount) {
+        if (!isLoading &&  (totalItemCount - visibleItem) <= (firstVisibleItem + visibleThreshold)) {
             mOnLoadMoreListener.onLoadMore()
             isLoading = true
         }
 
     }
 
-    private fun getLastVisibleItem(lastVisibleItemPositions: IntArray): Int {
-        var maxSize = 0
-        for (i in lastVisibleItemPositions.indices) {
-            if (i == 0) {
-                maxSize = lastVisibleItemPositions[i]
-            } else if (lastVisibleItemPositions[i] > maxSize) {
-                maxSize = lastVisibleItemPositions[i]
-            }
-        }
-        return maxSize
-    }
 }

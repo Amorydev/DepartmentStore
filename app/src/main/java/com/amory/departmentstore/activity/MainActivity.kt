@@ -5,8 +5,6 @@ import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.view.GestureDetector
-import android.view.MotionEvent
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 
@@ -16,12 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.ItemOffsetDecoration
-import com.amory.departmentstore.adapter.RecyclerViewLoadMoreScroll
+import com.amory.departmentstore.adapter.RvLoadMoreScroll
 import com.amory.departmentstore.adapter.RvLoaiSanPham
 import com.amory.departmentstore.adapter.RvSanPham
 import com.amory.departmentstore.adapter.Utils
 import com.amory.departmentstore.databinding.ActivityMainBinding
-import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_ITEM
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_LOADING
 import com.amory.departmentstore.model.LoaiSanPhamModel
@@ -41,9 +38,8 @@ import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
     lateinit var adapter: RvSanPham
-    lateinit var scrollListener: RecyclerViewLoadMoreScroll
+    lateinit var scrollListener: RvLoadMoreScroll
     lateinit var mLayoutManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,32 +109,48 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val produce = response.body()?.result
                     /*
-                                         Toast.makeText(this@MainActivity, produce, Toast.LENGTH_SHORT).show()
+                      Toast.makeText(this@MainActivity, produce, Toast.LENGTH_SHORT).show()
                     */
 
-                    val randomElement = produce?.shuffled()
-                    adapter = RvSanPham(randomElement as MutableList<SanPham>)
-                    adapter.notifyDataSetChanged()
-                    binding.rvSanpham.adapter = adapter
-                    val itemDecoration = ItemOffsetDecoration(3)
-                    binding.rvSanpham.addItemDecoration(itemDecoration)
-                    setRVLayoutManager()
-                    scrollListener = RecyclerViewLoadMoreScroll(mLayoutManager as GridLayoutManager)
-                    scrollListener.setOnLoadMoreListener(object :
-                        OnLoadMoreListener {
-                        override fun onLoadMore() {
-                            LoadMoreData(randomElement)
+                    if (!produce.isNullOrEmpty()) {
+                        val randomPhanTu = produce.shuffled()
+                        val list = randomPhanTu.take(12)
+
+                        if (list.isNotEmpty()) {
+
+                            adapter = RvSanPham(list as MutableList<SanPham>)
+                            adapter.notifyDataSetChanged()
+                            binding.rvSanpham.adapter = adapter
+
+                            val itemDecoration = ItemOffsetDecoration(3)
+                            binding.rvSanpham.addItemDecoration(itemDecoration)
+
+                            setRVLayoutManager()
+
+                            scrollListener = RvLoadMoreScroll(mLayoutManager as GridLayoutManager)
+                            scrollListener.setOnLoadMoreListener(object :
+                                OnLoadMoreListener {
+                                override fun onLoadMore() {
+                                    LoadMoreData(produce.toMutableList(), list)
+                                }
+                            })
+                            binding.rvSanpham.addOnScrollListener(scrollListener)
+                        } else {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Không có sản phẩm để hiển thị",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                    })
-
-                    binding.rvSanpham.addOnScrollListener(scrollListener)
-                    /*binding.rvSanpham.layoutManager = GridLayoutManager(
-                        this@MainActivity,
-                        3
-                    )*/
-
-
+                    } else {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Danh sách sản phẩm trống",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
+
 
             }
         })
@@ -154,7 +166,7 @@ class MainActivity : AppCompatActivity() {
                 override fun getSpanSize(position: Int): Int {
                     return when (adapter.getItemViewType(position)) {
                         VIEW_TYPE_ITEM -> 1
-                        VIEW_TYPE_LOADING -> 3 //number of columns of the grid
+                        VIEW_TYPE_LOADING -> 3
                         else -> -1
                     }
                 }
@@ -162,11 +174,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun LoadMoreData(list: MutableList<SanPham>) {
+    private fun LoadMoreData(produce: MutableList<SanPham>, current: MutableList<SanPham>) {
+
         adapter.addLoadingView()
         Handler().postDelayed({
             adapter.removeLoadingView()
-            adapter.addData(list)
+            /*Thực hiện lọc kiểm tra phần tử trước đó đã hiển thị hay chưa*/
+            val remainingItems = produce.filter {
+                /*san pham đã hiênr thị không còn chưa trong produce*/
+                !current.contains(it)
+            }
+            val newlist = remainingItems.take(12)
+
+            current.addAll(newlist)
+            adapter.addData(newlist)
+
             scrollListener.setLoaded()
             binding.rvSanpham.post {
                 adapter.notifyDataSetChanged()
