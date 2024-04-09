@@ -16,6 +16,12 @@
         android:theme="@style/Theme.DepartmentStore"
         tools:targetApi="31">
         <activity
+            android:name=".activity.TraiCayActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SnackActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.GaoActivity"
             android:exported="false" />
         <activity

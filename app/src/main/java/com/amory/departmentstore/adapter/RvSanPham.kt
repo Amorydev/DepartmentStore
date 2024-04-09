@@ -15,8 +15,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
+import com.amory.departmentstore.model.OnClickRvSanPham
 
-class RvSanPham(private var ds: MutableList<SanPham>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RvSanPham(private var ds: MutableList<SanPham>,private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var mcontext: Context
 
     class SanPhamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -75,6 +76,9 @@ class RvSanPham(private var ds: MutableList<SanPham>) : RecyclerView.Adapter<Rec
             sanPhamViewHolder.giasanpham.text = formatAmount(ds[position].giasanpham)
             Glide.with(mcontext).load(ds[position].hinhanh).centerCrop()
                 .into(sanPhamViewHolder.hinhanhsanpham)
+        }
+        holder.itemView.setOnClickListener {
+            onClickRvSanPham.onClickSanPham(position)
         }
     }
 

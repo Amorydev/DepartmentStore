@@ -3,14 +3,13 @@ package com.amory.departmentstore.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.amory.departmentstore.databinding.ActivityGaoBinding
 import com.amory.departmentstore.databinding.LayoutSanphamTheoloaiBinding
 import com.amory.departmentstore.model.SanPham
 import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import java.util.Locale
 
-class RvSanPhamGao(private var ds_gao:MutableList<SanPham>): RecyclerView.Adapter<RvSanPhamGao.viewHolder>() {
+class RvSanPhamCacLoai(private var ds_gao:MutableList<SanPham>): RecyclerView.Adapter<RvSanPhamCacLoai.viewHolder>() {
     inner class viewHolder(private val binding: LayoutSanphamTheoloaiBinding):RecyclerView.ViewHolder(binding.root) {
         fun bind(data:SanPham){
             binding.tensanphamtheoloai.text = data.tensanpham

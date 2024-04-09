@@ -26,6 +26,7 @@ import com.amory.departmentstore.model.Constant.VIEW_TYPE_ITEM
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_LOADING
 import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.model.OnClickRvLoaiSanPham
+import com.amory.departmentstore.model.OnClickRvSanPham
 import com.amory.departmentstore.model.OnLoadMoreListener
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
@@ -85,8 +86,14 @@ class MainActivity : AppCompatActivity() {
                                     "Bạn chọn " + list[position].tenloaisanpham,
                                     Toast.LENGTH_SHORT
                                 ).show()*/
-                                if (list[position].loaisanpham == 1)
+                                if (list[position].loaisanpham == 1){
                                     GoToSanPhamGao()
+                                }else if(list[position].loaisanpham == 2){
+                                    GoToSanPhamSnack()
+                                }else if(list[position].loaisanpham == 3)
+                                {
+                                    GoToSanPhamTraiCay()
+                                }
                             }
                         })
                     }
@@ -106,6 +113,11 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    private fun GoToSanPhamTraiCay() {
+        val intent = Intent(this, TraiCayActivity::class.java)
+        startActivity(intent)
     }
 
     private fun laySanPham() {
@@ -135,7 +147,11 @@ class MainActivity : AppCompatActivity() {
 
                         if (list.isNotEmpty()) {
 
-                            adapter = RvSanPham(list as MutableList<SanPham>)
+                            adapter = RvSanPham(list as MutableList<SanPham>,object :OnClickRvSanPham{
+                                override fun onClickSanPham(position: Int) {
+                                    Toast.makeText(applicationContext,list[position].tensanpham,Toast.LENGTH_SHORT).show()
+                                }
+                            })
                             adapter.notifyDataSetChanged()
                             binding.rvSanpham.adapter = adapter
 
@@ -174,8 +190,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun GoToSanPhamGao() {
-        val intnet = Intent(this@MainActivity, GaoActivity::class.java)
-        startActivity(intnet)
+        val intent = Intent(this@MainActivity, GaoActivity::class.java)
+        startActivity(intent)
+    }
+    private fun GoToSanPhamSnack() {
+        val intent = Intent(this,SnackActivity::class.java)
+        startActivity(intent)
     }
 
     /*Khi vuoót vào recyclerVIew sanpham*/

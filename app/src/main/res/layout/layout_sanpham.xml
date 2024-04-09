@@ -79,14 +79,13 @@
                 android:textColor="#FFEB3B"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/appCompatButton2"
+                app:layout_constraintEnd_toStartOf="@+id/btnMua"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
-
-                android:id="@+id/appCompatButton2"
+                android:id="@+id/btnMua"
                 android:layout_width="60sp"
                 android:layout_height="30sp"
                 android:layout_marginBottom="10sp"
