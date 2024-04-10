@@ -12,7 +12,6 @@ class RvLoadMoreScroll(layoutManager: GridLayoutManager) :
     private var isLoading: Boolean = false
     private var firstVisibleItem = 0
     private var totalItemCount = 0
-    private var previousTotal = 0
     private val visibleThreshold = 0// Số lượng item còn lại trước khi load thêm
     private var mLayoutManager: RecyclerView.LayoutManager = layoutManager
 

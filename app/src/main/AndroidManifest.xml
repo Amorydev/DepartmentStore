@@ -16,6 +16,9 @@
         android:theme="@style/Theme.DepartmentStore"
         tools:targetApi="31">
         <activity
+            android:name=".activity.ChiTietSanPhamActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.TraiCayActivity"
             android:exported="false" />
         <activity

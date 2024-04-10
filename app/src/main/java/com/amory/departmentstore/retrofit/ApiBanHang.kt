@@ -17,7 +17,6 @@ interface ApiBanHang {
     @POST("laysanphamtheoloai.php")
     @FormUrlEncoded
     fun getSanPhamTheoLoai(
-        @Field("page") page:Int,
         @Field("loai") loai:Int
     ):Call<SanPhamModel>
 }

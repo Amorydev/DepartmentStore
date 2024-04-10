@@ -25,6 +25,7 @@ import com.amory.departmentstore.databinding.ActivityMainBinding
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_ITEM
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_LOADING
 import com.amory.departmentstore.model.LoaiSanPhamModel
+import com.amory.departmentstore.model.OnCLickButtonSanPham
 import com.amory.departmentstore.model.OnClickRvLoaiSanPham
 import com.amory.departmentstore.model.OnClickRvSanPham
 import com.amory.departmentstore.model.OnLoadMoreListener
@@ -44,17 +45,21 @@ import java.util.Locale
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     lateinit var adapter: RvSanPham
-    lateinit var scrollListener: RvLoadMoreScroll
-    lateinit var mLayoutManager: RecyclerView.LayoutManager
+    private lateinit var scrollListener: RvLoadMoreScroll
+    private lateinit var mLayoutManager: RecyclerView.LayoutManager
+    private var soluongsanpham = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         SlideQuangCao()
-        /*onTouch()*/
+
+        /*  onTouch()*/
 
         /*  showSanPham()*/
+        laySoLuongSanPhamActivityChiTiet()
 
         if (Utils.kiemTraKetNoi(this)) {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
@@ -86,13 +91,18 @@ class MainActivity : AppCompatActivity() {
                                     "Bạn chọn " + list[position].tenloaisanpham,
                                     Toast.LENGTH_SHORT
                                 ).show()*/
-                                if (list[position].loaisanpham == 1){
-                                    GoToSanPhamGao()
-                                }else if(list[position].loaisanpham == 2){
-                                    GoToSanPhamSnack()
-                                }else if(list[position].loaisanpham == 3)
-                                {
-                                    GoToSanPhamTraiCay()
+                                when (list[position].loaisanpham) {
+                                    1 -> {
+                                        GoToSanPhamGao()
+                                    }
+
+                                    2 -> {
+                                        GoToSanPhamSnack()
+                                    }
+
+                                    3 -> {
+                                        GoToSanPhamTraiCay()
+                                    }
                                 }
                             }
                         })
@@ -147,27 +157,42 @@ class MainActivity : AppCompatActivity() {
 
                         if (list.isNotEmpty()) {
 
-                            adapter = RvSanPham(list as MutableList<SanPham>,object :OnClickRvSanPham{
-                                override fun onClickSanPham(position: Int) {
-                                    Toast.makeText(applicationContext,list[position].tensanpham,Toast.LENGTH_SHORT).show()
-                                }
-                            })
+                            adapter =
+                                RvSanPham(list as MutableList<SanPham>, object : OnClickRvSanPham {
+                                    override fun onClickSanPham(position: Int) {
+                                                                            Toast.makeText(applicationContext,
+                                                                                "Mua $position",Toast.LENGTH_SHORT).show()
+                                        val intent = Intent(this@MainActivity, ChiTietSanPhamActivity::class.java)
+
+                                        intent.putExtra(
+                                            "tensanpham",
+                                            list[position].tensanpham.toString()
+                                        )
+                                        intent.putExtra("giasanpham", list[position].giasanpham)
+                                        intent.putExtra("hinhanhsanpham", list[position].hinhanh)
+                                        intent.putExtra("motasanpham", list[position].mota)
+                                        /*intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)*/
+                                        startActivity(intent)
+
+                                    }
+                                }, object : OnCLickButtonSanPham {
+                                    override fun onCLickButtonSanPham(position: Int) {
+                                        soluongsanpham += 1
+                                        var soluongsanphamchitiet = intent.getIntExtra("soluongsanpham", 0)
+                                        soluongsanphamchitiet += soluongsanpham
+                                        if (soluongsanphamchitiet != 0) {
+                                            binding.badgeCart.setText(soluongsanphamchitiet.toString())
+                                        }
+                                    }
+                                })
                             adapter.notifyDataSetChanged()
                             binding.rvSanpham.adapter = adapter
-
+                            /*Thêm khoảng cách giữa các item adapter*/
                             val itemDecoration = ItemOffsetDecoration(3)
                             binding.rvSanpham.addItemDecoration(itemDecoration)
 
                             setRVLayoutManager()
-
-                            scrollListener = RvLoadMoreScroll(mLayoutManager as GridLayoutManager)
-                            scrollListener.setOnLoadMoreListener(object :
-                                OnLoadMoreListener {
-                                override fun onLoadMore() {
-                                    LoadMoreData(produce.toMutableList(), list)
-                                }
-                            })
-                            binding.rvSanpham.addOnScrollListener(scrollListener)
+                            addEventLoad(produce, list)
                         } else {
                             Toast.makeText(
                                 this@MainActivity,
@@ -189,44 +214,61 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    private fun laySoLuongSanPhamActivityChiTiet() {
+        var soluongsanphamchitiet = intent.getIntExtra("soluongsanpham", 0)
+        soluongsanphamchitiet += soluongsanpham
+        if (soluongsanphamchitiet != 0) {
+            binding.badgeCart.setText(soluongsanphamchitiet.toString())
+        }
+        /*Toast.makeText(this,soluongsanpham.toString(),Toast.LENGTH_SHORT).show()*/
+    }
+
+    private fun addEventLoad(produce: MutableList<SanPham>, list: MutableList<SanPham>) {
+        scrollListener = RvLoadMoreScroll(mLayoutManager as GridLayoutManager)
+        scrollListener.setOnLoadMoreListener(object :
+            OnLoadMoreListener {
+            override fun onLoadMore() {
+                LoadMoreData(produce.toMutableList(), list)
+            }
+        })
+        binding.rvSanpham.addOnScrollListener(scrollListener)
+    }
+
     private fun GoToSanPhamGao() {
         val intent = Intent(this@MainActivity, GaoActivity::class.java)
         startActivity(intent)
     }
+
     private fun GoToSanPhamSnack() {
-        val intent = Intent(this,SnackActivity::class.java)
+        val intent = Intent(this, SnackActivity::class.java)
         startActivity(intent)
     }
 
     /*Khi vuoót vào recyclerVIew sanpham*/
     @SuppressLint("ClickableViewAccessibility")
     fun onTouch() {
-        val gestureDetector =
-            GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onFling(
-                    e1: MotionEvent?,
-                    e2: MotionEvent,
-                    velocityX: Float,
-                    velocityY: Float
-                ): Boolean {
-                    if (velocityY < 0) {
-                        // Vuốt lên
-                        binding.viewFlipper.translationY = -200f // Đẩy ViewFlipper lên trên 200dp
-                        binding.txt.translationY = -200f // Đẩy TextView lên trên 200dp
-                        binding.rvloaisanpham.translationY = -200f
-                    } else {
-                        // Vuốt xuống
-                        binding.viewFlipper.translationY = 0f
-                        binding.txt.translationY = 0f
-                        binding.rvloaisanpham.translationY = 0f
-                    }
-                    return super.onFling(e1, e2, velocityX, velocityY)
+        binding.rvSanpham.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (firstVisibleItemPosition == 0 && dy < 0) {
+
+                    binding.txt.animate().translationY(0f).duration = 300
+                    binding.viewFlipper.animate().translationY(0f).duration = 300
+                    binding.rvloaisanpham.animate().translationY(0f).duration = 300
+
+                } else {
+                    binding.txt.animate().translationY(-binding.txt.height.toFloat()).duration = 300
+                    binding.viewFlipper.animate()
+                        .translationY(-binding.viewFlipper.height.toFloat()).duration = 600
+                    binding.rvloaisanpham.animate()
+                        .translationY(-binding.rvloaisanpham.height.toFloat()).duration = 900
                 }
-            })
-        binding.rvSanpham.setOnTouchListener { v, event ->
-            gestureDetector.onTouchEvent(event)
-            false
-        }
+            }
+        })
     }
 
     private fun setRVLayoutManager() {
@@ -269,11 +311,6 @@ class MainActivity : AppCompatActivity() {
         }, 3000)
     }
 
-    //format gia 89.000d
-    fun formatCurrency(number: Int): String {
-        val formatter = NumberFormat.getInstance(Locale("vi", "VN"))
-        return "${formatter.format(number)}đ"
-    }
 
     private fun SlideQuangCao() {
         val listquangcao: MutableList<String> = mutableListOf()
@@ -298,6 +335,11 @@ class MainActivity : AppCompatActivity() {
         binding.viewFlipper.inAnimation = slide_in
         binding.viewFlipper.outAnimation = slide_out
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        laySanPham()
     }
 
 

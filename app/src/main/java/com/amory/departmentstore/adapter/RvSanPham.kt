@@ -11,29 +11,31 @@ import java.text.NumberFormat
 import java.util.Locale
 import android.os.Handler
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
+import com.amory.departmentstore.model.OnCLickButtonSanPham
 import com.amory.departmentstore.model.OnClickRvSanPham
 
-class RvSanPham(private var ds: MutableList<SanPham>,private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RvSanPham(private var ds: MutableList<SanPham>,private val onClickRvSanPham: OnClickRvSanPham,private val onCLickButtonSanPham: OnCLickButtonSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var mcontext: Context
 
-    class SanPhamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        var tensanpham:TextView = itemView.findViewById(R.id.txt_tensanpham)
-        var giasanpham:TextView = itemView.findViewById(R.id.txtgiasanpham)
-        var hinhanhsanpham:ImageView = itemView.findViewById(R.id.img_sanpham)
+    inner class SanPhamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        val tensanpham:TextView = itemView.findViewById(R.id.txt_tensanpham)
+        val giasanpham:TextView = itemView.findViewById(R.id.txtgiasanpham)
+        val hinhanhsanpham:ImageView = itemView.findViewById(R.id.img_sanpham)
+        val btnMua:Button = itemView.findViewById(R.id.btnMua)
     }
-    class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
+    inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     //chuyen sang dinh dang 000.000d
     private fun formatAmount(amount: String): String {
         val number = amount.toLong()
         val formatter = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${formatter.format(number)}đ"
     }
-
     @SuppressLint("NotifyDataSetChanged")
     fun addData(dateView: List<SanPham>) {
         this.ds.addAll(dateView)
@@ -43,7 +45,7 @@ class RvSanPham(private var ds: MutableList<SanPham>,private val onClickRvSanPha
     fun addLoadingView() {
         //Thêm loading
         Handler().post {
-            ds.add(SanPham("", "", ""))
+            ds.add(SanPham("", "", "",""))
             notifyItemInserted(ds.size - 1)
         }
     }
@@ -76,11 +78,17 @@ class RvSanPham(private var ds: MutableList<SanPham>,private val onClickRvSanPha
             sanPhamViewHolder.giasanpham.text = formatAmount(ds[position].giasanpham)
             Glide.with(mcontext).load(ds[position].hinhanh).centerCrop()
                 .into(sanPhamViewHolder.hinhanhsanpham)
+
+            sanPhamViewHolder.btnMua.setOnClickListener {
+                onCLickButtonSanPham.onCLickButtonSanPham(position)
+            }
         }
         holder.itemView.setOnClickListener {
             onClickRvSanPham.onClickSanPham(position)
         }
+
     }
+
 
     override fun getItemViewType(position: Int): Int {
         return if (ds[position].tensanpham.isEmpty()) Constant.VIEW_TYPE_LOADING else Constant.VIEW_TYPE_ITEM

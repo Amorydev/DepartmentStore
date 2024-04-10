@@ -65,5 +65,6 @@ dependencies {
     // For control over item selection of both touch and mouse driven selection
     implementation ("androidx.recyclerview:recyclerview-selection:1.1.0")
 
-
+    //notification badge
+    implementation ("com.nex3z:notification-badge:1.0.4")
 }
