@@ -9,4 +9,5 @@
     <string name="test_gia_chitiet">23.000đ</string>
     <string name="chitiet_sanpham">Chi tiết sản phẩm</string>
     <string name="them_vao_gio_hang">Thêm vào giỏ hàng</string>
+    <string name="giohang">Giỏ hàng</string>
 </resources>

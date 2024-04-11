@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".activity.ChiTietSanPhamActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,6 +34,8 @@
             android:text="@string/chitiet_sanpham"
             android:textSize="25sp"
             android:textStyle="bold"
+            android:textColor="@color/black"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/frameLayout"
             app:layout_constraintStart_toEndOf="@+id/imvBack"
@@ -83,12 +86,14 @@
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/test_gia_chitiet"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="10sp"
+        android:text="@string/test_gia_chitiet"
         android:textColor="@color/red"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imv_chitiet_hinhanh" />
 
     <TextView
@@ -98,6 +103,7 @@
         android:layout_gravity="center"
         android:text="@string/test_chitiet"
         android:textSize="22sp"
+        android:textColor="@color/black"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,6 +117,7 @@
         android:layout_marginTop="5dp"
         android:text="Mô tả"
         android:textSize="25sp"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txt_chitiet_tensanpham" />
@@ -150,6 +157,7 @@
                 android:layout_height="50dp"
                 android:gravity="center"
                 android:text="-"
+                android:textColor="@color/black"
                 android:textAlignment="center"
                 android:textSize="30sp"
                 android:textStyle="bold"
@@ -164,6 +172,7 @@
                 android:gravity="center"
                 android:text="1"
                 android:textAlignment="center"
+                android:textColor="@color/black"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -178,6 +187,7 @@
                 android:gravity="center"
                 android:text="+"
                 android:textAlignment="center"
+                android:textColor="@color/black"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -192,6 +202,7 @@
             android:layout_height="50dp"
             android:background="#AFFAB2"
             android:textAlignment="center"
+            android:textColor="@color/black"
             android:gravity="center"
             android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toBottomOf="parent"

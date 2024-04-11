@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.animation.AnimationUtils
@@ -61,6 +62,7 @@ class MainActivity : AppCompatActivity() {
 
         /*  showSanPham()*/
         laySoLuongSanPhamActivityChiTiet()
+        goToGioHang()
 
         if (Utils.kiemTraKetNoi(this)) {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
@@ -69,6 +71,13 @@ class MainActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Vui lòng kết nối internet", Toast.LENGTH_SHORT).show()
 
+        }
+    }
+
+    private fun goToGioHang() {
+        binding.imvGiohang.setOnClickListener {
+            val intent = Intent(this,GioHangActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -137,8 +146,10 @@ class MainActivity : AppCompatActivity() {
         call.enqueue(object : Callback<SanPhamModel> {
             override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
                 t.printStackTrace()
+                Log.e("Amory", "Error occurred: ${t.message}", t)
                 Toast.makeText(this@MainActivity, "Lấy sản phẩm thất bại", Toast.LENGTH_SHORT)
                     .show()
+
             }
 
             @SuppressLint("NotifyDataSetChanged")

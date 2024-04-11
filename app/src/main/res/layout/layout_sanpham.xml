@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="130sp"
+    android:layout_width="126sp"
     android:layout_height="210dp"
-    android:layout_margin="2dp"
-    app:cardBackgroundColor="#04CA0B"
-
+    android:layout_marginStart="2dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="2dp"
     app:cardCornerRadius="10dp"
-
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardElevation="4dp"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="#04CA0B"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -29,7 +31,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvimg"
-                android:layout_width="90dp"
+                android:layout_width="100dp"
                 android:layout_height="90dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="10sp"
@@ -60,7 +62,8 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cvimg" />
+                app:layout_constraintTop_toBottomOf="@id/cvimg"
+                tools:ignore="SmallSp" />
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -102,4 +105,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</com.google.android.material.card.MaterialCardView>
+</androidx.cardview.widget.CardView>

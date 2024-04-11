@@ -16,12 +16,12 @@ import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import java.util.Locale
 
-class RvSanPhamCacLoai(private var ds_gao:MutableList<SanPham>,private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoai): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RvSanPhamCacLoai(private var ds:MutableList<SanPham>,private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoai): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var mcontext:Context
     inner class viewHolder(itemView : View):RecyclerView.ViewHolder(itemView) {
-        val txtTenSanPhamCacLoai = itemView.findViewById<TextView>(R.id.tensanphamtheoloai)
-        val txtGiaSanPhamCacLoai = itemView.findViewById<TextView>(R.id.giasanphamtheoloai)
-        val imvHinhAnhSanPhamCacLoai = itemView.findViewById<ImageView>(R.id.imvhinhanhloaisanpham)
+        val txtTenSanPhamCacLoai = itemView.findViewById<TextView>(R.id.txt_tensanpham)!!
+        val txtGiaSanPhamCacLoai = itemView.findViewById<TextView>(R.id.txtgiasanpham)!!
+        val imvHinhAnhSanPhamCacLoai = itemView.findViewById<ImageView>(R.id.img_sanpham)!!
     }
     inner class LoadingViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
     //chuyen sang dinh dang 000.000d
@@ -32,19 +32,19 @@ class RvSanPhamCacLoai(private var ds_gao:MutableList<SanPham>,private val onCli
     }
     @SuppressLint("NotifyDataSetChanged")
     fun addData(dataView : List<SanPham>){
-        this.ds_gao.addAll(dataView)
+        this.ds.addAll(dataView)
         notifyDataSetChanged()
     }
     fun addLoadingView(){
         android.os.Handler().post {
-            ds_gao.add(SanPham("","","",""))
-            notifyItemInserted(ds_gao.size-1)
+            ds.add(SanPham("","","",""))
+            notifyItemInserted(ds.size-1)
         }
     }
     fun removeLoadingView(){
-        if (ds_gao.size != 0){
-            ds_gao.removeAt(ds_gao.size-1)
-            notifyItemRemoved(ds_gao.size-1)
+        if (ds.size != 0){
+            ds.removeAt(ds.size-1)
+            notifyItemRemoved(ds.size-1)
         }
     }
 
@@ -52,7 +52,7 @@ class RvSanPhamCacLoai(private var ds_gao:MutableList<SanPham>,private val onCli
         mcontext = parent.context
         return if (viewType == Constant.VIEW_TYPE_ITEM) {
             val view =
-                LayoutInflater.from(parent.context).inflate(R.layout.layout_sanpham_theoloai, parent, false)
+                LayoutInflater.from(parent.context).inflate(R.layout.layout_sanpham, parent, false)
             viewHolder(view)
         } else {
             val view =
@@ -63,15 +63,15 @@ class RvSanPhamCacLoai(private var ds_gao:MutableList<SanPham>,private val onCli
 
 
     override fun getItemCount(): Int {
-        return ds_gao.size
+        return ds.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder.itemViewType == Constant.VIEW_TYPE_ITEM) {
             val sanPhamTheoLoaiViewHolder = holder as RvSanPhamCacLoai.viewHolder
-            sanPhamTheoLoaiViewHolder.txtTenSanPhamCacLoai.text = ds_gao[position].tensanpham
-            sanPhamTheoLoaiViewHolder.txtGiaSanPhamCacLoai.text = formatAmount(ds_gao[position].giasanpham)
-            Glide.with(mcontext).load(ds_gao[position].hinhanh).centerCrop()
+            sanPhamTheoLoaiViewHolder.txtTenSanPhamCacLoai.text = ds[position].tensanpham
+            sanPhamTheoLoaiViewHolder.txtGiaSanPhamCacLoai.text = formatAmount(ds[position].giasanpham)
+            Glide.with(mcontext).load(ds[position].hinhanh).centerCrop()
                 .into(sanPhamTheoLoaiViewHolder.imvHinhAnhSanPhamCacLoai)
 
         }
@@ -81,6 +81,6 @@ class RvSanPhamCacLoai(private var ds_gao:MutableList<SanPham>,private val onCli
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (ds_gao[position].tensanpham.isEmpty()) Constant.VIEW_TYPE_LOADING else Constant.VIEW_TYPE_ITEM
+        return if (ds[position].tensanpham.isEmpty()) Constant.VIEW_TYPE_LOADING else Constant.VIEW_TYPE_ITEM
     }
 }
