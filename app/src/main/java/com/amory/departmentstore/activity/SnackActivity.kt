@@ -1,6 +1,7 @@
 package com.amory.departmentstore.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -44,32 +45,43 @@ class SnackActivity : AppCompatActivity() {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
                 if (response.isSuccessful) {
-                    val produce_snack = response.body()?.result
-                    val randomSanPham = produce_snack?.shuffled()
-                    val list = randomSanPham?.take(12)
-                    /*Toast.makeText(applicationContext,produce?.get(2)?.tensanpham,Toast.LENGTH_SHORT).show()*/
-                    adapter = produce_snack?.let { RvSanPhamCacLoai(it,object :
-                        OnClickSanPhamTheoLoai {
-                        override fun onClickSanPhamTheoLoai(position: Int) {
-                            Toast.makeText(this@SnackActivity,list!![position].tensanpham,Toast.LENGTH_SHORT).show()
+                    val produce = response.body()?.result
+                    if (!produce.isNullOrEmpty()) {
 
+                        val randomSanPham = produce.shuffled()
+                        val list = randomSanPham.take(12)
+
+                        if (list.isNotEmpty()) {
+/*
+                            Toast.makeText(applicationContext, produce[2].tensanpham,Toast.LENGTH_SHORT).show()
+*/
+                            adapter = RvSanPhamCacLoai(
+                                list.toMutableList(),
+                                object : OnClickSanPhamTheoLoai {
+                                    override fun onClickSanPhamTheoLoai(position: Int) {
+                                        /* Toast.makeText(this@GaoActivity,list[position].tensanpham,Toast.LENGTH_SHORT).show()*/
+                                        val intent = Intent(
+                                            this@SnackActivity,
+                                            ChiTietSanPhamActivity::class.java
+                                        )
+                                        intent.putExtra("tensanpham", list[position].tensanpham)
+                                        intent.putExtra("giasanpham", list[position].giasanpham)
+                                        intent.putExtra("hinhanhsanpham", list[position].hinhanh)
+                                        intent.putExtra("motasanpham", list[position].mota)
+/*
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+*/
+                                        startActivity(intent)
+                                    }
+                                })
+                            binding.rvsanphamtheoloaiSnack.adapter = adapter
+                            adapter.notifyDataSetChanged()
+                            setRVLayoutManager()
+                            addEventLoad(produce, list as MutableList<SanPham>)
                         }
-                    }) }!!
+                    }
 
-                    binding.rvsanphamtheoloaiSnack.adapter = adapter
-                    adapter.notifyDataSetChanged()
 
-                    /* set khoảng cách giữa các item*/
-                    val itemDecoration = ItemOffsetDecoration(3)
-                    binding.rvsanphamtheoloaiSnack.addItemDecoration(itemDecoration)
-                   /* binding.rvsanphamtheoloaiSnack.layoutManager = GridLayoutManager(
-                        this@SnackActivity,
-                        3,
-                        GridLayoutManager.VERTICAL,
-                        false
-                    )*/
-                    setRVLayoutManager()
-                    addEventLoad(produce_snack, list as MutableList<SanPham>)
                 }
             }
 
@@ -101,15 +113,15 @@ class SnackActivity : AppCompatActivity() {
                 /*san pham đã hiênr thị không còn chưa trong produce*/
                 !current.contains(it)
             }
-            val newlist = remainingItems.take(12)
+            val newList = remainingItems.take(12)
             laySanPhamSnack()
-            current.addAll(newlist)
-            adapter.addData(newlist)
+            current.addAll(newList)
+            adapter.addData(newList)
             scrollListener.setLoaded()
             binding.rvsanphamtheoloaiSnack.post {
                 adapter.notifyDataSetChanged()
             }
-        }, 3000)
+        }, 1000)
     }
 
     private fun setRVLayoutManager() {

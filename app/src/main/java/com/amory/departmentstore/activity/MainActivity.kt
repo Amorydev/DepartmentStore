@@ -40,6 +40,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.NumberFormat
 import java.util.Locale
+import kotlin.math.log
 
 
 class MainActivity : AppCompatActivity() {
@@ -160,9 +161,14 @@ class MainActivity : AppCompatActivity() {
                             adapter =
                                 RvSanPham(list as MutableList<SanPham>, object : OnClickRvSanPham {
                                     override fun onClickSanPham(position: Int) {
-                                                                            Toast.makeText(applicationContext,
-                                                                                "Mua $position",Toast.LENGTH_SHORT).show()
-                                        val intent = Intent(this@MainActivity, ChiTietSanPhamActivity::class.java)
+                                        /*Toast.makeText(
+                                            applicationContext,
+                                            "Mua $position", Toast.LENGTH_SHORT
+                                        ).show()*/
+                                        val intent = Intent(
+                                            this@MainActivity,
+                                            ChiTietSanPhamActivity::class.java
+                                        )
 
                                         intent.putExtra(
                                             "tensanpham",
@@ -171,17 +177,19 @@ class MainActivity : AppCompatActivity() {
                                         intent.putExtra("giasanpham", list[position].giasanpham)
                                         intent.putExtra("hinhanhsanpham", list[position].hinhanh)
                                         intent.putExtra("motasanpham", list[position].mota)
-                                        /*intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)*/
+                                        intent.putExtra("soluongsanphamgiohang", soluongsanpham)
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(intent)
 
                                     }
                                 }, object : OnCLickButtonSanPham {
                                     override fun onCLickButtonSanPham(position: Int) {
                                         soluongsanpham += 1
-                                        var soluongsanphamchitiet = intent.getIntExtra("soluongsanpham", 0)
-                                        soluongsanphamchitiet += soluongsanpham
-                                        if (soluongsanphamchitiet != 0) {
-                                            binding.badgeCart.setText(soluongsanphamchitiet.toString())
+                                        val soluongsanphamchitiet =
+                                            intent.getIntExtra("soluongsanphamgiohang", 0)
+                                        soluongsanpham += soluongsanphamchitiet
+                                        if (soluongsanpham != 0) {
+                                            binding.badgeCart.setText(soluongsanpham.toString())
                                         }
                                     }
                                 })
@@ -213,6 +221,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
 
     private fun laySoLuongSanPhamActivityChiTiet() {
         var soluongsanphamchitiet = intent.getIntExtra("soluongsanpham", 0)
@@ -308,7 +317,7 @@ class MainActivity : AppCompatActivity() {
             binding.rvSanpham.post {
                 adapter.notifyDataSetChanged()
             }
-        }, 3000)
+        }, 1000)
     }
 
 

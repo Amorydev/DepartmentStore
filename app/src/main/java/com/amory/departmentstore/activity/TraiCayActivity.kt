@@ -1,6 +1,7 @@
 package com.amory.departmentstore.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -26,7 +27,7 @@ class TraiCayActivity : AppCompatActivity() {
     lateinit var adapter: RvSanPhamCacLoai
     private lateinit var scrollListener: RvLoadMoreScroll
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
-    private val loai:Int = 3
+    private val loai: Int = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,49 +36,67 @@ class TraiCayActivity : AppCompatActivity() {
         )
         setContentView(binding.root)
         laySanPhamTraiCay()
-        
+
     }
 
     private fun laySanPhamTraiCay() {
-            val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
-            val call = service.getSanPhamTheoLoai(loai)
-            call.enqueue(object : retrofit2.Callback<SanPhamModel>{
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
-                    if(response.isSuccessful){
-                        val produce = response.body()?.result
-                        val randomSanPham = produce?.shuffled()
-                        val list = randomSanPham?.take(12)
-                        /*Toast.makeText(applicationContext,produce?.get(2)?.tensanpham,Toast.LENGTH_SHORT).show()*/
-                        adapter = produce?.let { RvSanPhamCacLoai(it,object :
-                            OnClickSanPhamTheoLoai {
-                            override fun onClickSanPhamTheoLoai(position: Int) {
-                                Toast.makeText(this@TraiCayActivity,list!![position].tensanpham,Toast.LENGTH_SHORT).show()
+        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val call = service.getSanPhamTheoLoai(loai)
+        call.enqueue(object : retrofit2.Callback<SanPhamModel> {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
+                if (response.isSuccessful) {
+                    val produce = response.body()?.result
+                    if (!produce.isNullOrEmpty()) {
+                        val randomSanPham = produce.shuffled()
+                        val list = randomSanPham.take(12)
+                        if (list.isNotEmpty()) {
+                            /*Toast.makeText(applicationContext,produce?.get(2)?.tensanpham,Toast.LENGTH_SHORT).show()*/
+                            adapter = RvSanPhamCacLoai(list.toMutableList(), object :
+                                OnClickSanPhamTheoLoai {
+                                override fun onClickSanPhamTheoLoai(position: Int) {
+                                    /*
+                                                                            Toast.makeText(this@TraiCayActivity,list[position].tensanpham,Toast.LENGTH_SHORT).show()
+                                    */
 
-                            }
-                        }) }!!
+                                    val intent = Intent(
+                                        this@TraiCayActivity,
+                                        ChiTietSanPhamActivity::class.java
+                                    )
+                                    intent.putExtra("tensanpham", list[position].tensanpham)
+                                    intent.putExtra("giasanpham", list[position].giasanpham)
+                                    intent.putExtra("hinhanhsanpham", list[position].hinhanh)
+                                    intent.putExtra("motasanpham", list[position].mota)
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    startActivity(intent)
+                                }
+                            })
 
-                        binding.rvsanphamtheoloaiTraicay.adapter = adapter
-                        adapter.notifyDataSetChanged()
+                            binding.rvsanphamtheoloaiTraicay.adapter = adapter
+                            adapter.notifyDataSetChanged()
 
-                        /* set khoảng cách giữa các item*/
-                        val itemDecoration = ItemOffsetDecoration(3)
-                        binding.rvsanphamtheoloaiTraicay.addItemDecoration(itemDecoration)
-                        /*binding.rvsanphamtheoloaiTraicay.layoutManager = GridLayoutManager(
-                            this@TraiCayActivity,
-                            3,
-                            GridLayoutManager.VERTICAL,
-                            false
-                        )*/
-                        setRVLayoutManager()
-                        addEventLoad(produce, list as MutableList<SanPham>)
+                            /* set khoảng cách giữa các item*/
+                            val itemDecoration = ItemOffsetDecoration(3)
+                            binding.rvsanphamtheoloaiTraicay.addItemDecoration(itemDecoration)
+                            /*binding.rvsanphamtheoloaiTraicay.layoutManager = GridLayoutManager(
+                                this@TraiCayActivity,
+                                3,
+                                GridLayoutManager.VERTICAL,
+                                false
+                            )*/
+                            setRVLayoutManager()
+                            addEventLoad(produce, list as MutableList<SanPham>)
+                        }
                     }
                 }
-                override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
-                    t.printStackTrace()
-                }
-            })
+            }
+
+            override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
     }
+
     private fun addEventLoad(produce: MutableList<SanPham>, list: MutableList<SanPham>) {
         scrollListener = RvLoadMoreScroll(mLayoutManager as GridLayoutManager)
         scrollListener.setOnLoadMoreListener(object :
@@ -108,7 +127,7 @@ class TraiCayActivity : AppCompatActivity() {
             binding.rvsanphamtheoloaiTraicay.post {
                 adapter.notifyDataSetChanged()
             }
-        }, 3000)
+        }, 1000)
     }
 
     private fun setRVLayoutManager() {

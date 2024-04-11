@@ -12,21 +12,28 @@ import java.util.Locale
 
 class ChiTietSanPhamActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChiTietSanPhamBinding
+    private lateinit var tensanpham: String
+    private lateinit var giasanpham: String
+    private lateinit var hinhanhsanpham: String
+    private lateinit var motasanpham: String
+
+    private var soluongsanphamgiohang: Int = 0
 
     private var soluongsanpham = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChiTietSanPhamBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        XulyChiTiet()
+        init()
         onClickBack()
+        XulyChiTiet()
         onCLickCongTruSanPham()
         ThemVaoGioHang()
     }
 
     private fun putData() {
-        val intent = Intent(this,MainActivity::class.java)
-        intent.putExtra("soluongsanpham",soluongsanpham)
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("soluongsanpham", soluongsanphamgiohang)
         startActivity(intent)
     }
 
@@ -54,23 +61,31 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
             putData()
         }
     }
-    private fun ThemVaoGioHang(){
+
+    private fun ThemVaoGioHang() {
         binding.btnThemvaogiohang.setOnClickListener {
-            binding.badgeCart.setText(soluongsanpham.toString())
+            soluongsanphamgiohang += soluongsanpham
+            if (soluongsanpham != 0) {
+                binding.badgeCart.setText(soluongsanphamgiohang.toString())
+            }
         }
     }
 
+    private fun init() {
+        tensanpham = intent.getStringExtra("tensanpham").toString()
+        giasanpham = intent.getStringExtra("giasanpham").toString()
+        hinhanhsanpham = intent.getStringExtra("hinhanhsanpham").toString()
+        motasanpham = intent.getStringExtra("motasanpham").toString()
+        soluongsanphamgiohang = intent.getIntExtra("soluongsanphamgiohang", 0)
+    }
+
     private fun XulyChiTiet() {
-        val tensanpham = intent.extras?.getString("tensanpham")
-        val giasanpham = intent.getStringExtra("giasanpham").toString()
-        val hinhanhsanpham = intent.getStringExtra("hinhanhsanpham").toString()
-        val motasanpham = intent.getStringExtra("motasanpham").toString()
         binding.txtChitietTensanpham.text = tensanpham
         binding.txtChitietGiasanpham.text = formatAmount(giasanpham)
         binding.txtChitietMotasanpham.text = motasanpham
         Glide.with(applicationContext).load(hinhanhsanpham).centerCrop()
             .into(binding.imvChitietHinhanh)
-
+        binding.badgeCart.setText(soluongsanphamgiohang.toString())
     }
 
     //chuyen sang dinh dang 000.000d
