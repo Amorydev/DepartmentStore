@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var scrollListener: RvLoadMoreScroll
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private var soluongsanpham = 0
+    var soluongsanphamchitiet = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,11 +73,13 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Vui lòng kết nối internet", Toast.LENGTH_SHORT).show()
 
         }
+        soluongsanphamchitiet = intent.getIntExtra("soluongsanphamgiohang", 0)
+
     }
 
     private fun goToGioHang() {
         binding.imvGiohang.setOnClickListener {
-            val intent = Intent(this,GioHangActivity::class.java)
+            val intent = Intent(this, GioHangActivity::class.java)
             startActivity(intent)
         }
     }
@@ -195,10 +198,8 @@ class MainActivity : AppCompatActivity() {
                                     }
                                 }, object : OnCLickButtonSanPham {
                                     override fun onCLickButtonSanPham(position: Int) {
-                                        soluongsanpham += 1
-                                        val soluongsanphamchitiet =
-                                            intent.getIntExtra("soluongsanphamgiohang", 0)
                                         soluongsanpham += soluongsanphamchitiet
+                                        soluongsanpham += 1
                                         if (soluongsanpham != 0) {
                                             binding.badgeCart.setText(soluongsanpham.toString())
                                         }

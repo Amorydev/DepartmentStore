@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import com.amory.departmentstore.R
+import com.amory.departmentstore.adapter.Utils
 import com.amory.departmentstore.databinding.ActivityChiTietSanPhamBinding
+import com.amory.departmentstore.model.GioHang
 import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import java.util.Locale
@@ -30,12 +32,12 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         onCLickCongTruSanPham()
         ThemVaoGioHang()
     }
-
+/*
     private fun putData() {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("soluongsanpham", soluongsanphamgiohang)
         startActivity(intent)
-    }
+    }*/
 
     private fun onCLickCongTruSanPham() {
         binding.txtCongSanpham.setOnClickListener {
@@ -58,25 +60,61 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
     private fun onClickBack() {
         binding.imvBack.setOnClickListener {
             onBackPressed()
-            putData()
         }
     }
 
     private fun ThemVaoGioHang() {
         binding.btnThemvaogiohang.setOnClickListener {
-            soluongsanphamgiohang += soluongsanpham
-            if (soluongsanpham != 0) {
-                binding.badgeCart.setText(soluongsanphamgiohang.toString())
+            if (Utils.manggiohang.size > 0) {
+                val soluong = soluongsanpham
+                var flags:Boolean = false
+                for (i in 0 until Utils.manggiohang.size){
+                    if (Utils.manggiohang[i].tensanphamgiohang == tensanpham){
+                        Utils.manggiohang[i].soluongsanphamgiohang += soluong
+                        val tongGiaTriSanPham = giasanpham.toLong() * Utils.manggiohang[i].soluongsanphamgiohang
+                        Utils.manggiohang[i].giasanphamgiohang = tongGiaTriSanPham.toString()
+                        flags = true
+                        break
+                    }
+                }
+                if (!flags){
+                    val tongGiaTriSanPham = giasanpham.toLong() * soluong
+                    val gioHang = GioHang(
+                        tensanphamgiohang = tensanpham,
+                        giasanphamgiohang = tongGiaTriSanPham.toString(),
+                        hinhanhsanphamgiohang = hinhanhsanpham,
+                        soluongsanphamgiohang = soluong
+                    )
+                    Utils.manggiohang.add(gioHang)
+                }
+            } else {
+                val soluong = soluongsanpham
+                val tongGiaTriSanPham = giasanpham.toLong() * soluong
+                val gioHang = GioHang(
+                    tensanphamgiohang = tensanpham,
+                    giasanphamgiohang = tongGiaTriSanPham.toString(),
+                    hinhanhsanphamgiohang = hinhanhsanpham,
+                    soluongsanphamgiohang = soluong
+                )
+                Utils.manggiohang.add(gioHang)
+
             }
+            binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
         }
     }
-
+    fun MutableList<GioHang>.getSoluong(): Int {
+        var totalSoluong = 0
+        for (gioHang in this) {
+            totalSoluong += gioHang.soluongsanphamgiohang
+        }
+        return totalSoluong
+    }
     private fun init() {
         tensanpham = intent.getStringExtra("tensanpham").toString()
         giasanpham = intent.getStringExtra("giasanpham").toString()
         hinhanhsanpham = intent.getStringExtra("hinhanhsanpham").toString()
         motasanpham = intent.getStringExtra("motasanpham").toString()
-        soluongsanphamgiohang = intent.getIntExtra("soluongsanphamgiohang", 0)
+        binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
     }
 
     private fun XulyChiTiet() {
@@ -85,7 +123,6 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         binding.txtChitietMotasanpham.text = motasanpham
         Glide.with(applicationContext).load(hinhanhsanpham).centerCrop()
             .into(binding.imvChitietHinhanh)
-        binding.badgeCart.setText(soluongsanphamgiohang.toString())
     }
 
     //chuyen sang dinh dang 000.000d
