@@ -20,7 +20,7 @@ class GioHangActivity : AppCompatActivity() {
 
         val list: MutableList<SanPham> = mutableListOf()
         list.add(
-            SanPham(
+            SanPham(0,
                 "https://cdn.tgdd.vn/Products/Images/2513/323829/bhx/nep-than-pmt-tui-1kg-clone-202403221751543836.jpg",
                 "3 túi nếp than PMT 1kg",
                 "",
@@ -28,7 +28,7 @@ class GioHangActivity : AppCompatActivity() {
             )
         )
         list.add(
-            SanPham(
+            SanPham(0,
                 "https://cdn.tgdd.vn/Products/Images/2513/323829/bhx/nep-than-pmt-tui-1kg-clone-202403221751543836.jpg",
                 "3 túi nếp than PMT 1kg",
                 "",
@@ -36,7 +36,7 @@ class GioHangActivity : AppCompatActivity() {
             )
         )
         list.add(
-            SanPham(
+            SanPham(0,
                 "https://cdn.tgdd.vn/Products/Images/2513/323829/bhx/nep-than-pmt-tui-1kg-clone-202403221751543836.jpg",
                 "3 túi nếp than PMT 1kg",
                 "",
@@ -44,37 +44,14 @@ class GioHangActivity : AppCompatActivity() {
             )
         )
         list.add(
-            SanPham(
+            SanPham(0,
                 "https://cdn.tgdd.vn/Products/Images/2513/323829/bhx/nep-than-pmt-tui-1kg-clone-202403221751543836.jpg",
                 "3 túi nếp than PMT 1kg",
                 "",
                 ""
             )
         )
-        list.add(
-            SanPham(
-                "https://cdn.tgdd.vn/Products/Images/2513/323829/bhx/nep-than-pmt-tui-1kg-clone-202403221751543836.jpg",
-                "3 túi nếp than PMT 1kg",
-                "",
-                ""
-            )
-        )
-        list.add(
-            SanPham(
-                "https://cdn.tgdd.vn/Products/Images/2513/323829/bhx/nep-than-pmt-tui-1kg-clone-202403221751543836.jpg",
-                "3 túi nếp than PMT 1kg",
-                "",
-                ""
-            )
-        )
-        list.add(
-            SanPham(
-                "https://cdn.tgdd.vn/Products/Images/2513/323829/bhx/nep-than-pmt-tui-1kg-clone-202403221751543836.jpg",
-                "3 túi nếp than PMT 1kg",
-                "",
-                ""
-            )
-        )
+
 
         val adapter = RvSanPhamTrongGioHang(list)
         binding.rvSanphamTronggiohang.adapter = adapter

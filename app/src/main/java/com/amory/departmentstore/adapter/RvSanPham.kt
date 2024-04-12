@@ -45,7 +45,7 @@ class RvSanPham(private var ds: MutableList<SanPham>,private val onClickRvSanPha
     fun addLoadingView() {
         //Thêm loading
         Handler().post {
-            ds.add(SanPham("", "", "",""))
+            ds.add(SanPham(0, "", "","",""))
             notifyItemInserted(ds.size - 1)
         }
     }

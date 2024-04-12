@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.widget.Toast
 import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.Utils
 import com.amory.departmentstore.databinding.ActivityChiTietSanPhamBinding
@@ -18,10 +19,9 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
     private lateinit var giasanpham: String
     private lateinit var hinhanhsanpham: String
     private lateinit var motasanpham: String
+    private  var idsanpham: Int = 0
+    private var soluongsanpham = 1
 
-    private var soluongsanphamgiohang: Int = 0
-
-    private var soluongsanpham = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChiTietSanPhamBinding.inflate(layoutInflater)
@@ -31,6 +31,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         XulyChiTiet()
         onCLickCongTruSanPham()
         ThemVaoGioHang()
+        /*Toast.makeText(this,idsanpham.toString(),Toast.LENGTH_SHORT).show()*/
     }
 /*
     private fun putData() {
@@ -46,10 +47,10 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
 
         }
         binding.txtTruSanpham.setOnClickListener {
-            soluongsanpham -= 1
-            if (soluongsanpham >= 0) {
-                CapNhatSoLuongSanPham()
+            if (soluongsanpham > 0){
+                soluongsanpham -= 1
             }
+                CapNhatSoLuongSanPham()
         }
     }
 
@@ -69,7 +70,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
                 val soluong = soluongsanpham
                 var flags:Boolean = false
                 for (i in 0 until Utils.manggiohang.size){
-                    if (Utils.manggiohang[i].tensanphamgiohang == tensanpham){
+                    if (Utils.manggiohang[i].idsanphamgiohang == idsanpham){
                         Utils.manggiohang[i].soluongsanphamgiohang += soluong
                         val tongGiaTriSanPham = giasanpham.toLong() * Utils.manggiohang[i].soluongsanphamgiohang
                         Utils.manggiohang[i].giasanphamgiohang = tongGiaTriSanPham.toString()
@@ -80,6 +81,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
                 if (!flags){
                     val tongGiaTriSanPham = giasanpham.toLong() * soluong
                     val gioHang = GioHang(
+                        idsanphamgiohang = idsanpham,
                         tensanphamgiohang = tensanpham,
                         giasanphamgiohang = tongGiaTriSanPham.toString(),
                         hinhanhsanphamgiohang = hinhanhsanpham,
@@ -91,6 +93,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
                 val soluong = soluongsanpham
                 val tongGiaTriSanPham = giasanpham.toLong() * soluong
                 val gioHang = GioHang(
+                    idsanphamgiohang = idsanpham,
                     tensanphamgiohang = tensanpham,
                     giasanphamgiohang = tongGiaTriSanPham.toString(),
                     hinhanhsanphamgiohang = hinhanhsanpham,
@@ -102,7 +105,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
             binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
         }
     }
-    fun MutableList<GioHang>.getSoluong(): Int {
+    private fun MutableList<GioHang>.getSoluong(): Int {
         var totalSoluong = 0
         for (gioHang in this) {
             totalSoluong += gioHang.soluongsanphamgiohang
@@ -114,6 +117,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         giasanpham = intent.getStringExtra("giasanpham").toString()
         hinhanhsanpham = intent.getStringExtra("hinhanhsanpham").toString()
         motasanpham = intent.getStringExtra("motasanpham").toString()
+        idsanpham = intent.getIntExtra("idsanpham",0)
         binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
     }
 

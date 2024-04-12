@@ -25,6 +25,7 @@ import com.amory.departmentstore.adapter.Utils
 import com.amory.departmentstore.databinding.ActivityMainBinding
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_ITEM
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_LOADING
+import com.amory.departmentstore.model.GioHang
 import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.model.OnCLickButtonSanPham
 import com.amory.departmentstore.model.OnClickRvLoaiSanPham
@@ -49,8 +50,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var adapter: RvSanPham
     private lateinit var scrollListener: RvLoadMoreScroll
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
-    private var soluongsanpham = 0
-    var soluongsanphamchitiet = 0
+    private var soluong = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,20 +62,18 @@ class MainActivity : AppCompatActivity() {
         /*  onTouch()*/
 
         /*  showSanPham()*/
-        laySoLuongSanPhamActivityChiTiet()
         goToGioHang()
-
         if (Utils.kiemTraKetNoi(this)) {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
             laySanPham()
             layLoaiSanPham()
+
         } else {
             Toast.makeText(this, "Vui lòng kết nối internet", Toast.LENGTH_SHORT).show()
 
         }
-        soluongsanphamchitiet = intent.getIntExtra("soluongsanphamgiohang", 0)
-
     }
+
 
     private fun goToGioHang() {
         binding.imvGiohang.setOnClickListener {
@@ -177,7 +175,7 @@ class MainActivity : AppCompatActivity() {
                                     override fun onClickSanPham(position: Int) {
                                         /*Toast.makeText(
                                             applicationContext,
-                                            "Mua $position", Toast.LENGTH_SHORT
+                                            "Mua " + list[position].id, Toast.LENGTH_SHORT
                                         ).show()*/
                                         val intent = Intent(
                                             this@MainActivity,
@@ -186,23 +184,46 @@ class MainActivity : AppCompatActivity() {
 
                                         intent.putExtra(
                                             "tensanpham",
-                                            list[position].tensanpham.toString()
+                                            list[position].tensanpham
                                         )
+                                        intent.putExtra("idsanpham", list[position].id)
                                         intent.putExtra("giasanpham", list[position].giasanpham)
                                         intent.putExtra("hinhanhsanpham", list[position].hinhanh)
                                         intent.putExtra("motasanpham", list[position].mota)
-                                        intent.putExtra("soluongsanphamgiohang", soluongsanpham)
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(intent)
 
                                     }
                                 }, object : OnCLickButtonSanPham {
                                     override fun onCLickButtonSanPham(position: Int) {
-                                        soluongsanpham += soluongsanphamchitiet
-                                        soluongsanpham += 1
-                                        if (soluongsanpham != 0) {
-                                            binding.badgeCart.setText(soluongsanpham.toString())
+                                        val soluong = 1
+                                        var flags = false
+
+                                        if (Utils.manggiohang.size > 0) {
+                                            for (i in 0 until Utils.manggiohang.size) {
+                                                if (Utils.manggiohang[i].tensanphamgiohang == list[position].tensanpham) {
+                                                    flags = true
+                                                    Utils.manggiohang[i].soluongsanphamgiohang += soluong
+                                                    val tongGiaTriSanPham = list[position].giasanpham.toLong() * Utils.manggiohang[i].soluongsanphamgiohang
+                                                    Utils.manggiohang[i].giasanphamgiohang = tongGiaTriSanPham.toString()
+                                                    break
+                                                }
+                                            }
                                         }
+
+                                        if (!flags) {
+                                            val tongGiaTriSanPham = list[position].giasanpham.toLong() * soluong
+                                            val gioHang = GioHang(
+                                                idsanphamgiohang = list[position].id,
+                                                tensanphamgiohang = list[position].tensanpham,
+                                                giasanphamgiohang = tongGiaTriSanPham.toString(),
+                                                hinhanhsanphamgiohang = list[position].hinhanh,
+                                                soluongsanphamgiohang = soluong
+                                            )
+                                            Utils.manggiohang.add(gioHang)
+                                        }
+
+                                        binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
                                     }
                                 })
                             adapter.notifyDataSetChanged()
@@ -232,16 +253,17 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
+        if (Utils.manggiohang.getSoluong()!=0) {
+            binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
+        }
     }
 
-
-    private fun laySoLuongSanPhamActivityChiTiet() {
-        var soluongsanphamchitiet = intent.getIntExtra("soluongsanpham", 0)
-        soluongsanphamchitiet += soluongsanpham
-        if (soluongsanphamchitiet != 0) {
-            binding.badgeCart.setText(soluongsanphamchitiet.toString())
+    private fun MutableList<GioHang>.getSoluong(): Int {
+        var totalSoluong = 0
+        for (gioHang in Utils.manggiohang) {
+            totalSoluong += gioHang.soluongsanphamgiohang
         }
-        /*Toast.makeText(this,soluongsanpham.toString(),Toast.LENGTH_SHORT).show()*/
+        return totalSoluong
     }
 
     private fun addEventLoad(produce: MutableList<SanPham>, list: MutableList<SanPham>) {
@@ -263,33 +285,6 @@ class MainActivity : AppCompatActivity() {
     private fun GoToSanPhamSnack() {
         val intent = Intent(this, SnackActivity::class.java)
         startActivity(intent)
-    }
-
-    /*Khi vuoót vào recyclerVIew sanpham*/
-    @SuppressLint("ClickableViewAccessibility")
-    fun onTouch() {
-        binding.rvSanpham.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-
-                if (firstVisibleItemPosition == 0 && dy < 0) {
-
-                    binding.txt.animate().translationY(0f).duration = 300
-                    binding.viewFlipper.animate().translationY(0f).duration = 300
-                    binding.rvloaisanpham.animate().translationY(0f).duration = 300
-
-                } else {
-                    binding.txt.animate().translationY(-binding.txt.height.toFloat()).duration = 300
-                    binding.viewFlipper.animate()
-                        .translationY(-binding.viewFlipper.height.toFloat()).duration = 600
-                    binding.rvloaisanpham.animate()
-                        .translationY(-binding.rvloaisanpham.height.toFloat()).duration = 900
-                }
-            }
-        })
     }
 
     private fun setRVLayoutManager() {
