@@ -76,8 +76,6 @@ class GioHangActivity : AppCompatActivity() {
     }
     @Subscribe(sticky = true , threadMode = ThreadMode.MAIN)
     public fun eventTinhTien(event: TinhTongEvent){
-        if(event!= null){
-            tinhTongTienHang()
-        }
+        tinhTongTienHang()
     }
 }

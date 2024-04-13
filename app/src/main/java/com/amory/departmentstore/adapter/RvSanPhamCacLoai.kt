@@ -5,23 +5,27 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
+import com.amory.departmentstore.model.OnCLickButtonSanPham
 import com.amory.departmentstore.model.OnClickSanPhamTheoLoai
 import com.amory.departmentstore.model.SanPham
 import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import java.util.Locale
 
-class RvSanPhamCacLoai(private var ds:MutableList<SanPham>,private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoai): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RvSanPhamCacLoai(private var ds:MutableList<SanPham>,private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoai, private val onCLickButtonSanPham: OnCLickButtonSanPham): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var mcontext:Context
     inner class viewHolder(itemView : View):RecyclerView.ViewHolder(itemView) {
         val txtTenSanPhamCacLoai = itemView.findViewById<TextView>(R.id.txt_tensanpham)!!
         val txtGiaSanPhamCacLoai = itemView.findViewById<TextView>(R.id.txtgiasanpham)!!
         val imvHinhAnhSanPhamCacLoai = itemView.findViewById<ImageView>(R.id.img_sanpham)!!
+        val btnMua: Button = itemView.findViewById(R.id.btnMua)
+
     }
     inner class LoadingViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
     //chuyen sang dinh dang 000.000d
@@ -73,11 +77,14 @@ class RvSanPhamCacLoai(private var ds:MutableList<SanPham>,private val onClickSa
             sanPhamTheoLoaiViewHolder.txtGiaSanPhamCacLoai.text = formatAmount(ds[position].giasanpham)
             Glide.with(mcontext).load(ds[position].hinhanh).centerCrop()
                 .into(sanPhamTheoLoaiViewHolder.imvHinhAnhSanPhamCacLoai)
-
+            sanPhamTheoLoaiViewHolder.btnMua.setOnClickListener {
+                onCLickButtonSanPham.onCLickButtonSanPham(position)
+            }
         }
         holder.itemView.setOnClickListener {
             onClickSanPhamTheoLoai.onClickSanPhamTheoLoai(position)
         }
+
     }
 
     override fun getItemViewType(position: Int): Int {

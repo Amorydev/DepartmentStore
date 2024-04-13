@@ -11,8 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.adapter.ItemOffsetDecoration
 import com.amory.departmentstore.adapter.RvLoadMoreScroll
 import com.amory.departmentstore.adapter.RvSanPhamCacLoai
+import com.amory.departmentstore.adapter.Utils
 import com.amory.departmentstore.databinding.ActivityTraiCayBinding
 import com.amory.departmentstore.model.Constant
+import com.amory.departmentstore.model.GioHang
+import com.amory.departmentstore.model.OnCLickButtonSanPham
 import com.amory.departmentstore.model.OnClickSanPhamTheoLoai
 import com.amory.departmentstore.model.OnLoadMoreListener
 import com.amory.departmentstore.model.SanPham
@@ -37,6 +40,7 @@ class TraiCayActivity : AppCompatActivity() {
         setContentView(binding.root)
         laySanPhamTraiCay()
         quayLaiTrangChu()
+        goToGioHang()
     }
     private fun quayLaiTrangChu() {
         binding.imvBack.setOnClickListener {
@@ -75,6 +79,37 @@ class TraiCayActivity : AppCompatActivity() {
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                     startActivity(intent)
                                 }
+                            },object: OnCLickButtonSanPham {
+                                override fun onCLickButtonSanPham(position: Int) {
+                                    val soluong = 1
+                                    var flags = false
+
+                                    if (Utils.manggiohang.size > 0) {
+                                        for (i in 0 until Utils.manggiohang.size) {
+                                            if (Utils.manggiohang[i].tensanphamgiohang == list[position].tensanpham) {
+                                                flags = true
+                                                Utils.manggiohang[i].soluongsanphamgiohang += soluong
+                                                val tongGiaTriSanPham = list[position].giasanpham.toLong() * Utils.manggiohang[i].soluongsanphamgiohang
+                                                Utils.manggiohang[i].giasanphamgiohang = tongGiaTriSanPham.toString()
+                                                break
+                                            }
+                                        }
+                                    }
+
+                                    if (!flags) {
+                                        val tongGiaTriSanPham = list[position].giasanpham.toLong() * soluong
+                                        val gioHang = GioHang(
+                                            idsanphamgiohang = list[position].id,
+                                            tensanphamgiohang = list[position].tensanpham,
+                                            giasanphamgiohang = tongGiaTriSanPham.toString(),
+                                            hinhanhsanphamgiohang = list[position].hinhanh,
+                                            soluongsanphamgiohang = soluong
+                                        )
+                                        Utils.manggiohang.add(gioHang)
+                                    }
+
+                                    binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
+                                }
                             })
 
                             binding.rvsanphamtheoloaiTraicay.adapter = adapter
@@ -91,6 +126,8 @@ class TraiCayActivity : AppCompatActivity() {
                             )*/
                             setRVLayoutManager()
                             addEventLoad(produce, list as MutableList<SanPham>)
+                            binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
+
                         }
                     }
                 }
@@ -100,6 +137,19 @@ class TraiCayActivity : AppCompatActivity() {
                 t.printStackTrace()
             }
         })
+    }
+    private fun MutableList<GioHang>.getSoluong(): Int {
+        var totalSoluong = 0
+        for (gioHang in Utils.manggiohang) {
+            totalSoluong += gioHang.soluongsanphamgiohang
+        }
+        return totalSoluong
+    }
+    private fun goToGioHang() {
+        binding.imvGiohang.setOnClickListener {
+            val intent = Intent(this, GioHangActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun addEventLoad(produce: MutableList<SanPham>, list: MutableList<SanPham>) {
