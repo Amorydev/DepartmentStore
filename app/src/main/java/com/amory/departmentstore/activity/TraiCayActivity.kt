@@ -36,7 +36,12 @@ class TraiCayActivity : AppCompatActivity() {
         )
         setContentView(binding.root)
         laySanPhamTraiCay()
-
+        quayLaiTrangChu()
+    }
+    private fun quayLaiTrangChu() {
+        binding.imvBack.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun laySanPhamTraiCay() {

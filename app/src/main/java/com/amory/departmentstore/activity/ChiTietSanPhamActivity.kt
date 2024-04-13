@@ -31,14 +31,23 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         XulyChiTiet()
         onCLickCongTruSanPham()
         ThemVaoGioHang()
+        GoToGioHang()
         /*Toast.makeText(this,idsanpham.toString(),Toast.LENGTH_SHORT).show()*/
     }
-/*
-    private fun putData() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("soluongsanpham", soluongsanphamgiohang)
-        startActivity(intent)
-    }*/
+
+    private fun GoToGioHang() {
+        binding.imgGiohangchitiet.setOnClickListener {
+            val intent = Intent(this, GioHangActivity::class.java)
+            startActivity(intent)
+        }
+
+    }
+    /*
+        private fun putData() {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("soluongsanpham", soluongsanphamgiohang)
+            startActivity(intent)
+        }*/
 
     private fun onCLickCongTruSanPham() {
         binding.txtCongSanpham.setOnClickListener {
@@ -68,7 +77,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         binding.btnThemvaogiohang.setOnClickListener {
             if (Utils.manggiohang.size > 0) {
                 val soluong = soluongsanpham
-                var flags:Boolean = false
+                var flags= false
                 for (i in 0 until Utils.manggiohang.size){
                     if (Utils.manggiohang[i].idsanphamgiohang == idsanpham){
                         Utils.manggiohang[i].soluongsanphamgiohang += soluong

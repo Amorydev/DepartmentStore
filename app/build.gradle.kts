@@ -48,11 +48,6 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    //Rx Java, Rx Android & Rx Kotlin
-    implementation ("io.reactivex.rxjava2:rxjava:2.2.9")
-    implementation ("io.reactivex.rxjava2:rxandroid:2.1.1")
-    implementation ("io.reactivex.rxjava2:rxkotlin:2.2.0")
-
     //Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     //GSON Converter
@@ -68,4 +63,8 @@ dependencies {
     //notification badge
     implementation ("com.nex3z:notification-badge:1.0.4")
 
+    //Events Bus
+    implementation ("org.greenrobot:eventbus:3.2.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
 }

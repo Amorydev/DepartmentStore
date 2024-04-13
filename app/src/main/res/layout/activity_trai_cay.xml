@@ -84,10 +84,35 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30sp"
+        android:layout_marginStart="5sp"
+        android:layout_marginTop="5sp"
+        android:layout_marginBottom="5sp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imv_back"
+            android:layout_width="28sp"
+            android:layout_height="25sp"
+            android:background="@drawable/left_arrow"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30sp"
+            android:layout_marginStart="5sp"
+            android:text="Trái cây"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvsanphamtheoloai_traicay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white" />
+        android:background="#AFFAB2" />
 
 </LinearLayout>
