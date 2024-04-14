@@ -14,7 +14,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.model.OnCLickButtonSanPham
@@ -74,9 +73,9 @@ class RvSanPham(private var ds: MutableList<SanPham>,private val onClickRvSanPha
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder.itemViewType == Constant.VIEW_TYPE_ITEM) {
             val sanPhamViewHolder = holder as SanPhamViewHolder
-            sanPhamViewHolder.tensanpham.text = ds[position].tensanpham
-            sanPhamViewHolder.giasanpham.text = formatAmount(ds[position].giasanpham)
-            Glide.with(mcontext).load(ds[position].hinhanh).centerCrop()
+            sanPhamViewHolder.tensanpham.text = ds[position].name
+            sanPhamViewHolder.giasanpham.text = formatAmount(ds[position].price)
+            Glide.with(mcontext).load(ds[position].image_url).centerCrop()
                 .into(sanPhamViewHolder.hinhanhsanpham)
 
             sanPhamViewHolder.btnMua.setOnClickListener {
@@ -91,7 +90,7 @@ class RvSanPham(private var ds: MutableList<SanPham>,private val onClickRvSanPha
 
 
     override fun getItemViewType(position: Int): Int {
-        return if (ds[position].tensanpham.isEmpty()) Constant.VIEW_TYPE_LOADING else Constant.VIEW_TYPE_ITEM
+        return if (ds[position].name.isEmpty()) Constant.VIEW_TYPE_LOADING else Constant.VIEW_TYPE_ITEM
     }
 
     override fun getItemCount(): Int {

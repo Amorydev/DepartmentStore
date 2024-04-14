@@ -122,8 +122,8 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         return totalSoluong
     }
     private fun init() {
-        tensanpham = intent.getStringExtra("tensanpham").toString()
-        giasanpham = intent.getStringExtra("giasanpham").toString()
+        tensanpham = intent.getStringExtra("name").toString()
+        giasanpham = intent.getStringExtra("price").toString()
         hinhanhsanpham = intent.getStringExtra("hinhanhsanpham").toString()
         motasanpham = intent.getStringExtra("motasanpham").toString()
         idsanpham = intent.getIntExtra("idsanpham",0)

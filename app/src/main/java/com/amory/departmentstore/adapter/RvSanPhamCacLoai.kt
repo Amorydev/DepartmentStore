@@ -73,9 +73,9 @@ class RvSanPhamCacLoai(private var ds:MutableList<SanPham>,private val onClickSa
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder.itemViewType == Constant.VIEW_TYPE_ITEM) {
             val sanPhamTheoLoaiViewHolder = holder as RvSanPhamCacLoai.viewHolder
-            sanPhamTheoLoaiViewHolder.txtTenSanPhamCacLoai.text = ds[position].tensanpham
-            sanPhamTheoLoaiViewHolder.txtGiaSanPhamCacLoai.text = formatAmount(ds[position].giasanpham)
-            Glide.with(mcontext).load(ds[position].hinhanh).centerCrop()
+            sanPhamTheoLoaiViewHolder.txtTenSanPhamCacLoai.text = ds[position].name
+            sanPhamTheoLoaiViewHolder.txtGiaSanPhamCacLoai.text = formatAmount(ds[position].price)
+            Glide.with(mcontext).load(ds[position].image_url).centerCrop()
                 .into(sanPhamTheoLoaiViewHolder.imvHinhAnhSanPhamCacLoai)
             sanPhamTheoLoaiViewHolder.btnMua.setOnClickListener {
                 onCLickButtonSanPham.onCLickButtonSanPham(position)
@@ -88,6 +88,6 @@ class RvSanPhamCacLoai(private var ds:MutableList<SanPham>,private val onClickSa
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (ds[position].tensanpham.isEmpty()) Constant.VIEW_TYPE_LOADING else Constant.VIEW_TYPE_ITEM
+        return if (ds[position].name.isEmpty()) Constant.VIEW_TYPE_LOADING else Constant.VIEW_TYPE_ITEM
     }
 }

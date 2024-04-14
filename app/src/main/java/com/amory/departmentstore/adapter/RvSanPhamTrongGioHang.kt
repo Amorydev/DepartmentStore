@@ -1,6 +1,7 @@
 package com.amory.departmentstore.adapter
 
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -29,9 +30,9 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
             Glide.with(binding.root).load(data.hinhanhsanphamgiohang)
                 .into(binding.imvHinhanhsanphamtrongiohang)
 
+            val position = adapterPosition
+            val gioHangItem = gioHang[position]
             binding.txtCongSanpham.setOnClickListener {
-                val position = adapterPosition
-                val gioHangItem = gioHang[position]
                 val soluongmoi = gioHangItem.soluongsanphamgiohang + 1
                 gioHangItem.soluongsanphamgiohang = soluongmoi
 
@@ -44,8 +45,7 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
                 EventBus.getDefault().postSticky(TinhTongEvent())
             }
             binding.txtTruSanpham.setOnClickListener {
-                val position = adapterPosition
-                val gioHangItem = gioHang[position]
+
                 val soluongmoi = gioHangItem.soluongsanphamgiohang - 1
                 if (soluongmoi >= 1) {
                     gioHangItem.soluongsanphamgiohang = soluongmoi
@@ -57,7 +57,21 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
                     EventBus.getDefault().postSticky(TinhTongEvent())
                 }
             }
-
+            binding.checkboxSanpham.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked){
+                    Utils.mangmuahang.add(gioHangItem)
+                    EventBus.getDefault().postSticky(TinhTongEvent())
+                }else{
+                    val iterator = Utils.mangmuahang.iterator()
+                    while (iterator.hasNext()) {
+                        val item = iterator.next()
+                        if (item.idsanphamgiohang == gioHangItem.idsanphamgiohang) {
+                            iterator.remove()
+                        }
+                    }
+                    EventBus.getDefault().postSticky(TinhTongEvent())
+                }
+            }
         }
 
     }

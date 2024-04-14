@@ -15,7 +15,7 @@
         android:layout_height="match_parent">
 
         <CheckBox
-            android:id="@+id/checkbox"
+            android:id="@+id/checkbox_sanpham"
             android:layout_width="25sp"
             android:layout_height="25sp"
             android:layout_marginStart="10dp"
@@ -29,7 +29,7 @@
             android:layout_height="90dp"
             android:layout_marginStart="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/checkbox"
+            app:layout_constraintStart_toEndOf="@id/checkbox_sanpham"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView

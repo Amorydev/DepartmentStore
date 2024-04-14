@@ -48,8 +48,8 @@ class GioHangActivity : AppCompatActivity() {
         var tongtienhang:Long = 0
         val phigiaohang = 30000
 
-        for(i in 0 until  Utils.manggiohang.size){
-            tongtienhang +=Utils.manggiohang[i].giasanphamgiohang.toLong()
+        for(i in 0 until  Utils.mangmuahang.size){
+            tongtienhang +=Utils.mangmuahang[i].giasanphamgiohang.toLong()
            /* Toast.makeText(this,Utils.manggiohang[i].soluongsanphamgiohang.toString(),Toast.LENGTH_SHORT).show()
             Toast.makeText(this,Utils.manggiohang[i].giasanphamgiohang,Toast.LENGTH_SHORT).show()*/
         }

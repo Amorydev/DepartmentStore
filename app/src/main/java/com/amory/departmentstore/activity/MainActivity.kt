@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.GestureDetector
-import android.view.MotionEvent
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 
@@ -40,9 +38,6 @@ import retrofit2.Call
 
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.NumberFormat
-import java.util.Locale
-import kotlin.math.log
 
 
 class MainActivity : AppCompatActivity() {
@@ -50,8 +45,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var adapter: RvSanPham
     private lateinit var scrollListener: RvLoadMoreScroll
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
-    private var soluong = 0
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,17 +95,52 @@ class MainActivity : AppCompatActivity() {
                                     "Bạn chọn " + list[position].tenloaisanpham,
                                     Toast.LENGTH_SHORT
                                 ).show()*/
-                                when (list[position].loaisanpham) {
+                                when (list[position].category_id) {
                                     1 -> {
-                                        GoToSanPhamGao()
+                                        /*
+                                                                                GoToSanPhamGao()
+                                        */
+                                        val intent = Intent(
+                                            this@MainActivity,
+                                            SanPhamTheoLoaiActivity::class.java
+                                        )
+                                        intent.putExtra("loai", list[position].category_id)
+                                        intent.putExtra("tenloaisanpham", list[position].name)
+                                        startActivity(intent)
                                     }
 
                                     2 -> {
-                                        GoToSanPhamSnack()
+                                        /* GoToSanPhamSnack()*/
+                                        val intent = Intent(
+                                            this@MainActivity,
+                                            SanPhamTheoLoaiActivity::class.java
+                                        )
+                                        intent.putExtra("loai", list[position].category_id)
+                                        intent.putExtra("tenloaisanpham", list[position].name)
+
+                                        startActivity(intent)
                                     }
 
                                     3 -> {
-                                        GoToSanPhamTraiCay()
+                                        /*   GoToSanPhamTraiCay()*/
+                                        val intent = Intent(
+                                            this@MainActivity,
+                                            SanPhamTheoLoaiActivity::class.java
+                                        )
+                                        intent.putExtra("loai", list[position].category_id)
+                                        intent.putExtra("tenloaisanpham", list[position].name)
+
+                                        startActivity(intent)
+                                    }
+
+                                    4 -> {
+                                        val intent = Intent(
+                                            this@MainActivity,
+                                            SanPhamTheoLoaiActivity::class.java
+                                        )
+                                        intent.putExtra("loai", list[position].category_id)
+                                        intent.putExtra("tenloaisanpham", list[position].name)
+                                        startActivity(intent)
                                     }
                                 }
                             }
@@ -136,10 +164,6 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun GoToSanPhamTraiCay() {
-        val intent = Intent(this, TraiCayActivity::class.java)
-        startActivity(intent)
-    }
 
     private fun laySanPham() {
         val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
@@ -175,7 +199,7 @@ class MainActivity : AppCompatActivity() {
                                     override fun onClickSanPham(position: Int) {
                                         /*Toast.makeText(
                                             applicationContext,
-                                            "Mua " + list[position].id, Toast.LENGTH_SHORT
+                                            "Mua " + list[position].category_id, Toast.LENGTH_SHORT
                                         ).show()*/
                                         val intent = Intent(
                                             this@MainActivity,
@@ -183,13 +207,13 @@ class MainActivity : AppCompatActivity() {
                                         )
 
                                         intent.putExtra(
-                                            "tensanpham",
-                                            list[position].tensanpham
+                                            "name",
+                                            list[position].name
                                         )
                                         intent.putExtra("idsanpham", list[position].id)
-                                        intent.putExtra("giasanpham", list[position].giasanpham)
-                                        intent.putExtra("hinhanhsanpham", list[position].hinhanh)
-                                        intent.putExtra("motasanpham", list[position].mota)
+                                        intent.putExtra("price", list[position].price)
+                                        intent.putExtra("hinhanhsanpham", list[position].image_url)
+                                        intent.putExtra("motasanpham", list[position].description)
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(intent)
 
@@ -201,29 +225,34 @@ class MainActivity : AppCompatActivity() {
 
                                         if (Utils.manggiohang.size > 0) {
                                             for (i in 0 until Utils.manggiohang.size) {
-                                                if (Utils.manggiohang[i].tensanphamgiohang == list[position].tensanpham) {
+                                                if (Utils.manggiohang[i].tensanphamgiohang == list[position].name) {
                                                     flags = true
                                                     Utils.manggiohang[i].soluongsanphamgiohang += soluong
-                                                    val tongGiaTriSanPham = list[position].giasanpham.toLong() * Utils.manggiohang[i].soluongsanphamgiohang
-                                                    Utils.manggiohang[i].giasanphamgiohang = tongGiaTriSanPham.toString()
+                                                    val tongGiaTriSanPham =
+                                                        list[position].price.toLong() * Utils.manggiohang[i].soluongsanphamgiohang
+                                                    Utils.manggiohang[i].giasanphamgiohang =
+                                                        tongGiaTriSanPham.toString()
                                                     break
                                                 }
                                             }
                                         }
 
                                         if (!flags) {
-                                            val tongGiaTriSanPham = list[position].giasanpham.toLong() * soluong
+                                            val tongGiaTriSanPham =
+                                                list[position].price.toLong() * soluong
                                             val gioHang = GioHang(
                                                 idsanphamgiohang = list[position].id,
-                                                tensanphamgiohang = list[position].tensanpham,
+                                                tensanphamgiohang = list[position].name,
                                                 giasanphamgiohang = tongGiaTriSanPham.toString(),
-                                                hinhanhsanphamgiohang = list[position].hinhanh,
+                                                hinhanhsanphamgiohang = list[position].image_url,
                                                 soluongsanphamgiohang = soluong
                                             )
                                             Utils.manggiohang.add(gioHang)
                                         }
 
-                                        binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
+                                        binding.badgeCart.setText(
+                                            Utils.manggiohang.getSoluong().toString()
+                                        )
                                     }
                                 })
                             adapter.notifyDataSetChanged()
@@ -253,7 +282,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
-        if (Utils.manggiohang.getSoluong()!=0) {
+        if (Utils.manggiohang.getSoluong() != 0) {
             binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
         }
     }
@@ -275,16 +304,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
         binding.rvSanpham.addOnScrollListener(scrollListener)
-    }
-
-    private fun GoToSanPhamGao() {
-        val intent = Intent(this@MainActivity, GaoActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun GoToSanPhamSnack() {
-        val intent = Intent(this, SnackActivity::class.java)
-        startActivity(intent)
     }
 
     private fun setRVLayoutManager() {

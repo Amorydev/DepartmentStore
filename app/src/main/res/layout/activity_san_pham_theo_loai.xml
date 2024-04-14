@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#AFFAB2"
     android:orientation="vertical"
+
     tools:context=".activity.GaoActivity">
 
     <LinearLayout
@@ -19,7 +19,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout2"
-            android:layout_width="370dp"
+            android:layout_width="380dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:background="@drawable/bk_timkiem"
@@ -45,7 +45,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/magnifying_glass"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imb_trangchu"
@@ -54,13 +54,13 @@
 
 
             <EditText
-                android:id="@+id/editText"
-                android:layout_width="220dp"
+                android:id="@+id/edt_timkiem"
+                android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="10sp"
                 android:background="@android:color/transparent"
-                android:hint="Tìm trong trang snack, rong biển"
+                android:hint="Tìm trong trang gạo các loại"
                 android:inputType="textFilter"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -110,22 +110,24 @@
 
         <ImageView
             android:id="@+id/imv_back"
+
             android:layout_width="28sp"
             android:layout_height="25sp"
             android:background="@drawable/left_arrow"
             tools:ignore="ContentDescription" />
 
         <TextView
+            android:id="@+id/txt_loaisanpham"
             android:layout_width="match_parent"
             android:layout_height="30sp"
             android:layout_marginStart="5sp"
-            android:text="Trái cây"
+            android:text="Gạo các loại"
             android:textColor="@color/black"
             android:textSize="20sp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvsanphamtheoloai_traicay"
+        android:id="@+id/rvsanphamtheoloai_gao"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#AFFAB2" />

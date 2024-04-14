@@ -12,8 +12,8 @@ class RvLoaiSanPham(val ds:List<LoaiSanPham>, private val onClickRvSanPham: OnCl
 
     inner class viewHolder(private val binding:LayoutLoaisanphamBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(data:LoaiSanPham){
-            binding.tvloaisanpham.text = data.tenloaisanpham
-            Glide.with(binding.root).load(data.hinhanh).centerCrop().into(binding.imvhinhanh)
+            binding.tvloaisanpham.text = data.name
+            Glide.with(binding.root).load(data.image_url).centerCrop().into(binding.imvhinhanh)
         }
 
     }

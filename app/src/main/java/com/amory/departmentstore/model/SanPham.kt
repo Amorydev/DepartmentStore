@@ -2,8 +2,8 @@ package com.amory.departmentstore.model
 
 data class SanPham(
     val id:Int,
-    val hinhanh: String,
-    val tensanpham: String,
-    val giasanpham: String,
-    val mota: String
+    val image_url: String,
+    val name: String,
+    val price: String,
+    val description: String
 )

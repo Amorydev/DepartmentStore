@@ -5,15 +5,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.ItemOffsetDecoration
 import com.amory.departmentstore.adapter.RvLoadMoreScroll
 import com.amory.departmentstore.adapter.RvSanPhamCacLoai
 import com.amory.departmentstore.adapter.Utils
-import com.amory.departmentstore.databinding.ActivitySnackBinding
+import com.amory.departmentstore.databinding.ActivitySanPhamTheoLoaiBinding
 import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.model.GioHang
 import com.amory.departmentstore.model.OnCLickButtonSanPham
@@ -25,23 +25,28 @@ import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import retrofit2.Call
 import retrofit2.Response
+import java.util.Locale
 
-class SnackActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivitySnackBinding
+class SanPhamTheoLoaiActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySanPhamTheoLoaiBinding
     lateinit var adapter: RvSanPhamCacLoai
     private lateinit var scrollListener: RvLoadMoreScroll
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
-    private val loai: Int = 2
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySnackBinding.inflate(layoutInflater)
+        binding = ActivitySanPhamTheoLoaiBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        laySanPhamSnack()
-        goToGioHang()
+        laySanPhamGao()
         quayLaiTrangChu()
+        goToGioHang()
+        setGiaoDien()
+    }
+
+    private fun setGiaoDien() {
+        var tenloaisanpham = intent.getStringExtra("tenloaisanpham")
+        binding.txtLoaisanpham.text = tenloaisanpham
+        tenloaisanpham = tenloaisanpham?.lowercase()
+        binding.edtTimkiem.hint = "Tìm kiếm trong trang $tenloaisanpham"
     }
 
     private fun quayLaiTrangChu() {
@@ -50,7 +55,9 @@ class SnackActivity : AppCompatActivity() {
         }
     }
 
-    private fun laySanPhamSnack() {
+
+    private fun laySanPhamGao() {
+        val loai = intent.getIntExtra("loai", 1)
         val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
         val call = service.getSanPhamTheoLoai(loai)
         call.enqueue(object : retrofit2.Callback<SanPhamModel> {
@@ -58,32 +65,32 @@ class SnackActivity : AppCompatActivity() {
             override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
                 if (response.isSuccessful) {
                     val produce = response.body()?.result
-                    if (!produce.isNullOrEmpty()) {
+                    /*
+                      Toast.makeText(this@MainActivity, produce, Toast.LENGTH_SHORT).show()
+                    */
 
-                        val randomSanPham = produce.shuffled()
-                        val list = randomSanPham.take(12)
+                    if (!produce.isNullOrEmpty()) {
+                        val randomPhanTu = produce.shuffled()
+                        val list = randomPhanTu.take(12)
 
                         if (list.isNotEmpty()) {
-                            /*
-                                                        Toast.makeText(applicationContext, produce[2].tensanpham,Toast.LENGTH_SHORT).show()
-                            */
+
                             adapter = RvSanPhamCacLoai(
                                 list.toMutableList(),
                                 object : OnClickSanPhamTheoLoai {
                                     override fun onClickSanPhamTheoLoai(position: Int) {
-                                        /* Toast.makeText(this@GaoActivity,list[position].tensanpham,Toast.LENGTH_SHORT).show()*/
+                                        /* Toast.makeText(this@GaoActivity,list[position].name,Toast.LENGTH_SHORT).show()*/
                                         val intent = Intent(
-                                            this@SnackActivity,
+                                            this@SanPhamTheoLoaiActivity,
                                             ChiTietSanPhamActivity::class.java
                                         )
-                                        intent.putExtra("tensanpham", list[position].tensanpham)
-                                        intent.putExtra("giasanpham", list[position].giasanpham)
-                                        intent.putExtra("hinhanhsanpham", list[position].hinhanh)
-                                        intent.putExtra("motasanpham", list[position].mota)
-                                        /*
-                                                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                        */
+                                        intent.putExtra("name", list[position].name)
+                                        intent.putExtra("price", list[position].price)
+                                        intent.putExtra("hinhanhsanpham", list[position].image_url)
+                                        intent.putExtra("motasanpham", list[position].description)
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(intent)
+
                                     }
                                 }, object : OnCLickButtonSanPham {
                                     override fun onCLickButtonSanPham(position: Int) {
@@ -92,11 +99,11 @@ class SnackActivity : AppCompatActivity() {
 
                                         if (Utils.manggiohang.size > 0) {
                                             for (i in 0 until Utils.manggiohang.size) {
-                                                if (Utils.manggiohang[i].tensanphamgiohang == list[position].tensanpham) {
+                                                if (Utils.manggiohang[i].tensanphamgiohang == list[position].name) {
                                                     flags = true
                                                     Utils.manggiohang[i].soluongsanphamgiohang += soluong
                                                     val tongGiaTriSanPham =
-                                                        list[position].giasanpham.toLong() * Utils.manggiohang[i].soluongsanphamgiohang
+                                                        list[position].price.toLong() * Utils.manggiohang[i].soluongsanphamgiohang
                                                     Utils.manggiohang[i].giasanphamgiohang =
                                                         tongGiaTriSanPham.toString()
                                                     break
@@ -106,12 +113,12 @@ class SnackActivity : AppCompatActivity() {
 
                                         if (!flags) {
                                             val tongGiaTriSanPham =
-                                                list[position].giasanpham.toLong() * soluong
+                                                list[position].price.toLong() * soluong
                                             val gioHang = GioHang(
                                                 idsanphamgiohang = list[position].id,
-                                                tensanphamgiohang = list[position].tensanpham,
+                                                tensanphamgiohang = list[position].name,
                                                 giasanphamgiohang = tongGiaTriSanPham.toString(),
-                                                hinhanhsanphamgiohang = list[position].hinhanh,
+                                                hinhanhsanphamgiohang = list[position].image_url,
                                                 soluongsanphamgiohang = soluong
                                             )
                                             Utils.manggiohang.add(gioHang)
@@ -122,31 +129,47 @@ class SnackActivity : AppCompatActivity() {
                                         )
                                     }
                                 })
-                            binding.rvsanphamtheoloaiSnack.adapter = adapter
+                            binding.rvsanphamtheoloaiGao.adapter = adapter
                             adapter.notifyDataSetChanged()
+                            val itemDecoration = ItemOffsetDecoration(3)
+                            binding.rvsanphamtheoloaiGao.addItemDecoration(itemDecoration)
                             setRVLayoutManager()
                             addEventLoad(produce, list as MutableList<SanPham>)
                             binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
+
+                        } else {
+                            Toast.makeText(
+                                this@SanPhamTheoLoaiActivity,
+                                "Không có sản phẩm để hiển thị",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
+                    } else {
+                        Toast.makeText(
+                            this@SanPhamTheoLoaiActivity,
+                            "Danh sách sản phẩm trống",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-
-
                 }
+
+
+            }
+
+            private fun MutableList<GioHang>.getSoluong(): Int {
+                var totalSoluong = 0
+                for (gioHang in Utils.manggiohang) {
+                    totalSoluong += gioHang.soluongsanphamgiohang
+                }
+                return totalSoluong
             }
 
             override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
                 t.printStackTrace()
-                Log.e("Amory", "Error occurred: ${t.message}", t)
             }
-        })
-    }
-
-    private fun MutableList<GioHang>.getSoluong(): Int {
-        var totalSoluong = 0
-        for (gioHang in Utils.manggiohang) {
-            totalSoluong += gioHang.soluongsanphamgiohang
         }
-        return totalSoluong
+
+        )
     }
 
     private fun goToGioHang() {
@@ -164,7 +187,7 @@ class SnackActivity : AppCompatActivity() {
                 LoadMoreData(produce, list)
             }
         })
-        binding.rvsanphamtheoloaiSnack.addOnScrollListener(scrollListener)
+        binding.rvsanphamtheoloaiGao.addOnScrollListener(scrollListener)
     }
 
 
@@ -179,21 +202,21 @@ class SnackActivity : AppCompatActivity() {
                 !current.contains(it)
             }
             val newList = remainingItems.take(12)
-            laySanPhamSnack()
+            laySanPhamGao()
             current.addAll(newList)
             adapter.addData(newList)
             scrollListener.setLoaded()
-            binding.rvsanphamtheoloaiSnack.post {
+            binding.rvsanphamtheoloaiGao.post {
                 adapter.notifyDataSetChanged()
             }
-        }, 1000)
+        }, 3000)
     }
 
     private fun setRVLayoutManager() {
         mLayoutManager = GridLayoutManager(this, 3)
-        binding.rvsanphamtheoloaiSnack.layoutManager = mLayoutManager
-        binding.rvsanphamtheoloaiSnack.setHasFixedSize(true)
-        binding.rvsanphamtheoloaiSnack.adapter = adapter
+        binding.rvsanphamtheoloaiGao.layoutManager = mLayoutManager
+        binding.rvsanphamtheoloaiGao.setHasFixedSize(true)
+        binding.rvsanphamtheoloaiGao.adapter = adapter
         (mLayoutManager as GridLayoutManager).spanSizeLookup =
             object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
@@ -205,4 +228,6 @@ class SnackActivity : AppCompatActivity() {
                 }
             }
     }
+
+
 }
