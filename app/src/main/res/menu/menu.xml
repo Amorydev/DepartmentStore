@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/home"
+        android:title="Sản phẩm"
+        android:icon="@drawable/home"/>
+    <item android:id="@+id/discount"
+        android:title="Khuyến mãi"
+        android:icon="@drawable/discount"/>
+    <item android:id="@+id/cart"
+        android:title="Giỏ hàng"
+        android:icon="@drawable/carts"/>
+    <item android:id="@+id/account"
+        android:title="Tài khoản"
+        android:icon="@drawable/user"/>
+</menu>

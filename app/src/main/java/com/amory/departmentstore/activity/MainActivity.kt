@@ -7,10 +7,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.MenuItem
+import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.ImageView
 
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,6 +40,7 @@ import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import com.bumptech.glide.Glide
+import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
 
 import retrofit2.Callback
@@ -51,7 +58,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         SlideQuangCao()
-
+        onClickDanhMuc()
+        onCLickNav()
+        OnclickNavHeader()
         /*  onTouch()*/
 
         /*  showSanPham()*/
@@ -63,7 +72,53 @@ class MainActivity : AppCompatActivity() {
 
         } else {
             Toast.makeText(this, "Vui lòng kết nối internet", Toast.LENGTH_SHORT).show()
+        }
 
+
+    }
+
+
+    private fun OnclickNavHeader() {
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        val headerView: View = navigationView.getHeaderView(0)
+        val btnSignIn: Button = headerView.findViewById(R.id.btnSignIn)
+        val btnLogin:Button = headerView.findViewById(R.id.btnLogin)
+        btnSignIn.setOnClickListener {
+            val intent = Intent(this, DangKiActivity::class.java)
+            startActivity(intent)
+        }
+        btnLogin.setOnClickListener {
+            val intent = Intent(this, DangNhapActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+
+    private fun onCLickNav() {
+        binding.navView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.btnSignIn -> {
+                    val intent = Intent(this, DangKiActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+
+                R.id.cart -> {
+                    val intent = Intent(this, GioHangActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+
+                else -> {
+                    true
+                }
+            }
+        }
+    }
+
+    private fun onClickDanhMuc() {
+        binding.imbTrangchu.setOnClickListener {
+            binding.layoutDrawer.openDrawer(binding.navView)
         }
     }
 
@@ -74,6 +129,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
 
     private fun layLoaiSanPham() {
         val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)

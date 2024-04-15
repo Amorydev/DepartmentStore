@@ -1,6 +1,7 @@
 package com.amory.departmentstore.retrofit
 
 
+import com.amory.departmentstore.model.DangKiModel
 import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.model.SanPhamModel
 import retrofit2.Call
@@ -19,4 +20,14 @@ interface ApiBanHang {
     fun getSanPhamTheoLoai(
         @Field("loai") loai:Int
     ):Call<SanPhamModel>
+    @POST("dangki.php")
+    @FormUrlEncoded
+    fun dangkitaikhoan(
+        @Field("first_name") first_name:String,
+        @Field("last_name") last_name:String,
+        @Field("email") email:String,
+        @Field("password") password:String,
+        @Field("mobiphone") mobile:String
+    ):Call<DangKiModel>
+
 }

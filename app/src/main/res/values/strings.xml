@@ -10,4 +10,7 @@
     <string name="chitiet_sanpham">Chi tiết sản phẩm</string>
     <string name="them_vao_gio_hang">Thêm vào giỏ hàng</string>
     <string name="giohang">Giỏ hàng</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+
 </resources>

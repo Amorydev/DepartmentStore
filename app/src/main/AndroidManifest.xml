@@ -19,6 +19,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.DangNhapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.DangKiActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.SanPhamTheoLoaiActivity"
             android:exported="false" />
         <activity
