@@ -3,6 +3,7 @@ package com.amory.departmentstore.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -52,6 +53,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var adapter: RvSanPham
     private lateinit var scrollListener: RvLoadMoreScroll
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
+    private var tempProductList: List<SanPham>? = null
+    private var isLoadMore = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         goToGioHang()
         if (Utils.kiemTraKetNoi(this)) {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
+            paddingRecy()
             laySanPham()
             layLoaiSanPham()
 
@@ -77,12 +81,17 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun paddingRecy() {
+        val itemDecoration = ItemOffsetDecoration(1)
+        binding.rvSanpham.addItemDecoration(itemDecoration)
+    }
+
 
     private fun OnclickNavHeader() {
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         val headerView: View = navigationView.getHeaderView(0)
         val btnSignIn: Button = headerView.findViewById(R.id.btnSignIn)
-        val btnLogin:Button = headerView.findViewById(R.id.btnLogin)
+        val btnLogin: Button = headerView.findViewById(R.id.btnLogin)
         btnSignIn.setOnClickListener {
             val intent = Intent(this, DangKiActivity::class.java)
             startActivity(intent)
@@ -198,6 +207,37 @@ class MainActivity : AppCompatActivity() {
                                         intent.putExtra("tenloaisanpham", list[position].name)
                                         startActivity(intent)
                                     }
+
+                                    5 -> {
+                                        val intent = Intent(
+                                            this@MainActivity,
+                                            SanPhamTheoLoaiActivity::class.java
+                                        )
+                                        intent.putExtra("loai", list[position].category_id)
+                                        intent.putExtra("tenloaisanpham", list[position].name)
+                                        startActivity(intent)
+                                    }
+
+                                    6 -> {
+                                        val intent = Intent(
+                                            this@MainActivity,
+                                            SanPhamTheoLoaiActivity::class.java
+                                        )
+                                        intent.putExtra("loai", list[position].category_id)
+                                        intent.putExtra("tenloaisanpham", list[position].name)
+                                        startActivity(intent)
+                                    }
+
+                                    7 -> {
+                                        val intent = Intent(
+                                            this@MainActivity,
+                                            SanPhamTheoLoaiActivity::class.java
+                                        )
+                                        intent.putExtra("loai", list[position].category_id)
+                                        intent.putExtra("tenloaisanpham", list[position].name)
+                                        startActivity(intent)
+                                    }
+
                                 }
                             }
                         })
@@ -245,8 +285,12 @@ class MainActivity : AppCompatActivity() {
                     */
 
                     if (!produce.isNullOrEmpty()) {
-                        val randomPhanTu = produce.shuffled()
-                        val list = randomPhanTu.take(12)
+                        //khoi tao list tam luu tru lai list de khong load lai moi lan nhan back
+                        if (tempProductList == null) {
+                            tempProductList = produce.shuffled().take(12)
+                        }
+
+                        val list = if (isLoadMore) tempProductList!! else produce
 
                         if (list.isNotEmpty()) {
 
@@ -313,10 +357,6 @@ class MainActivity : AppCompatActivity() {
                                 })
                             adapter.notifyDataSetChanged()
                             binding.rvSanpham.adapter = adapter
-                            /*Thêm khoảng cách giữa các item adapter*/
-                            val itemDecoration = ItemOffsetDecoration(3)
-                            binding.rvSanpham.addItemDecoration(itemDecoration)
-
                             setRVLayoutManager()
                             addEventLoad(produce, list)
                         } else {
@@ -431,6 +471,23 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         laySanPham()
+        layLoaiSanPham()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        laySanPham()
+        layLoaiSanPham()
+    }
+
+    override fun onBackPressed() {
+        if (isLoadMore) {
+            isLoadMore =
+                false // Đặt lại trạng thái loadmore về false khi quay lại danh sách ban đầu
+            laySanPham() // Hiển thị lại danh sách sản phẩm ban đầu
+        } else {
+            super.onBackPressed() // Nếu chưa loadmore thì thực hiện như bình thường
+        }
     }
 
 

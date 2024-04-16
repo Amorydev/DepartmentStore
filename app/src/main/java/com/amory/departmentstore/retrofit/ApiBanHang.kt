@@ -1,7 +1,7 @@
 package com.amory.departmentstore.retrofit
 
 
-import com.amory.departmentstore.model.DangKiModel
+import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.model.SanPhamModel
 import retrofit2.Call
@@ -28,6 +28,12 @@ interface ApiBanHang {
         @Field("email") email:String,
         @Field("password") password:String,
         @Field("mobiphone") mobile:String
-    ):Call<DangKiModel>
+    ):Call<UserModel>
+    @POST("dangnhap.php")
+    @FormUrlEncoded
+    fun dangnhaptaikhoan(
+        @Field("email") email:String,
+        @Field("password") password:String
+    ):Call<UserModel>
 
 }

@@ -4,12 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="126sp"
     android:layout_height="210dp"
-    android:layout_marginStart="2dp"
-    android:layout_marginTop="2dp"
-    android:layout_marginEnd="2dp"
+   android:layout_margin="2sp"
     app:cardCornerRadius="10dp"
     app:cardBackgroundColor="@android:color/transparent"
-    app:cardElevation="4dp"
+    app:cardElevation="2dp"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,7 +78,7 @@
                 android:layout_marginTop="5sp"
                 android:text="@string/_89_900"
                 android:textColor="#FFEB3B"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/btnMua"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -89,7 +87,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnMua"
-                android:layout_width="60sp"
+                android:layout_width="65sp"
                 android:layout_height="30sp"
                 android:layout_marginBottom="10sp"
                 android:background="@drawable/bk_item"

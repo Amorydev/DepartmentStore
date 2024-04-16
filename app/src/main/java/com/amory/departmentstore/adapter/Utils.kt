@@ -6,11 +6,13 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import com.amory.departmentstore.model.GioHang
+import com.amory.departmentstore.model.User
 
 class Utils {
     companion object{
         val manggiohang: MutableList<GioHang> = mutableListOf()
         val mangmuahang: MutableList<GioHang> = mutableListOf()
+        lateinit var user:User
         @SuppressLint("ObsoleteSdkInt")
         fun kiemTraKetNoi(context: Context): Boolean {
             val connectivityManager =

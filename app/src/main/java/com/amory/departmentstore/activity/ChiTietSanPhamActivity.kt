@@ -38,6 +38,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
     private fun GoToGioHang() {
         binding.imgGiohangchitiet.setOnClickListener {
             val intent = Intent(this, GioHangActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
 
@@ -70,6 +71,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
     private fun onClickBack() {
         binding.imvBack.setOnClickListener {
             onBackPressed()
+            finish()
         }
     }
 

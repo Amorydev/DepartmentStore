@@ -52,6 +52,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
     private fun quayLaiTrangChu() {
         binding.imvBack.setOnClickListener {
             onBackPressed()
+            finish()
         }
     }
 
@@ -175,6 +176,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
     private fun goToGioHang() {
         binding.imvGiohang.setOnClickListener {
             val intent = Intent(this, GioHangActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
     }
