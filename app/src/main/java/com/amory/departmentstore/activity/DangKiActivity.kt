@@ -52,7 +52,11 @@ class DangKiActivity : AppCompatActivity() {
         val repassword = binding.repassET.text?.trim().toString()
         val mobile = binding.mobileET.text?.trim().toString()
 
-        if (first_name.isEmpty() && last_name.isEmpty() && email.isEmpty() && password.isEmpty() && repassword.isEmpty() && mobile.isEmpty()) {
+        if (first_name.isEmpty() && last_name.isEmpty()
+            && email.isEmpty() && password.isEmpty()
+            && repassword.isEmpty() && mobile.isEmpty()
+            && !isValidPassword(password)
+            &&!email.let { Patterns.EMAIL_ADDRESS.matcher(it).matches() } && email.isEmpty()) {
             binding.txtBatbuocnhapmobile.visibility = View.VISIBLE
             binding.progressBar.visibility = View.INVISIBLE
             Toast.makeText(this, "Vui lòng nhập đủ dữ liệu", Toast.LENGTH_SHORT).show()

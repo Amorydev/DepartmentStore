@@ -13,6 +13,7 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -38,6 +39,7 @@ import com.amory.departmentstore.model.OnClickRvSanPham
 import com.amory.departmentstore.model.OnLoadMoreListener
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
+import com.amory.departmentstore.model.User
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import com.bumptech.glide.Glide
@@ -64,9 +66,11 @@ class MainActivity : AppCompatActivity() {
         onClickDanhMuc()
         onCLickNav()
         OnclickNavHeader()
-        /*  onTouch()*/
 
+        /*  onTouch()*/
         /*  showSanPham()*/
+        /*Toast.makeText(this,Utils.user_current?.email,Toast.LENGTH_SHORT).show()*/
+
         goToGioHang()
         if (Utils.kiemTraKetNoi(this)) {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
@@ -100,6 +104,18 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, DangNhapActivity::class.java)
             startActivity(intent)
         }
+        if (Utils.user_current != null){
+            btnLogin.visibility = View.INVISIBLE
+            btnSignIn.visibility = View.INVISIBLE
+            val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
+            txt_nav.text = Utils.user_current?.email
+        }else{
+            btnLogin.visibility = View.VISIBLE
+            btnSignIn.visibility = View.VISIBLE
+            val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
+            txt_nav.text = Utils.user_current?.email
+        }
+
     }
 
 
@@ -290,7 +306,7 @@ class MainActivity : AppCompatActivity() {
                             tempProductList = produce.shuffled().take(12)
                         }
 
-                        val list = if (isLoadMore) tempProductList!! else produce
+                        val list = tempProductList!!
 
                         if (list.isNotEmpty()) {
 
@@ -480,13 +496,13 @@ class MainActivity : AppCompatActivity() {
         layLoaiSanPham()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (isLoadMore) {
-            isLoadMore =
-                false // Đặt lại trạng thái loadmore về false khi quay lại danh sách ban đầu
-            laySanPham() // Hiển thị lại danh sách sản phẩm ban đầu
+            isLoadMore = false
+            laySanPham()
         } else {
-            super.onBackPressed() // Nếu chưa loadmore thì thực hiện như bình thường
+            super.onBackPressed()
         }
     }
 

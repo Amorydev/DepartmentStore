@@ -72,4 +72,6 @@ dependencies {
     implementation ("com.github.denzcoskun:ImageSlideshow:0.1.2")
     //paperDB
     implementation ("io.github.pilgr:paperdb:2.7.2")
+    //circle ImageView
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
 }

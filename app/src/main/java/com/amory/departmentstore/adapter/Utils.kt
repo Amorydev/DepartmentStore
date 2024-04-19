@@ -12,7 +12,7 @@ class Utils {
     companion object{
         val manggiohang: MutableList<GioHang> = mutableListOf()
         val mangmuahang: MutableList<GioHang> = mutableListOf()
-        lateinit var user:User
+        var user_current: User? = null
         @SuppressLint("ObsoleteSdkInt")
         fun kiemTraKetNoi(context: Context): Boolean {
             val connectivityManager =

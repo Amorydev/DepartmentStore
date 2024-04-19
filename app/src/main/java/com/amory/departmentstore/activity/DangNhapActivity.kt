@@ -35,26 +35,18 @@ class DangNhapActivity : AppCompatActivity() {
 
     private fun onCLickDangKi() {
         binding.txtDangkingay.setOnClickListener {
-            val intent = Intent(this,DangKiActivity::class.java)
+            val intent = Intent(this, DangKiActivity::class.java)
             startActivity(intent)
             finish()
         }
     }
 
-    private fun onClickChecked(email:String,password:String) {
-        binding.checkBoxNhodangnhap.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked){
-                Paper.book().write("email",email)
-                Paper.book().write("password",password)
-            }
-        }
-    }
 
-    private fun init(){
+    private fun init() {
         Paper.init(this)
         val emailPaper = Paper.book().read<String>("email")
         val passwordPaper = Paper.book().read<String>("password")
-        if (emailPaper != null && passwordPaper != null){
+        if (emailPaper != null && passwordPaper != null) {
             binding.emailEt.setText(emailPaper)
             binding.passET.setText(passwordPaper)
         }
@@ -65,17 +57,22 @@ class DangNhapActivity : AppCompatActivity() {
         binding.btnDangnhap.setOnClickListener {
             val email = binding.emailEt.text.toString().trim()
             val password = binding.passET.text.toString().trim()
-            onClickChecked(email,password)
+            Paper.book().write("email", email)
+            Paper.book().write("password", password)
             binding.prgbar.visibility = View.VISIBLE
-            if (TextUtils.isEmpty(email) && TextUtils.isEmpty(password) && !Patterns.EMAIL_ADDRESS.matcher(email).matches() ) {
+            if (TextUtils.isEmpty(email) && TextUtils.isEmpty(password) && !Patterns.EMAIL_ADDRESS.matcher(
+                    email
+                ).matches()
+            ) {
                 Toast.makeText(
                     applicationContext,
                     "Vui lòng nhập đầy đủ email và password",
                     Toast.LENGTH_SHORT
                 ).show()
                 binding.prgbar.visibility = View.INVISIBLE
-            }else {
-
+            } else {
+                Utils.user_current?.email = email
+                Utils.user_current?.password = password
                 val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
                 val call = service.dangnhaptaikhoan(email, password)
                 call.enqueue(object : Callback<UserModel> {
@@ -89,7 +86,7 @@ class DangNhapActivity : AppCompatActivity() {
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     binding.prgbar.visibility = View.GONE
-                                    Utils.user = response.body()?.result?.get(0)!!
+                                    Utils.user_current = response.body()?.result?.get(0)!!
                                     val intent =
                                         Intent(this@DangNhapActivity, MainActivity::class.java)
                                     startActivity(intent)
@@ -115,11 +112,12 @@ class DangNhapActivity : AppCompatActivity() {
         }
 
     }
+
     override fun onResume() {
         super.onResume()
-        if (::user.isInitialized && Utils.user.email != null && Utils.user.password != null){
-            binding.emailEt.setText(Utils.user.email)
-            binding.passET.setText(Utils.user.password)
+        if (::user.isInitialized && Utils.user_current?.email?.isEmpty()!! && Utils?.user_current?.password?.isEmpty()!!) {
+            binding.emailEt.setText(Utils.user_current?.email)
+            binding.passET.setText(Utils.user_current?.password)
         }
     }
 }
