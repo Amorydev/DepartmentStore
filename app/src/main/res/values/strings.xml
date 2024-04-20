@@ -13,5 +13,8 @@
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
     <string name="email_display">amory.dev@gmail.com</string>
+    <string name="mua_hang">Mua hàng</string>
+    <string name="thong_tin_thanh_toan">Thông tin thanh toán</string>
+    <string name="dat_hang">Đặt hàng</string>
 
 </resources>

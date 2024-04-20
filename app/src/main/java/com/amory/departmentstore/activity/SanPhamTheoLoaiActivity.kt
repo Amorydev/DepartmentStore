@@ -54,6 +54,10 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
             onBackPressed()
             finish()
         }
+        binding.txtLoaisanpham.setOnClickListener {
+            onBackPressed()
+            finish()
+        }
     }
 
 

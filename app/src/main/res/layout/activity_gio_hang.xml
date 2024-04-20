@@ -39,7 +39,6 @@
             android:textSize="25sp"
             android:textStyle="bold" />
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -51,7 +50,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -61,18 +60,18 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_sanpham_tronggiohang"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView_thongtinthanhtoan"
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
                     android:layout_margin="10dp"
+                    android:layout_marginTop="9dp"
                     app:cardBackgroundColor="#AFFAB2"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="5sp"
@@ -154,9 +153,9 @@
                             android:id="@+id/view"
                             android:layout_width="350sp"
                             android:layout_height="1dp"
-                            android:layout_marginStart="20dp"
                             android:layout_marginTop="8dp"
                             android:background="@color/black"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/txt" />
 
@@ -199,12 +198,13 @@
                     app:layout_constraintTop_toBottomOf="@id/cardView_thongtinthanhtoan">
 
                     <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_muahang"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20sp"
                         android:background="#AFFAB2"
-                        android:text="Đặt hàng"
-                        android:textSize="20dp"
+                        android:text="@string/mua_hang"
+                        android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

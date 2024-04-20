@@ -29,7 +29,7 @@ class RvSanPhamCacLoai(private var ds:MutableList<SanPham>,private val onClickSa
     }
     inner class LoadingViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
     //chuyen sang dinh dang 000.000d
-    fun formatAmount(amount: String): String {
+    private fun formatAmount(amount: String): String {
         val number = amount.toLong()
         val formatter = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${formatter.format(number)}đ"

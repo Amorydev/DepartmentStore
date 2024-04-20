@@ -74,4 +74,6 @@ dependencies {
     implementation ("io.github.pilgr:paperdb:2.7.2")
     //circle ImageView
     implementation ("de.hdodenhof:circleimageview:3.1.0")
+    //Gson
+    implementation ("com.google.code.gson:gson:2.10.1")
 }

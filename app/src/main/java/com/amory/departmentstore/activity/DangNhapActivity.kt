@@ -87,10 +87,17 @@ class DangNhapActivity : AppCompatActivity() {
                                     ).show()
                                     binding.prgbar.visibility = View.GONE
                                     Utils.user_current = response.body()?.result?.get(0)!!
-                                    val intent =
-                                        Intent(this@DangNhapActivity, MainActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
+                                    if (Utils.user_current!!.email != "admin") {
+                                        val intent =
+                                            Intent(this@DangNhapActivity, MainActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
+                                    }else{
+                                        val intent =
+                                            Intent(this@DangNhapActivity, AdminActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
+                                    }
                                 } else {
                                     binding.prgbar.visibility = View.GONE
                                     Toast.makeText(

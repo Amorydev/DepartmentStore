@@ -104,12 +104,12 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, DangNhapActivity::class.java)
             startActivity(intent)
         }
-        if (Utils.user_current != null){
+        if (Utils.user_current != null) {
             btnLogin.visibility = View.INVISIBLE
             btnSignIn.visibility = View.INVISIBLE
             val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
             txt_nav.text = Utils.user_current?.email
-        }else{
+        } else {
             btnLogin.visibility = View.VISIBLE
             btnSignIn.visibility = View.VISIBLE
             val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
@@ -286,7 +286,6 @@ class MainActivity : AppCompatActivity() {
                 Log.e("Amory", "Error occurred: ${t.message}", t)
                 Toast.makeText(this@MainActivity, "Lấy sản phẩm thất bại", Toast.LENGTH_SHORT)
                     .show()
-
             }
 
             @SuppressLint("NotifyDataSetChanged")
@@ -301,12 +300,8 @@ class MainActivity : AppCompatActivity() {
                     */
 
                     if (!produce.isNullOrEmpty()) {
-                        //khoi tao list tam luu tru lai list de khong load lai moi lan nhan back
-                        if (tempProductList == null) {
-                            tempProductList = produce.shuffled().take(12)
-                        }
 
-                        val list = tempProductList!!
+                        val list = produce.shuffled().take(12)
 
                         if (list.isNotEmpty()) {
 

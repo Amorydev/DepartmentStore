@@ -1,5 +1,6 @@
 package com.amory.departmentstore.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -26,9 +27,12 @@ class GioHangActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         OnClickBack()
+        onCLickMuaHang()
         if(Utils.manggiohang.size == 0){
+            Toast.makeText(this,"Chưa có sản phẩm nào được thêm vô giỏ hàng",Toast.LENGTH_SHORT).show()
         }else{
-            tinhTongTienHang()
+
+            tienHang()
            /* Toast.makeText(this,tinhTongTienHang().toString(),Toast.LENGTH_SHORT).show()*/
             val adapter = RvSanPhamTrongGioHang(Utils.manggiohang)
             binding.rvSanphamTronggiohang.adapter = adapter
@@ -38,27 +42,34 @@ class GioHangActivity : AppCompatActivity() {
 
     }
 
+    private fun onCLickMuaHang() {
+        binding.btnMuahang.setOnClickListener {
+            val intent = Intent(this,ThanhToanActivity::class.java)
+            intent.putExtra("tienhang",tinhTongTienHang())
+            startActivity(intent)
+        }
+    }
+
     private fun OnClickBack() {
         binding.imvBack.setOnClickListener {
             onBackPressed()
         }
     }
 
-    private fun tinhTongTienHang(){
+    private fun tinhTongTienHang():Long{
         var tongtienhang:Long = 0
-        val phigiaohang = 30000
-
         for(i in 0 until  Utils.mangmuahang.size){
             tongtienhang +=Utils.mangmuahang[i].giasanphamgiohang.toLong()
            /* Toast.makeText(this,Utils.manggiohang[i].soluongsanphamgiohang.toString(),Toast.LENGTH_SHORT).show()
             Toast.makeText(this,Utils.manggiohang[i].giasanphamgiohang,Toast.LENGTH_SHORT).show()*/
         }
-        binding.tienhang.text = formatAmount(tongtienhang.toString())
-        binding.phigiaohang.text = formatAmount(phigiaohang.toString())
-        tongtienhang+=30000
-        binding.tongtien.text = formatAmount(tongtienhang.toString())
+        return tongtienhang
+    }
+    private fun tienHang(){
+        binding.tienhang.text = formatAmount(tinhTongTienHang().toString())
+        binding.phigiaohang.text = formatAmount(30000.toString())
 
-
+        binding.tongtien.text = formatAmount((tinhTongTienHang()+30000).toString())
     }
     private fun formatAmount(amount:String):String{
         val number = amount.toLong()
@@ -76,6 +87,6 @@ class GioHangActivity : AppCompatActivity() {
     }
     @Subscribe(sticky = true , threadMode = ThreadMode.MAIN)
     public fun eventTinhTien(event: TinhTongEvent){
-        tinhTongTienHang()
+        tienHang()
     }
 }
