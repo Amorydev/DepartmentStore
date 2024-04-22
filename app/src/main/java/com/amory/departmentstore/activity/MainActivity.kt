@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         onClickDanhMuc()
         onCLickNav()
         OnclickNavHeader()
+        onClickSearch()
 
         /*  onTouch()*/
         /*  showSanPham()*/
@@ -82,7 +83,19 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Vui lòng kết nối internet", Toast.LENGTH_SHORT).show()
         }
 
+    }
 
+    private fun onClickSearch() {
+        binding.imbSearch.setOnClickListener {
+            val intent = Intent(this,SearchActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
+        binding.edtSearch.setOnClickListener {
+            val intent = Intent(this,SearchActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
     }
 
     private fun paddingRecy() {

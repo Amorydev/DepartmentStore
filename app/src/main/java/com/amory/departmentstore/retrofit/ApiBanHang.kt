@@ -35,5 +35,22 @@ interface ApiBanHang {
         @Field("email") email:String,
         @Field("password") password:String
     ):Call<UserModel>
+    @POST("donhang.php")
+    @FormUrlEncoded
+    fun taodonhang(
+        @Field("user_id") user_id: Int?,
+        @Field("full_name") fullName:String,
+        @Field("phone") phone:String,
+        @Field("total") total:Int,
+        @Field("total_money") total_money: Float,
+        @Field("address") address:String,
+        @Field("detail") detail:String
+    ):Call<UserModel>
+
+    @POST("timkiem.php")
+    @FormUrlEncoded
+    fun timkiem(
+        @Field("search") search:String
+    ):Call<SanPhamModel>
 
 }

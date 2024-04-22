@@ -23,6 +23,7 @@ import retrofit2.Response
 class DangNhapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDangNhapBinding
     private lateinit var user: User
+    private var isLogin = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +51,12 @@ class DangNhapActivity : AppCompatActivity() {
             binding.emailEt.setText(emailPaper)
             binding.passET.setText(passwordPaper)
         }
+        /*if(Paper.book().read<Boolean>("isLogin")!= null){
+            val flags = Paper.book().read<Boolean>("isLogin")
+            if (flags == true){
+                Toast.makeText(this,"Đã đăng nhập",Toast.LENGTH_SHORT).show()
+            }
+        }*/
     }
 
     private fun onClickDangNhap() {
@@ -57,8 +64,7 @@ class DangNhapActivity : AppCompatActivity() {
         binding.btnDangnhap.setOnClickListener {
             val email = binding.emailEt.text.toString().trim()
             val password = binding.passET.text.toString().trim()
-            Paper.book().write("email", email)
-            Paper.book().write("password", password)
+
             binding.prgbar.visibility = View.VISIBLE
             if (TextUtils.isEmpty(email) && TextUtils.isEmpty(password) && !Patterns.EMAIL_ADDRESS.matcher(
                     email
@@ -85,14 +91,15 @@ class DangNhapActivity : AppCompatActivity() {
                                         "Đăng nhập thành công",
                                         Toast.LENGTH_SHORT
                                     ).show()
+                                    isLogin = true
+                                    Paper.book().write("isLogin", isLogin)
+                                    Paper.book().write("email", email)
+                                    Paper.book().write("password", password)
                                     binding.prgbar.visibility = View.GONE
                                     Utils.user_current = response.body()?.result?.get(0)!!
                                     if (Utils.user_current!!.email != "admin") {
-                                        val intent =
-                                            Intent(this@DangNhapActivity, MainActivity::class.java)
-                                        startActivity(intent)
-                                        finish()
-                                    }else{
+                                        dangNhap()
+                                    } else {
                                         val intent =
                                             Intent(this@DangNhapActivity, AdminActivity::class.java)
                                         startActivity(intent)
@@ -118,6 +125,14 @@ class DangNhapActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun dangNhap() {
+        val intent = Intent(this@DangNhapActivity, MainActivity::class.java)
+        startActivity(intent)
+        val flags = Paper.book().read<Boolean>("isLogin")
+        intent.putExtra("isLogin",flags)
+        finish()
     }
 
     override fun onResume() {

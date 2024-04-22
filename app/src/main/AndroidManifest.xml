@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.SearchActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.AdminActivity"
             android:exported="false" />
         <activity
@@ -26,9 +29,6 @@
             android:exported="false" />
         <activity
             android:name=".activity.DangNhapActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.AccountActivity"
             android:exported="false" />
         <activity
             android:name=".activity.DangKiActivity"
@@ -41,15 +41,6 @@
             android:exported="false" />
         <activity
             android:name=".activity.ChiTietSanPhamActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.TraiCayActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.SnackActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.GaoActivity"
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
