@@ -1,6 +1,7 @@
 package com.amory.departmentstore.retrofit
 
 
+import com.amory.departmentstore.model.DonHangModel
 import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.model.SanPhamModel
@@ -52,5 +53,10 @@ interface ApiBanHang {
     fun timkiem(
         @Field("search") search:String
     ):Call<SanPhamModel>
+    @POST("xemdonhang.php")
+    @FormUrlEncoded
+    fun xemdonhang(
+        @Field("user_id") user_id: Int?
+    ):Call<DonHangModel>
 
 }

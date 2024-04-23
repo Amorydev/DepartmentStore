@@ -16,5 +16,6 @@
     <string name="mua_hang">Mua hàng</string>
     <string name="thong_tin_thanh_toan">Thông tin thanh toán</string>
     <string name="dat_hang">Đặt hàng</string>
+    <string name="don_hang">Đơn hàng của bạn</string>
 
 </resources>

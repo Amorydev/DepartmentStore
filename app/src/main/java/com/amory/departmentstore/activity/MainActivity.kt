@@ -146,6 +146,12 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+                R.id.details_order ->{
+                    val intent = Intent(this, ChiTietDatHangActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+
 
                 else -> {
                     true
