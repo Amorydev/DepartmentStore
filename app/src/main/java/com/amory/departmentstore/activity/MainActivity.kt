@@ -44,6 +44,7 @@ import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
+import io.paperdb.Paper
 import retrofit2.Call
 
 import retrofit2.Callback
@@ -55,7 +56,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var adapter: RvSanPham
     private lateinit var scrollListener: RvLoadMoreScroll
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
-    private var tempProductList: List<SanPham>? = null
     private var isLoadMore = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         onCLickNav()
         OnclickNavHeader()
         onClickSearch()
+        Paper.init(this)
 
         /*  onTouch()*/
         /*  showSanPham()*/
@@ -117,11 +118,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, DangNhapActivity::class.java)
             startActivity(intent)
         }
-        if (Utils.user_current != null) {
+        if (Paper.book().read<String>("user") != null) {
             btnLogin.visibility = View.INVISIBLE
             btnSignIn.visibility = View.INVISIBLE
             val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
-            txt_nav.text = Utils.user_current?.email
+            txt_nav.text = Paper.book().read<String>("email")
         } else {
             btnLogin.visibility = View.VISIBLE
             btnSignIn.visibility = View.VISIBLE
@@ -151,7 +152,12 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-
+                R.id.logout -> {
+                    Paper.book().delete("user")
+                    val intent = Intent(this, DangNhapActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
 
                 else -> {
                     true

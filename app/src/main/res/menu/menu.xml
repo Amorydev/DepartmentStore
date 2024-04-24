@@ -14,8 +14,11 @@
         android:icon="@drawable/user"/>
     <item android:id="@+id/details_order"
         android:title="Chi tiết đơn hàng"
-        android:icon="@drawable/user"/>
+        android:icon="@drawable/ic_detail_products"/>
     <item android:id="@+id/feedback"
         android:title="Liên hệ"
         android:icon="@drawable/ic_phone"/>
+    <item android:id="@+id/logout"
+        android:title="Đăng xuất"
+        android:icon="@drawable/ic_logout"/>
 </menu>

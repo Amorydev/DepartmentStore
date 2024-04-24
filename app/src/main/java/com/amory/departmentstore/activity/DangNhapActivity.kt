@@ -51,12 +51,6 @@ class DangNhapActivity : AppCompatActivity() {
             binding.emailEt.setText(emailPaper)
             binding.passET.setText(passwordPaper)
         }
-        /*if(Paper.book().read<Boolean>("isLogin")!= null){
-            val flags = Paper.book().read<Boolean>("isLogin")
-            if (flags == true){
-                Toast.makeText(this,"Đã đăng nhập",Toast.LENGTH_SHORT).show()
-            }
-        }*/
     }
 
     private fun onClickDangNhap() {
@@ -93,11 +87,14 @@ class DangNhapActivity : AppCompatActivity() {
                                     ).show()
                                     isLogin = true
                                     Paper.book().write("isLogin", isLogin)
-                                    Paper.book().write("email", email)
-                                    Paper.book().write("password", password)
                                     binding.prgbar.visibility = View.GONE
                                     Utils.user_current = response.body()?.result?.get(0)!!
+
+
                                     if (Utils.user_current!!.email != "admin") {
+                                        Paper.book().write("user", Utils.user_current!!)
+                                        Paper.book().write("email", email)
+                                        Paper.book().write("password", password)
                                         dangNhap()
                                     } else {
                                         val intent =
@@ -130,14 +127,12 @@ class DangNhapActivity : AppCompatActivity() {
     private fun dangNhap() {
         val intent = Intent(this@DangNhapActivity, MainActivity::class.java)
         startActivity(intent)
-        val flags = Paper.book().read<Boolean>("isLogin")
-        intent.putExtra("isLogin",flags)
         finish()
     }
 
     override fun onResume() {
         super.onResume()
-        if (::user.isInitialized && Utils.user_current?.email?.isEmpty()!! && Utils?.user_current?.password?.isEmpty()!!) {
+        if (::user.isInitialized && Utils.user_current?.email?.isEmpty()!! && Utils.user_current?.password?.isEmpty()!!) {
             binding.emailEt.setText(Utils.user_current?.email)
             binding.passET.setText(Utils.user_current?.password)
         }

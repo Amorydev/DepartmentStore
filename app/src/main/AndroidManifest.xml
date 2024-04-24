@@ -19,6 +19,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.AdminThemSanPhamActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AdminQLSanPhamActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AdminQLLoaiSanPhamActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ChiTietDatHangActivity"
             android:exported="false" />
         <activity
