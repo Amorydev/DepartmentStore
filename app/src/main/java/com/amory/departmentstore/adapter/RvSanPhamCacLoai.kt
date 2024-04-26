@@ -25,7 +25,6 @@ class RvSanPhamCacLoai(private var ds:MutableList<SanPham>,private val onClickSa
         val txtGiaSanPhamCacLoai = itemView.findViewById<TextView>(R.id.txtgiasanpham)!!
         val imvHinhAnhSanPhamCacLoai = itemView.findViewById<ImageView>(R.id.img_sanpham)!!
         val btnMua: Button = itemView.findViewById(R.id.btnMua)
-
     }
     inner class LoadingViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
     //chuyen sang dinh dang 000.000d
@@ -41,7 +40,7 @@ class RvSanPhamCacLoai(private var ds:MutableList<SanPham>,private val onClickSa
     }
     fun addLoadingView(){
         android.os.Handler().post {
-            ds.add(SanPham(0,"","","",""))
+            ds.add(SanPham(0,"","","",0,""))
             notifyItemInserted(ds.size-1)
         }
     }

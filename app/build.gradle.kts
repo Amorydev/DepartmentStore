@@ -76,4 +76,6 @@ dependencies {
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     //Gson
     implementation ("com.google.code.gson:gson:2.10.1")
+    //ImagePicker
+    implementation ("com.github.dhaval2404:imagepicker:2.1")
 }

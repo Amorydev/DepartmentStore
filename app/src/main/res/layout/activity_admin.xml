@@ -36,6 +36,28 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="300sp"
+            android:layout_height="200sp"
+            android:layout_marginTop="10sp"
+            android:background="@drawable/img_admin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="#A3A2A2"
+            android:textStyle="italic"
+            android:layout_marginTop="5sp"
+            android:textAlignment="center"
+            android:text="Kéo qua để chọn tác vụ"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view_admin"

@@ -5,11 +5,15 @@ import com.amory.departmentstore.model.DonHangModel
 import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.model.SanPhamModel
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 
 interface ApiBanHang {
     @GET("laysanpham.php")
@@ -47,7 +51,6 @@ interface ApiBanHang {
         @Field("address") address:String,
         @Field("detail") detail:String
     ):Call<UserModel>
-
     @POST("timkiem.php")
     @FormUrlEncoded
     fun timkiem(
@@ -58,5 +61,54 @@ interface ApiBanHang {
     fun xemdonhang(
         @Field("user_id") user_id: Int?
     ):Call<DonHangModel>
-
+    @POST("themsanphammoi.php")
+    @FormUrlEncoded
+    fun themsanphammoi(
+        @Field("name") name: String,
+        @Field("price") price:Long,
+        @Field("image_url") image_url:String,
+        @Field("category_id") category_id:Int,
+        @Field("description") description: String
+    ):Call<SanPhamModel>
+    @POST("themloaisanpham.php")
+    @FormUrlEncoded
+    fun themloaisanphammoi(
+        @Field("name") name: String,
+        @Field("image_url") image_url:String,
+        @Field("category_id") category_id:Int
+    ):Call<LoaiSanPhamModel>
+    @POST("suasanpham.php")
+    @FormUrlEncoded
+    fun suasanpham(
+        @Field("name") name: String,
+        @Field("price") price:Long,
+        @Field("image_url") image_url:String,
+        @Field("category_id") category_id:Int,
+        @Field("description") description: String,
+        @Field("id") id: Int
+    ):Call<SanPhamModel>
+    @Multipart
+    @POST("uploadhinhanh.php")
+    fun uploadFile(
+        @Part file: MultipartBody.Part,
+        @Part("file") name: RequestBody
+    ): Call<SanPhamModel>
+    @POST("xoasanpham.php")
+    @FormUrlEncoded
+    fun xoasanpham(
+        @Field("id") id:Int
+    ):Call<SanPhamModel>
+    @POST("xoaloaisanpham.php")
+    @FormUrlEncoded
+    fun xoaloaisanpham(
+        @Field("id") id:Int
+    ):Call<SanPhamModel>
+    @POST("sualoaisanpham.php")
+    @FormUrlEncoded
+    fun sualoaisanpham(
+        @Field("name") name: String,
+        @Field("image_url") image_url:String,
+        @Field("category_id") category_id:Int,
+        @Field("id") id: Int
+    ):Call<LoaiSanPhamModel>
 }
