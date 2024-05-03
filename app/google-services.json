@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "722296007873",
+    "project_id": "department-store-c3b2c",
+    "storage_bucket": "department-store-c3b2c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:722296007873:android:00017eee779781a542b840",
+        "android_client_info": {
+          "package_name": "com.amory.departmentstore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQAibr1mMApd1DPa-h8rbw1tb0Isdd6io"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
