@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.amory.departmentstore" />
+                  <option name="mobileSdkAppId" value="1:722296007873:android:00017eee779781a542b840" />
+                  <option name="projectId" value="department-store-c3b2c" />
+                  <option name="projectNumber" value="722296007873" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

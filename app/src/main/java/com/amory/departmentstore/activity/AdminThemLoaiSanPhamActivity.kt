@@ -80,6 +80,12 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
 
                     override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
                         t.printStackTrace()
+                        Log.d("loi",t.message.toString())
+                        Toast.makeText(
+                            applicationContext,
+                            "Không thành công",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 })
             }else

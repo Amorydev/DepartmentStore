@@ -11,8 +11,6 @@ import java.text.NumberFormat
 import java.util.Locale
 import android.os.Handler
 import android.view.ContextMenu
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -20,11 +18,11 @@ import android.widget.TextView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.model.EventBus.SuaXoaEvent
-import com.amory.departmentstore.model.OnCLickButtonSanPham
-import com.amory.departmentstore.model.OnClickRvSanPham
+import com.amory.departmentstore.viewModel.OnCLickButtonSanPham
+import com.amory.departmentstore.viewModel.OnClickRvSanPham
 import org.greenrobot.eventbus.EventBus
 
-class RvSanPham(private var ds: MutableList<SanPham>,private val onClickRvSanPham: OnClickRvSanPham,private val onCLickButtonSanPham: OnCLickButtonSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class RvSanPham(private var ds: MutableList<SanPham>, private val onClickRvSanPham: OnClickRvSanPham, private val onCLickButtonSanPham: OnCLickButtonSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private lateinit var mcontext: Context
     inner class SanPhamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnCreateContextMenuListener {
@@ -49,6 +47,9 @@ class RvSanPham(private var ds: MutableList<SanPham>,private val onClickRvSanPha
     inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     //chuyen sang dinh dang 000.000d
     private fun formatAmount(amount: String): String {
+        if (amount.isEmpty()){
+            return ""
+        }
         val number = amount.toLong()
         val formatter = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${formatter.format(number)}đ"
@@ -62,7 +63,7 @@ class RvSanPham(private var ds: MutableList<SanPham>,private val onClickRvSanPha
     fun addLoadingView() {
         //Thêm loading
         Handler().post {
-            ds.add(SanPham(0, "", "","",0,""))
+            ds.add(SanPham(0, "", "","",1,""))
             notifyItemInserted(ds.size - 1)
         }
     }
@@ -90,6 +91,10 @@ class RvSanPham(private var ds: MutableList<SanPham>,private val onClickRvSanPha
 
     override fun getItemCount(): Int {
         return ds.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (ds[position].name.isEmpty()) Constant.VIEW_TYPE_LOADING else Constant.VIEW_TYPE_ITEM
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

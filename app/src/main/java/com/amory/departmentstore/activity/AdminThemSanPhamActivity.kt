@@ -11,15 +11,9 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.amory.departmentstore.R
-import com.amory.departmentstore.adapter.RvLoaiSanPham
 import com.amory.departmentstore.databinding.ActivityAdminThemSanPhamBinding
 import com.amory.departmentstore.model.LoaiSanPhamModel
-import com.amory.departmentstore.model.OnClickRvLoaiSanPham
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.ApiBanHang

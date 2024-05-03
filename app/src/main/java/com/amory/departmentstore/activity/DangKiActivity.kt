@@ -11,12 +11,18 @@ import com.amory.departmentstore.databinding.ActivityDangKiBinding
 import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class DangKiActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDangKiBinding
+    private lateinit var firebaseAuth:FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDangKiBinding.inflate(layoutInflater)
@@ -62,46 +68,28 @@ class DangKiActivity : AppCompatActivity() {
             Toast.makeText(this, "Vui lòng nhập đủ dữ liệu", Toast.LENGTH_SHORT).show()
             binding.progressBar.visibility = View.INVISIBLE
         } else {
-            Handler().postDelayed({
-                if (password == repassword) {
-                    val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
-                    val call =
-                        service.dangkitaikhoan(first_name, last_name, email, password, mobile)
-                    call.enqueue(object : Callback<UserModel> {
-                        override fun onResponse(
-                            call: Call<UserModel>,
-                            response: Response<UserModel>
-                        ) {
-                            if (response.isSuccessful) {
-                                binding.progressBar.visibility = View.GONE
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Đăng kí thành công",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                Handler().postDelayed({
-                                    val intent =
-                                        Intent(this@DangKiActivity, DangNhapActivity::class.java)
-                                    startActivity(intent)
-                                }, 500)
-                            }
+            firebaseAuth = FirebaseAuth.getInstance()
+            firebaseAuth.createUserWithEmailAndPassword(email,password)
+                .addOnCompleteListener(this@DangKiActivity
+                ) { p0 ->
+                    if (p0.isSuccessful) {
+                        val user: FirebaseUser? = firebaseAuth.currentUser
+                        if (user != null) {
+                            postData(
+                                first_name,
+                                last_name,
+                                email,
+                                password,
+                                repassword,
+                                mobile,
+                                user.uid
+                            )
                         }
-
-                        override fun onFailure(call: Call<UserModel>, t: Throwable) {
-                            Toast.makeText(
-                                applicationContext,
-                                "Đăng kí không thành công",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            binding.progressBar.visibility = View.GONE
-                            t.printStackTrace()
-                        }
-                    })
-                } else {
-                    binding.txtBatbuocnhaprepass.visibility = View.VISIBLE
-                    Toast.makeText(this, "Password không trùng khớp", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(applicationContext, "Email đã tồn tại", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
-            }, 2000)
 
         }
         /*kiem tra dinh dang email*/
@@ -115,6 +103,58 @@ class DangKiActivity : AppCompatActivity() {
             binding.txtBatbuocnhappass.visibility = View.VISIBLE
         }
 
+    }
+
+    private fun postData(
+        first_name: String,
+        last_name: String,
+        email: String,
+        password: String,
+        repassword: String,
+        mobile: String,
+        uid: String
+    ) {
+        val token = ""
+        Handler().postDelayed({
+            if (password == repassword) {
+                val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+                val call =
+                    service.dangkitaikhoan(first_name, last_name, email, password, mobile,uid,token)
+                call.enqueue(object : Callback<UserModel> {
+                    override fun onResponse(
+                        call: Call<UserModel>,
+                        response: Response<UserModel>
+                    ) {
+                        if (response.isSuccessful) {
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(
+                                applicationContext,
+                                "Đăng kí thành công",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Handler().postDelayed({
+                                val intent =
+                                    Intent(this@DangKiActivity, DangNhapActivity::class.java)
+                                startActivity(intent)
+                            }, 500)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UserModel>, t: Throwable) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Đăng kí không thành công",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        binding.progressBar.visibility = View.GONE
+                        t.printStackTrace()
+                    }
+                })
+            } else {
+                binding.txtBatbuocnhaprepass.visibility = View.VISIBLE
+                Toast.makeText(this, "Password không trùng khớp", Toast.LENGTH_SHORT).show()
+            }
+        }, 1000)
     }
 
 }

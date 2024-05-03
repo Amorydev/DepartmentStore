@@ -9,16 +9,16 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amory.departmentstore.R
+import com.amory.departmentstore.adapter.ItemOffsetDecoration
 import com.amory.departmentstore.adapter.RvSanPham
-import com.amory.departmentstore.databinding.ActivityAdminLoaiSanPhamBinding
 import com.amory.departmentstore.databinding.ActivityAdminQlsanPhamBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaEvent
-import com.amory.departmentstore.model.OnCLickButtonSanPham
-import com.amory.departmentstore.model.OnClickRvSanPham
+import com.amory.departmentstore.viewModel.OnCLickButtonSanPham
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.viewModel.OnClickRvSanPham
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -28,6 +28,7 @@ import retrofit2.Response
 
 class AdminQLSanPhamActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminQlsanPhamBinding
+    private lateinit var itemOffsetDecoration: ItemOffsetDecoration
     var list = mutableListOf<SanPham>()
     private var listSanPham: SanPham? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,6 +120,7 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
                             binding.rvSuasanpham.layoutManager = GridLayoutManager(this@AdminQLSanPhamActivity,3,
                                 GridLayoutManager.VERTICAL,false)
                             binding.rvSuasanpham.setHasFixedSize(true)
+                            binding.rvSuasanpham.addItemDecoration(itemOffsetDecoration)
                             registerForContextMenu(binding.rvSuasanpham)
                         } else {
                             Toast.makeText(

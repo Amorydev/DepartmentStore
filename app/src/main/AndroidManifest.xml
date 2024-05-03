@@ -23,11 +23,9 @@
             android:name=".activity.AdminThemLoaiSanPhamActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.AdminThemLoaiSanPhamMainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.AdminSuaSanPhamActivity"
-            android:exported="false" />
+            android:name=".activity.AdminThemLoaiSanPhamActivity"
+            android:exported="false"
+            tools:ignore="DuplicateActivity" />
         <activity
             android:name=".activity.AdminThemSanPhamActivity"
             android:exported="false" />
@@ -39,9 +37,6 @@
             android:exported="false" />
         <activity
             android:name=".activity.ChiTietDatHangActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.ChiTietDonHangActivity"
             android:exported="false" />
         <activity
             android:name=".activity.SearchActivity"
@@ -79,6 +74,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".service.FirebaseMessagingReciver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

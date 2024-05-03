@@ -2,7 +2,8 @@ package com.amory.departmentstore.adapter
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.amory.departmentstore.model.OnLoadMoreListener
+import com.amory.departmentstore.viewModel.OnLoadMoreListener
+
 
 class RvLoadMoreScroll(layoutManager: GridLayoutManager) :
     RecyclerView.OnScrollListener() {
@@ -18,11 +19,6 @@ class RvLoadMoreScroll(layoutManager: GridLayoutManager) :
     fun setLoaded() {
         isLoading = false
     }
-
-    fun getLoaded(): Boolean {
-        return isLoading
-    }
-
     fun setOnLoadMoreListener(mOnLoadMoreListener: OnLoadMoreListener) {
         this.mOnLoadMoreListener = mOnLoadMoreListener
     }

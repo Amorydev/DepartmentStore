@@ -1,4 +1,4 @@
-package com.amory.departmentstore.model
+package com.amory.departmentstore.viewModel
 
 interface OnLoadMoreListener {
     fun onLoadMore()

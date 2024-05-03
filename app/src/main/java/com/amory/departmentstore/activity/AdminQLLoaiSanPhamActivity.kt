@@ -6,18 +6,16 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvLoaiSanPham
 import com.amory.departmentstore.databinding.ActivityAdminLoaiSanPhamBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaLoaiEvent
 import com.amory.departmentstore.model.LoaiSanPham
 import com.amory.departmentstore.model.LoaiSanPhamModel
-import com.amory.departmentstore.model.OnClickRvLoaiSanPham
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.viewModel.OnClickRvLoaiSanPham
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -39,7 +37,7 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
     }
     private fun onClickThem() {
         binding.btnThem.setOnClickListener {
-            val intent = Intent(this,AdminThemSanPhamActivity::class.java)
+            val intent = Intent(this,AdminThemLoaiSanPhamActivity::class.java)
             intent.putExtra("sua",loaiSanPham)
             startActivity(intent)
         }

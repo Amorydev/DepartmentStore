@@ -3,12 +3,11 @@ package com.amory.departmentstore.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.text.TextUtils
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
@@ -16,9 +15,6 @@ import android.widget.ImageView
 import android.widget.TextView
 
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,17 +29,19 @@ import com.amory.departmentstore.model.Constant.VIEW_TYPE_ITEM
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_LOADING
 import com.amory.departmentstore.model.GioHang
 import com.amory.departmentstore.model.LoaiSanPhamModel
-import com.amory.departmentstore.model.OnCLickButtonSanPham
-import com.amory.departmentstore.model.OnClickRvLoaiSanPham
-import com.amory.departmentstore.model.OnClickRvSanPham
-import com.amory.departmentstore.model.OnLoadMoreListener
+import com.amory.departmentstore.viewModel.OnCLickButtonSanPham
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
-import com.amory.departmentstore.model.User
+import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.viewModel.OnClickRvLoaiSanPham
+import com.amory.departmentstore.viewModel.OnClickRvSanPham
+import com.amory.departmentstore.viewModel.OnLoadMoreListener
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import io.paperdb.Paper
 import retrofit2.Call
 
@@ -74,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         /*Toast.makeText(this,Utils.user_current?.email,Toast.LENGTH_SHORT).show()*/
 
         goToGioHang()
+        getToken()
         if (Utils.kiemTraKetNoi(this)) {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
             paddingRecy()
@@ -154,6 +153,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.logout -> {
                     Paper.book().delete("user")
+                    FirebaseAuth.getInstance().signOut()
                     val intent = Intent(this, DangNhapActivity::class.java)
                     startActivity(intent)
                     true
@@ -457,13 +457,12 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun LoadMoreData(produce: MutableList<SanPham>, current: MutableList<SanPham>) {
-
         adapter.addLoadingView()
         Handler().postDelayed({
             adapter.removeLoadingView()
             /*Thực hiện lọc kiểm tra phần tử trước đó đã hiển thị hay chưa*/
             val remainingItems = produce.filter {
-                /*san pham đã hiênr thị không còn chưa trong produce*/
+                /*san pham đã hiên thị không còn chưa trong produce*/
                 !current.contains(it)
             }
             val newlist = remainingItems.take(12)
@@ -475,7 +474,7 @@ class MainActivity : AppCompatActivity() {
             binding.rvSanpham.post {
                 adapter.notifyDataSetChanged()
             }
-        }, 1000)
+        }, 2000)
     }
 
 
@@ -526,5 +525,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun getToken(){
+        FirebaseMessaging.getInstance().token
+            .addOnSuccessListener { p0 ->
+                if (!TextUtils.isEmpty(p0)) {
+                    val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+                    val call = service.updateToken(Utils.user_current?.id, p0.toString())
+                    call.enqueue(object : Callback<UserModel> {
+                        override fun onResponse(
+                            call: Call<UserModel>,
+                            response: Response<UserModel>
+                        ) {
+                        }
+
+                        override fun onFailure(call: Call<UserModel>, t: Throwable) {
+                            t.printStackTrace()
+                        }
+                    })
+                }
+            }
+    }
 
 }

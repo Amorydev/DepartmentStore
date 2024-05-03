@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.databinding.LayoutLoaisanphamBinding
-import com.amory.departmentstore.model.EventBus.SuaXoaEvent
 import com.amory.departmentstore.model.EventBus.SuaXoaLoaiEvent
 import com.amory.departmentstore.model.LoaiSanPham
-import com.amory.departmentstore.model.OnClickRvLoaiSanPham
+import com.amory.departmentstore.viewModel.OnClickRvLoaiSanPham
+
 import com.bumptech.glide.Glide
 import org.greenrobot.eventbus.EventBus
 

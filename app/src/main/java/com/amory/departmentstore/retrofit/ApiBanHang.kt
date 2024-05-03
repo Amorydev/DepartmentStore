@@ -32,7 +32,9 @@ interface ApiBanHang {
         @Field("last_name") last_name:String,
         @Field("email") email:String,
         @Field("password") password:String,
-        @Field("mobiphone") mobile:String
+        @Field("mobiphone") mobile:String,
+        @Field("uid") uid:String,
+        @Field("token") token:String
     ):Call<UserModel>
     @POST("dangnhap.php")
     @FormUrlEncoded
@@ -50,6 +52,12 @@ interface ApiBanHang {
         @Field("total_money") total_money: Float,
         @Field("address") address:String,
         @Field("detail") detail:String
+    ):Call<UserModel>
+    @POST("updatetoken.php")
+    @FormUrlEncoded
+    fun updateToken(
+        @Field("id") id: Int?,
+        @Field("token") token:String
     ):Call<UserModel>
     @POST("timkiem.php")
     @FormUrlEncoded

@@ -8,7 +8,6 @@ import android.os.Handler
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.ItemOffsetDecoration
 import com.amory.departmentstore.adapter.RvLoadMoreScroll
 import com.amory.departmentstore.adapter.RvSanPhamCacLoai
@@ -16,16 +15,16 @@ import com.amory.departmentstore.adapter.Utils
 import com.amory.departmentstore.databinding.ActivitySanPhamTheoLoaiBinding
 import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.model.GioHang
-import com.amory.departmentstore.model.OnCLickButtonSanPham
-import com.amory.departmentstore.model.OnClickSanPhamTheoLoai
-import com.amory.departmentstore.model.OnLoadMoreListener
+import com.amory.departmentstore.viewModel.OnCLickButtonSanPham
+
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.viewModel.OnClickSanPhamTheoLoai
+import com.amory.departmentstore.viewModel.OnLoadMoreListener
 import retrofit2.Call
 import retrofit2.Response
-import java.util.Locale
 
 class SanPhamTheoLoaiActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySanPhamTheoLoaiBinding

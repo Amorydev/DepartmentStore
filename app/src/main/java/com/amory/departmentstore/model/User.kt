@@ -6,5 +6,7 @@ data class User(
     var last_name:String,
     var email:String,
     var password:String,
-    var mobiphone:String
+    var mobiphone:String,
+    val uid :String,
+    val token:String
 )

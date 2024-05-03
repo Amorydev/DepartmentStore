@@ -7,9 +7,13 @@ import android.widget.Toast
 import com.amory.departmentstore.adapter.Utils
 import com.amory.departmentstore.databinding.ActivityThanhToanBinding
 import com.amory.departmentstore.model.GioHang
+import com.amory.departmentstore.model.NotificationReponse
+import com.amory.departmentstore.model.SendNotification
 import com.amory.departmentstore.model.UserModel
+import com.amory.departmentstore.retrofit.APIPushNotification
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.RetrofitNotification
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import retrofit2.Call
@@ -51,7 +55,7 @@ class ThanhToanActivity : AppCompatActivity() {
             call.enqueue(object : Callback<UserModel> {
                 override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
                     if (response.isSuccessful) {
-
+                        pushNotification()
                         val gioHangSet = Utils.manggiohang.map { it.tensanphamgiohang }.toSet()
                         val muaHangSet = Utils.mangmuahang.map { it.tensanphamgiohang }.toSet()
                         val itemsToRemove = muaHangSet.intersect(gioHangSet)
@@ -72,6 +76,27 @@ class ThanhToanActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+
+    private fun pushNotification() {
+        val token = "f9eBM0y8TPOtuCQEqVnK_o:APA91bHWJ_irRTzKhlTvlveAxZgNYSYQVq0jkl1QBUerq3toSmHbGw1syGuwQx2-hyMXBn-Q9b8ErOnIDgq_OZcfjk0rQY_gkrxLzVd8_8EBz7tczRCBRCb1uMKelCu4r97XAwuEXDT2"
+        val data: MutableMap<String, String> = HashMap()
+        data["title"] = "Thông báo"
+        data["body"] = "Bạn có đơn hàng mới"
+        val sendNoti = SendNotification(token,data)
+        val service = RetrofitNotification.retrofitInstance.create(APIPushNotification::class.java)
+        val call = service.sendNotification(sendNoti)
+        call.enqueue(object : Callback<NotificationReponse>{
+            override fun onResponse(
+                call: Call<NotificationReponse>,
+                response: Response<NotificationReponse>
+            ) {
+            }
+
+            override fun onFailure(call: Call<NotificationReponse>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
     }
 
     private fun MutableList<GioHang>.getSoluong(): Int {
