@@ -24,25 +24,13 @@ import org.greenrobot.eventbus.EventBus
 
 class RvSanPham(private var ds: MutableList<SanPham>, private val onClickRvSanPham: OnClickRvSanPham, private val onCLickButtonSanPham: OnCLickButtonSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private lateinit var mcontext: Context
-    inner class SanPhamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnCreateContextMenuListener {
+    inner class SanPhamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val tensanpham: TextView = itemView.findViewById(R.id.txt_tensanpham)
         val giasanpham: TextView = itemView.findViewById(R.id.txtgiasanpham)
         val hinhanhsanpham: ImageView = itemView.findViewById(R.id.img_sanpham)
         val btnMua: Button = itemView.findViewById(R.id.btnMua)
 
-        init {
-            itemView.setOnCreateContextMenuListener(this)
-        }
 
-        override fun onCreateContextMenu(
-            menu: ContextMenu?,
-            v: View?,
-            menuInfo: ContextMenu.ContextMenuInfo?
-        ) {
-            menu?.add(0,0,adapterPosition,"Sửa")
-            menu?.add(0,1,adapterPosition, "Xóa")
-        }
     }
     inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     //chuyen sang dinh dang 000.000d
@@ -107,13 +95,6 @@ class RvSanPham(private var ds: MutableList<SanPham>, private val onClickRvSanPh
 
             sanPhamViewHolder.btnMua.setOnClickListener {
                 onCLickButtonSanPham.onCLickButtonSanPham(position)
-            }
-            sanPhamViewHolder.itemView.setOnLongClickListener {
-                val x = it.width / 2f
-                val y = it.height / 2f
-                it.showContextMenu(x, y)
-                EventBus.getDefault().postSticky(SuaXoaEvent(ds[position]))
-                true
             }
 
         }

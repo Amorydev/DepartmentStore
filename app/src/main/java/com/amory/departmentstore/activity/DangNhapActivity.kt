@@ -64,11 +64,13 @@ class DangNhapActivity : AppCompatActivity() {
     private fun onClickDangNhap() {
         binding.prgbar.visibility = View.INVISIBLE
         binding.btnDangnhap.setOnClickListener {
+            binding.prgbar.visibility = View.VISIBLE
             val email = binding.emailEt.text.toString().trim()
             val password = binding.passET.text.toString().trim()
             firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this@DangNhapActivity
-                ){ p0 ->
+                .addOnCompleteListener(
+                    this@DangNhapActivity
+                ) { p0 ->
                     if (p0.isSuccessful) {
                         firebaseUser = firebaseAuth.currentUser!!
                         dangNhap(email, password)
@@ -78,8 +80,7 @@ class DangNhapActivity : AppCompatActivity() {
 
     }
 
-    private fun dangNhap(email:String,password:String) {
-        binding.prgbar.visibility = View.VISIBLE
+    private fun dangNhap(email: String, password: String) {
         if (TextUtils.isEmpty(email) && TextUtils.isEmpty(password) && !Patterns.EMAIL_ADDRESS.matcher(
                 email
             ).matches()
@@ -98,42 +99,39 @@ class DangNhapActivity : AppCompatActivity() {
             call.enqueue(object : Callback<UserModel> {
                 override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
                     if (response.isSuccessful) {
-                        Handler().postDelayed({
-                            if (response.body()?.result?.isNotEmpty()!!) {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Đăng nhập thành công",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                isLogin = true
-                                Paper.book().write("isLogin", isLogin)
-                                binding.prgbar.visibility = View.GONE
-                                Utils.user_current = response.body()?.result?.get(0)!!
+                        if (response.body()?.result?.isNotEmpty()!!) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Đăng nhập thành công",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            isLogin = true
+                            Paper.book().write("isLogin", isLogin)
+                            binding.prgbar.visibility = View.GONE
+                            Utils.user_current = response.body()?.result?.get(0)!!
 
 
-                                if (Utils.user_current!!.email != "admin") {
-                                    Paper.book().write("user", Utils.user_current!!)
-                                    Paper.book().write("email", email)
-                                    Paper.book().write("password", password)
-                                    val intent = Intent(this@DangNhapActivity, MainActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
-                                } else {
-                                    val intent =
-                                        Intent(this@DangNhapActivity, AdminActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
-                                }
+                            if (Utils.user_current!!.role != 1) {
+                                Paper.book().write("user", Utils.user_current!!)
+                                Paper.book().write("email", email)
+                                Paper.book().write("password", password)
+                                val intent = Intent(this@DangNhapActivity, MainActivity::class.java)
+                                startActivity(intent)
+                                finish()
                             } else {
-                                binding.prgbar.visibility = View.GONE
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Đăng nhập không thành công",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                val intent =
+                                    Intent(this@DangNhapActivity, AdminActivity::class.java)
+                                startActivity(intent)
+                                finish()
                             }
-                        }, 1000)
-
+                        } else {
+                            binding.prgbar.visibility = View.GONE
+                            Toast.makeText(
+                                applicationContext,
+                                "Đăng nhập không thành công",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
 

@@ -19,6 +19,7 @@ import com.google.gson.GsonBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.create
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -79,24 +80,46 @@ class ThanhToanActivity : AppCompatActivity() {
     }
 
     private fun pushNotification() {
-        val token = "f9eBM0y8TPOtuCQEqVnK_o:APA91bHWJ_irRTzKhlTvlveAxZgNYSYQVq0jkl1QBUerq3toSmHbGw1syGuwQx2-hyMXBn-Q9b8ErOnIDgq_OZcfjk0rQY_gkrxLzVd8_8EBz7tczRCBRCb1uMKelCu4r97XAwuEXDT2"
-        val data: MutableMap<String, String> = HashMap()
-        data["title"] = "Thông báo"
-        data["body"] = "Bạn có đơn hàng mới"
-        val sendNoti = SendNotification(token,data)
-        val service = RetrofitNotification.retrofitInstance.create(APIPushNotification::class.java)
-        val call = service.sendNotification(sendNoti)
-        call.enqueue(object : Callback<NotificationReponse>{
-            override fun onResponse(
-                call: Call<NotificationReponse>,
-                response: Response<NotificationReponse>
-            ) {
+        val serviceToken = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val callToken = serviceToken.getToken(1)
+        callToken.enqueue(object : Callback<UserModel> {
+            override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
+                if (response.isSuccessful) {
+                    for (i in 0 until response.body()?.result?.size!!) {
+                        val token = response.body()!!.result[i].token
+                        Toast.makeText(
+                            this@ThanhToanActivity,
+                            token,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        val data: MutableMap<String, String> = HashMap()
+                        data["title"] = "Thông báo"
+                        data["body"] = "Bạn có đơn hàng mới"
+                        val sendNoti = SendNotification(token, data)
+                        val service =
+                            RetrofitNotification.retrofitInstance.create(APIPushNotification::class.java)
+                        val call = service.sendNotification(sendNoti)
+                        call.enqueue(object : Callback<NotificationReponse> {
+                            override fun onResponse(
+                                call: Call<NotificationReponse>,
+                                response: Response<NotificationReponse>
+                            ) {
+                            }
+
+                            override fun onFailure(call: Call<NotificationReponse>, t: Throwable) {
+                                t.printStackTrace()
+                            }
+                        })
+                    }
+                }
             }
 
-            override fun onFailure(call: Call<NotificationReponse>, t: Throwable) {
+            override fun onFailure(call: Call<UserModel>, t: Throwable) {
+                Log.d("amory_notification", t.message.toString())
                 t.printStackTrace()
             }
         })
+
     }
 
     private fun MutableList<GioHang>.getSoluong(): Int {

@@ -4,6 +4,8 @@
         android:title="Quản lý loại sản phẩm" />
     <item android:id="@+id/quanlysanpham"
         android:title="Quản lý sản phẩm" />
+    <item android:id="@+id/xemdonhang"
+        android:title="Quản lý các đơn hàng" />
     <item android:id="@+id/dangxuat"
         android:title="Đăng xuất" />
 </menu>

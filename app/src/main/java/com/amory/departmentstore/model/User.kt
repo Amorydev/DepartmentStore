@@ -8,5 +8,6 @@ data class User(
     var password:String,
     var mobiphone:String,
     val uid :String,
-    val token:String
+    val token:String,
+    val role:Int
 )

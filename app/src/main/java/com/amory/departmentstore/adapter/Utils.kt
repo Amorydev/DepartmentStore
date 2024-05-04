@@ -13,6 +13,13 @@ class Utils {
         val manggiohang: MutableList<GioHang> = mutableListOf()
         val mangmuahang: MutableList<GioHang> = mutableListOf()
         var user_current: User? = null
+        lateinit var ID_NHAN:String
+        const val GUI_ID = "id_gui"
+        const val NHAN_ID = "id_nhan"
+        const val MESS = "Massage"
+        const val DATE_TIME = "datetime"
+        const val PATH = "id_gui"
+
         @SuppressLint("ObsoleteSdkInt")
         fun kiemTraKetNoi(context: Context): Boolean {
             val connectivityManager =

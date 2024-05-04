@@ -1,4 +1,6 @@
 package com.amory.departmentstore.model.EventBus
 
-class TinhTongEvent {
+import com.amory.departmentstore.model.Donhang
+
+class TinhTongEvent() {
 }

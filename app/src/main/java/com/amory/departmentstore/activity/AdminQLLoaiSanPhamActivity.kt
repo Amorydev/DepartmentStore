@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvLoaiSanPham
+import com.amory.departmentstore.adapter.RvLoaiSanPhamAdmin
 import com.amory.departmentstore.databinding.ActivityAdminLoaiSanPhamBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaLoaiEvent
 import com.amory.departmentstore.model.LoaiSanPham
@@ -16,6 +17,7 @@ import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import com.amory.departmentstore.viewModel.OnClickRvLoaiSanPham
+import io.paperdb.Paper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -55,11 +57,7 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
 
                     val list = response.body()?.result
                     /*Toast.makeText(this@MainActivity, list, Toast.LENGTH_SHORT).show()*/
-                    val adapter = list?.let {
-                        RvLoaiSanPham(it, object : OnClickRvLoaiSanPham {
-                            override fun onClickLoaiSanPham(position: Int) {
-                            }})
-                    }
+                    val adapter = list?.let { RvLoaiSanPhamAdmin(it) }
                     binding.rvAdminLoaisanpham.adapter = adapter
                     binding.rvAdminLoaisanpham.layoutManager =  GridLayoutManager(
                         this@AdminQLLoaiSanPhamActivity,
@@ -122,6 +120,19 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
 
                 R.id.quanlysanpham -> {
                     val intent = Intent(this, AdminQLSanPhamActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.dangxuat ->
+                {
+                    Paper.book().delete("user")
+                    val intent = Intent(this, DangNhapActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.xemdonhang ->
+                {
+                    val intent = Intent(this, AdminChiTietDonHangActivity::class.java)
                     startActivity(intent)
                     true
                 }

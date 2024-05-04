@@ -13,30 +13,21 @@ import com.amory.departmentstore.viewModel.OnClickRvLoaiSanPham
 import com.bumptech.glide.Glide
 import org.greenrobot.eventbus.EventBus
 
-class RvLoaiSanPham(val ds:List<LoaiSanPham>, private val onClickRvSanPham: OnClickRvLoaiSanPham):RecyclerView.Adapter<RvLoaiSanPham.viewHolder>() {
+class RvLoaiSanPham(val ds: List<LoaiSanPham>, private val onClickRvSanPham: OnClickRvLoaiSanPham) :
+    RecyclerView.Adapter<RvLoaiSanPham.viewHolder>() {
 
-    inner class viewHolder(private val binding:LayoutLoaisanphamBinding):RecyclerView.ViewHolder(binding.root),
-        View.OnCreateContextMenuListener {
-        fun bind(data:LoaiSanPham){
+    inner class viewHolder(private val binding: LayoutLoaisanphamBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: LoaiSanPham) {
             binding.tvloaisanpham.text = data.name
             Glide.with(binding.root).load(data.image_url).centerCrop().into(binding.imvhinhanh)
         }
-        init {
-            itemView.setOnCreateContextMenuListener(this)
-        }
-
-        override fun onCreateContextMenu(
-            menu: ContextMenu?,
-            v: View?,
-            menuInfo: ContextMenu.ContextMenuInfo?
-        ) {
-            menu?.add(0,0,adapterPosition,"Sửa")
-            menu?.add(0,1,adapterPosition, "Xóa")
-        }
 
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHolder {
-        val binding = LayoutLoaisanphamBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding =
+            LayoutLoaisanphamBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return viewHolder(binding)
     }
 
@@ -47,15 +38,8 @@ class RvLoaiSanPham(val ds:List<LoaiSanPham>, private val onClickRvSanPham: OnCl
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
         holder.bind(ds[position])
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener {
             onClickRvSanPham.onClickLoaiSanPham(position)
-        }
-        holder.itemView.setOnLongClickListener{
-            val x = it.width / 2f
-            val y = it.height / 2f
-            it.showContextMenu(x, y)
-            EventBus.getDefault().postSticky(SuaXoaLoaiEvent(ds[position]))
-            true
         }
 
 

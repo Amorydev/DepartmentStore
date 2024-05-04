@@ -61,38 +61,46 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         SlideQuangCao()
-        onClickDanhMuc()
-        onCLickNav()
-        OnclickNavHeader()
-        onClickSearch()
+
         Paper.init(this)
 
         /*  onTouch()*/
         /*  showSanPham()*/
         /*Toast.makeText(this,Utils.user_current?.email,Toast.LENGTH_SHORT).show()*/
-
-        goToGioHang()
-        getToken()
         if (Utils.kiemTraKetNoi(this)) {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
             paddingRecy()
             laySanPham()
             layLoaiSanPham()
-
+            onClickDanhMuc()
+            onCLickNav()
+            OnclickNavHeader()
+            onClickSearch()
+            goToGioHang()
+            getToken()
+            gotoChat()
         } else {
             Toast.makeText(this, "Vui lòng kết nối internet", Toast.LENGTH_SHORT).show()
         }
 
     }
 
+    private fun gotoChat() {
+        binding.btnChat.setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
+    }
+
     private fun onClickSearch() {
         binding.imbSearch.setOnClickListener {
-            val intent = Intent(this,SearchActivity::class.java)
+            val intent = Intent(this, SearchActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
         binding.edtSearch.setOnClickListener {
-            val intent = Intent(this,SearchActivity::class.java)
+            val intent = Intent(this, SearchActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
@@ -146,11 +154,13 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-                R.id.details_order ->{
+
+                R.id.details_order -> {
                     val intent = Intent(this, ChiTietDatHangActivity::class.java)
                     startActivity(intent)
                     true
                 }
+
                 R.id.logout -> {
                     Paper.book().delete("user")
                     FirebaseAuth.getInstance().signOut()
@@ -525,12 +535,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getToken(){
+    private fun getToken() {
         FirebaseMessaging.getInstance().token
             .addOnSuccessListener { p0 ->
                 if (!TextUtils.isEmpty(p0)) {
                     val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
-                    val call = service.updateToken(Utils.user_current?.id, p0.toString())
+                    val call = service.updateToken(p0.toString(),Utils.user_current?.id)
                     call.enqueue(object : Callback<UserModel> {
                         override fun onResponse(
                             call: Call<UserModel>,
@@ -544,6 +554,22 @@ class MainActivity : AppCompatActivity() {
                     })
                 }
             }
+
+        val serviceToken = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val callToken = serviceToken.getToken(1)
+        callToken.enqueue(object : Callback<UserModel>{
+            override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
+                if (response.isSuccessful)
+                {
+                    Utils.ID_NHAN = response.body()?.result?.get(0)?.id.toString()
+                }
+            }
+
+            override fun onFailure(call: Call<UserModel>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
+
     }
 
 }

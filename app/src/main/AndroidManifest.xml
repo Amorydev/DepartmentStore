@@ -20,6 +20,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AdminChiTietDonHangActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.AdminThemLoaiSanPhamActivity"
             android:exported="false" />
         <activity
@@ -75,10 +81,11 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".service.FirebaseMessagingReciver"
+        <service
+            android:name=".service.FirebaseMessagingReciver"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
     </application>

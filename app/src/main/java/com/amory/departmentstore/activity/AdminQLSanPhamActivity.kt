@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.ItemOffsetDecoration
 import com.amory.departmentstore.adapter.RvSanPham
+import com.amory.departmentstore.adapter.RvSanPhamAdmin
 import com.amory.departmentstore.databinding.ActivityAdminQlsanPhamBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaEvent
 import com.amory.departmentstore.viewModel.OnCLickButtonSanPham
@@ -19,6 +20,7 @@ import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import com.amory.departmentstore.viewModel.OnClickRvSanPham
+import io.paperdb.Paper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -63,6 +65,19 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+                R.id.dangxuat ->
+                {
+                    Paper.book().delete("user")
+                    val intent = Intent(this, DangNhapActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.xemdonhang ->
+                {
+                    val intent = Intent(this, AdminChiTietDonHangActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
 
                 else -> {
                     true
@@ -103,24 +118,12 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
 
                         if (produce.isNotEmpty()) {
                             list = produce
-                            val adapter =
-                                RvSanPham(
-                                    produce,
-                                    object : OnClickRvSanPham {
-                                        override fun onClickSanPham(position: Int) {
-
-                                        }
-                                    },
-                                    object : OnCLickButtonSanPham {
-                                        override fun onCLickButtonSanPham(position: Int) {
-                                        }
-                                    })
+                            val adapter = RvSanPhamAdmin(list)
                             adapter.notifyDataSetChanged()
                             binding.rvSuasanpham.adapter = adapter
                             binding.rvSuasanpham.layoutManager = GridLayoutManager(this@AdminQLSanPhamActivity,3,
                                 GridLayoutManager.VERTICAL,false)
                             binding.rvSuasanpham.setHasFixedSize(true)
-                            binding.rvSuasanpham.addItemDecoration(itemOffsetDecoration)
                             registerForContextMenu(binding.rvSuasanpham)
                         } else {
                             Toast.makeText(

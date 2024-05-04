@@ -45,7 +45,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
         var tenloaisanpham = intent.getStringExtra("tenloaisanpham")
         binding.txtLoaisanpham.text = tenloaisanpham
         tenloaisanpham = tenloaisanpham?.lowercase()
-        binding.edtTimkiem.hint = "Tìm kiếm trong trang $tenloaisanpham"
+        binding.edtSearch.hint = "Tìm kiếm trong trang $tenloaisanpham"
     }
 
     private fun quayLaiTrangChu() {

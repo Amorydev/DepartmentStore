@@ -38,6 +38,12 @@ class AdminActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+                R.id.xemdonhang ->
+                {
+                    val intent = Intent(this, AdminChiTietDonHangActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> {
                     true
                 }

@@ -56,8 +56,8 @@ interface ApiBanHang {
     @POST("updatetoken.php")
     @FormUrlEncoded
     fun updateToken(
-        @Field("id") id: Int?,
-        @Field("token") token:String
+        @Field("token") token:String,
+        @Field("id") id: Int?
     ):Call<UserModel>
     @POST("timkiem.php")
     @FormUrlEncoded
@@ -119,4 +119,15 @@ interface ApiBanHang {
         @Field("category_id") category_id:Int,
         @Field("id") id: Int
     ):Call<LoaiSanPhamModel>
+    @POST("getToken.php")
+    @FormUrlEncoded
+    fun getToken(
+        @Field("role") role: Int,
+    ):Call<UserModel>
+    @POST("updatetinhtrang.php")
+    @FormUrlEncoded
+    fun updatetinhtrang(
+        @Field("id") id: Int?,
+        @Field("status") status: Int?
+    ):Call<DonHangModel>
 }

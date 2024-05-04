@@ -2,13 +2,17 @@
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/layout_drawer_admin"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".activity.AdminActivity">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
         <LinearLayout
             android:id="@+id/linearLayout6"
             android:layout_width="match_parent"
@@ -19,13 +23,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="UselessLeaf">
+
             <ImageView
                 android:id="@+id/imb_danhmuc_admin"
                 android:layout_width="40sp"
                 android:layout_height="40sp"
-                android:layout_marginStart="10sp"
                 android:layout_gravity="center"
-                android:background="@drawable/main_menu"/>
+                android:layout_marginStart="10sp"
+                android:background="@drawable/main_menu"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -49,21 +55,22 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textColor="#A3A2A2"
-            android:textStyle="italic"
             android:layout_marginTop="5sp"
-            android:textAlignment="center"
             android:text="Kéo qua để chọn tác vụ"
+            android:textAlignment="center"
+            android:textColor="#A3A2A2"
+            android:textSize="20sp"
+            android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView3" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view_admin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header_admin"
-        app:menu="@menu/menu_admin"/>
+        app:menu="@menu/menu_admin" />
 </androidx.drawerlayout.widget.DrawerLayout>
