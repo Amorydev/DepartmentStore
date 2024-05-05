@@ -52,6 +52,7 @@ class GioHangActivity : AppCompatActivity() {
 
     private fun OnClickBack() {
         binding.imvBack.setOnClickListener {
+            Utils.mangmuahang.clear()
             onBackPressed()
         }
     }

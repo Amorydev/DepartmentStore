@@ -16,9 +16,9 @@ class Utils {
         lateinit var ID_NHAN:String
         const val GUI_ID = "id_gui"
         const val NHAN_ID = "id_nhan"
-        const val MESS = "Massage"
+        const val MESS = "message"
         const val DATE_TIME = "datetime"
-        const val PATH = "id_gui"
+        const val PATH = "chat"
 
         @SuppressLint("ObsoleteSdkInt")
         fun kiemTraKetNoi(context: Context): Boolean {

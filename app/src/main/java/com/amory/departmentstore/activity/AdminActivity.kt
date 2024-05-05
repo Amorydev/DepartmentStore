@@ -16,6 +16,14 @@ class AdminActivity : AppCompatActivity() {
         Paper.init(this)
         onCLickDanhMuc()
         onClickNavViewAdmin()
+        onCLickChat()
+    }
+
+    private fun onCLickChat() {
+        binding.btnChat.setOnClickListener {
+            val intent = Intent(this, AdminChatUserActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun onClickNavViewAdmin() {

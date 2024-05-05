@@ -109,8 +109,6 @@ class DangNhapActivity : AppCompatActivity() {
                             Paper.book().write("isLogin", isLogin)
                             binding.prgbar.visibility = View.GONE
                             Utils.user_current = response.body()?.result?.get(0)!!
-
-
                             if (Utils.user_current!!.role != 1) {
                                 Paper.book().write("user", Utils.user_current!!)
                                 Paper.book().write("email", email)

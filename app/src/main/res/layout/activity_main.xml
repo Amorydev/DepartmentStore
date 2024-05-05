@@ -108,6 +108,7 @@
                 android:id="@+id/btn_chat"
                 android:layout_width="35sp"
                 android:layout_height="35sp"
+                android:layout_marginEnd="10sp"
                 android:background="@drawable/bubble_chat"
                 tools:ignore="ContentDescription" />
         </LinearLayout>
@@ -151,11 +152,14 @@
                                 android:layout_height="115dp"
                                 android:background="@color/white" />
 
-                            <ViewFlipper
-                                android:id="@+id/view_flipper"
+                            <com.denzcoskun.imageslider.ImageSlider
+                                android:id="@+id/image_slider"
                                 android:layout_width="match_parent"
                                 android:layout_height="100dp"
-                                android:background="@color/white" />
+                                app:iss_auto_cycle="true"
+                                app:iss_period="1000"
+                                app:iss_delay="2000"
+                                app:iss_text_align="CENTER"/>
 
                             <TextView
                                 android:id="@+id/txt"

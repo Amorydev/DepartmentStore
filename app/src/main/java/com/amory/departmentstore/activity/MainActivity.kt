@@ -39,6 +39,9 @@ import com.amory.departmentstore.viewModel.OnClickRvLoaiSanPham
 import com.amory.departmentstore.viewModel.OnClickRvSanPham
 import com.amory.departmentstore.viewModel.OnLoadMoreListener
 import com.bumptech.glide.Glide
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.interfaces.ItemClickListener
+import com.denzcoskun.imageslider.models.SlideModel
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
@@ -489,28 +492,23 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun SlideQuangCao() {
-        val listquangcao: MutableList<String> = mutableListOf()
-        listquangcao.add("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/thanh-ly-giam-soc-22032024894.jpg")
-        listquangcao.add("https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_85,s_1058x135/https://cdn.tgdd.vn/bachhoaxanh/banners/5599/san-sale-gia-soc-cung-bhx-12032024133716.jpg")
-        listquangcao.add("https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_85,s_1058x135/https://cdn.tgdd.vn/bachhoaxanh/banners/5599/hoa-my-pham-giam-soc-den-50-21032024183619.jpg")
-        listquangcao.add("https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_85,s_1058x135/https://cdn.tgdd.vn/bachhoaxanh/banners/5599/sua-cac-loai-3012202311948.jpg")
+        val imageList = ArrayList<SlideModel>()
+        imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/thanh-ly-giam-soc-22032024894.jpg"))
+        imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/san-sale-gia-soc-cung-bhx-12032024133716.jpg"))
+        imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/sua-cac-loai-3012202311948.jpg"))
 
-        for (i in 0 until listquangcao.size) {
-            val imageView = ImageView(applicationContext)
-            Glide.with(applicationContext).load(listquangcao[i]).into(imageView)
-            imageView.scaleType = ImageView.ScaleType.FIT_XY
-            binding.viewFlipper.addView(imageView)
-        }
-        val slide_in = AnimationUtils.loadAnimation(applicationContext, R.anim.slide_in_right)
-        val slide_out = AnimationUtils.loadAnimation(applicationContext, R.anim.slide_out_right)
-        /*
-                Chuyển đổi ảnh
-        */
-        binding.viewFlipper.flipInterval = 3000
-        binding.viewFlipper.isAutoStart = true
-        binding.viewFlipper.inAnimation = slide_in
-        binding.viewFlipper.outAnimation = slide_out
+        binding.imageSlider.setImageList(imageList,ScaleTypes.FIT)
+        binding.imageSlider.setItemClickListener(
+            object : ItemClickListener{
+                override fun doubleClick(position: Int) {
 
+                }
+
+                override fun onItemSelected(position: Int) {
+
+                }
+            }
+        )
     }
 
     override fun onResume() {

@@ -62,6 +62,10 @@ class SearchActivity : AppCompatActivity() {
                     }
                     val adapter = ArrayAdapter(this@SearchActivity,android.R.layout.simple_list_item_1,list)
                     binding.lvSearch.adapter = adapter
+                }else{
+                    list.clear()
+                    val adapter = ArrayAdapter(this@SearchActivity,android.R.layout.simple_list_item_1,list)
+                    adapter.notifyDataSetChanged()
                 }
             }
 
