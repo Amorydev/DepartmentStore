@@ -1,9 +1,14 @@
 package com.amory.departmentstore.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
 import com.amory.departmentstore.R
@@ -56,9 +61,10 @@ class SearchActivity : AppCompatActivity() {
         call.enqueue(object : retrofit2.Callback<SanPhamModel>{
             override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
                 if (response.isSuccessful){
+                    val result = response.body()?.result
                     for (i in 0 until response.body()?.result?.size!!)
                     {
-                        list.add(response.body()?.result!![i].name)
+                        list.add(result?.get(i)?.name!!)
                     }
                     val adapter = ArrayAdapter(this@SearchActivity,android.R.layout.simple_list_item_1,list)
                     binding.lvSearch.adapter = adapter
@@ -79,5 +85,11 @@ class SearchActivity : AppCompatActivity() {
         binding.imbBack.setOnClickListener {
             onBackPressed()
         }
+    }
+    @Deprecated("Deprecated in Java",
+        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
+    )
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 }

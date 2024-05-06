@@ -163,4 +163,10 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
         super.onStop()
         EventBus.getDefault().unregister(this)
     }
+    @Deprecated("Deprecated in Java",
+        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
+    )
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
 }

@@ -26,6 +26,13 @@ class AdminChatUserActivity : AppCompatActivity() {
         setContentView(binding.root)
         initViews()
         getUser()
+        onClickBacK()
+    }
+
+    private fun onClickBacK() {
+        binding.btnBack.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -63,5 +70,11 @@ class AdminChatUserActivity : AppCompatActivity() {
         binding.rvUserChat.setHasFixedSize(true)
         adapter = RvAdminChatUser(listUser)
         binding.rvUserChat.adapter = adapter
+    }
+    @Deprecated("Deprecated in Java",
+        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
+    )
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 }

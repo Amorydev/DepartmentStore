@@ -20,7 +20,6 @@ import java.time.format.DateTimeFormatter
 
 class RvChatAdapter(val list: ArrayList<ChatMessage>, private val sendId: String) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    lateinit var mcontext: Context
 
     inner class NhanMesViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
         val txt_message = itemview.findViewById<TextView>(R.id.txt_message)
@@ -67,7 +66,7 @@ class RvChatAdapter(val list: ArrayList<ChatMessage>, private val sendId: String
         if (datetime != null) {
             val instant = Instant.ofEpochSecond(datetime.seconds, datetime.nanoseconds.toLong())
             val localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-            val formattedTime = localDateTime.format(DateTimeFormatter.ofPattern("hh:mm a"))
+            val formattedTime = localDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
             return formattedTime
         }
         return ""

@@ -54,6 +54,21 @@
             app:layout_constraintStart_toEndOf="@+id/cardView"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/txt_giagoc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="x1 10.000đ"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            android:layout_marginTop="2sp"
+            android:layout_marginBottom="2sp"
+            android:layout_marginEnd="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/txt_tonggiasanpham"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_tensanphamtronggiohang"
+            tools:ignore="SmallSp" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="100dp"

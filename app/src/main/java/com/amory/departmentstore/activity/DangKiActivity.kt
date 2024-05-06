@@ -156,5 +156,11 @@ class DangKiActivity : AppCompatActivity() {
             }
         }, 1000)
     }
+    @Deprecated("Deprecated in Java",
+        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
+    )
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
 
 }

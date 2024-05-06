@@ -59,6 +59,12 @@ class AdminActivity : AppCompatActivity() {
 
         }
     }
+    @Deprecated("Deprecated in Java",
+        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
+    )
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
 
     private fun onCLickDanhMuc() {
         binding.imbDanhmucAdmin.setOnClickListener {

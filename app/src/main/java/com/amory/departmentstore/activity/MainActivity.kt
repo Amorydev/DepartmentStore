@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         /*Toast.makeText(this,Utils.user_current?.email,Toast.LENGTH_SHORT).show()*/
         if (Utils.kiemTraKetNoi(this)) {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
-            paddingRecy()
+            paddingRv()
             laySanPham()
             layLoaiSanPham()
             onClickDanhMuc()
@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun paddingRecy() {
+    private fun paddingRv() {
         val itemDecoration = ItemOffsetDecoration(1)
         binding.rvSanpham.addItemDecoration(itemDecoration)
     }
@@ -355,10 +355,7 @@ class MainActivity : AppCompatActivity() {
                                             ChiTietSanPhamActivity::class.java
                                         )
 
-                                        intent.putExtra(
-                                            "name",
-                                            list[position].name
-                                        )
+                                        intent.putExtra("name", list[position].name)
                                         intent.putExtra("idsanpham", list[position].id)
                                         intent.putExtra("price", list[position].price)
                                         intent.putExtra("hinhanhsanpham", list[position].image_url)
@@ -399,9 +396,7 @@ class MainActivity : AppCompatActivity() {
                                             Utils.manggiohang.add(gioHang)
                                         }
 
-                                        binding.badgeCart.setText(
-                                            Utils.manggiohang.getSoluong().toString()
-                                        )
+                                        binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(),true)
                                     }
                                 })
                             adapter.notifyDataSetChanged()
@@ -428,7 +423,9 @@ class MainActivity : AppCompatActivity() {
             }
         })
         if (Utils.manggiohang.getSoluong() != 0) {
-            binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
+            binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(),true)
+        }else{
+            binding.badgeCart.setNumber(0)
         }
     }
 
@@ -511,23 +508,10 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    override fun onResume() {
-        super.onResume()
-        laySanPham()
-        layLoaiSanPham()
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        laySanPham()
-        layLoaiSanPham()
-    }
-
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (isLoadMore) {
             isLoadMore = false
-            laySanPham()
         } else {
             super.onBackPressed()
         }
@@ -570,4 +554,18 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (Utils.manggiohang.getSoluong() != 0) {
+            binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(),true)
+        }else{
+            binding.badgeCart.setNumber(0)
+        }
+        getToken()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getToken()
+    }
 }

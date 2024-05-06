@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextPaint
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,11 +12,13 @@ import com.amory.departmentstore.adapter.RvChatAdapter
 import com.amory.departmentstore.adapter.Utils
 import com.amory.departmentstore.databinding.ActivityChatBinding
 import com.amory.departmentstore.model.ChatMessage
+import com.amory.departmentstore.model.User
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import io.paperdb.Paper
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -43,11 +46,21 @@ class ChatActivity : AppCompatActivity() {
         }
     }
     private fun insertUser() {
-        val name = Utils.user_current?.first_name + Utils.user_current?.last_name
+        val name:String
         val user:HashMap<String,Any> = hashMapOf()
-        user["id"] = Utils.user_current?.id.toString()
-        user["username"] = name
-        db.collection("user").document(Utils.user_current?.id.toString()).set(user)
+        val account = Paper.book().read<User>("user")
+        if (account != null){
+            name = account.first_name + " "+account.last_name
+            user["id"] = account.id.toString()
+            user["username"] = name
+            db.collection("user").document(account.id.toString()).set(user)
+        }else{
+            name = Utils.user_current?.first_name+ " " + Utils.user_current?.last_name
+            user["id"] = Utils.user_current?.id.toString()
+            user["username"] = name
+            db.collection("user").document(Utils.user_current?.id.toString()).set(user)
+        }
+
     }
 
     private fun onClickChat() {
@@ -60,7 +73,9 @@ class ChatActivity : AppCompatActivity() {
         val txt_chat = binding.txtChat.text.toString().trim()
         if (txt_chat.isNotEmpty()) {
             val message: HashMap<String, Any> = hashMapOf()
-            message[Utils.GUI_ID] = Utils.user_current?.id.toString()
+            val account = Paper.book().read<User>("user")
+            val guiId = account?.id?.toString() ?: Utils.user_current?.id.toString()
+            message[Utils.GUI_ID] = guiId
             message[Utils.NHAN_ID] = Utils.ID_NHAN
             message[Utils.MESS] = txt_chat
             message[Utils.DATE_TIME] = Timestamp.now()
@@ -78,13 +93,16 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun getChat() {
+        val account = Paper.book().read<User>("user")
+        val user_id: String = account?.id?.toString() ?: Utils.user_current?.id.toString()
+        Toast.makeText(applicationContext,user_id,Toast.LENGTH_SHORT).show()
         db.collection(Utils.PATH)
-            .whereEqualTo(Utils.GUI_ID, Utils.user_current?.id.toString())
+            .whereEqualTo(Utils.GUI_ID, user_id)
             .whereEqualTo(Utils.NHAN_ID, Utils.ID_NHAN)
             .addSnapshotListener(eventListener)
         db.collection(Utils.PATH)
             .whereEqualTo(Utils.GUI_ID, Utils.ID_NHAN)
-            .whereEqualTo(Utils.NHAN_ID, Utils.user_current?.id.toString())
+            .whereEqualTo(Utils.NHAN_ID, user_id)
             .addSnapshotListener(eventListener)
     }
 
@@ -107,7 +125,7 @@ class ChatActivity : AppCompatActivity() {
                     list.add(chatMessage)
                 }
             }
-            list.sortWith(Comparator { obj1, obj2 -> obj1.dateObj?.compareTo(obj2.dateObj)!! })
+            list.sortWith(Comparator { obj1, obj2 -> obj1.dateObj.compareTo(obj2.dateObj)})
             if (count == 0) {
                 adapter.notifyDataSetChanged()
             } else {
@@ -125,7 +143,19 @@ class ChatActivity : AppCompatActivity() {
         binding.rvChat.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvChat.setHasFixedSize(true)
-        adapter = RvChatAdapter(list, Utils.user_current?.id.toString())
+        val account = Paper.book().read<User>("user")
+        adapter = if (account != null){
+            RvChatAdapter(list, account.id.toString())
+        }else{
+            RvChatAdapter(list, Utils.user_current?.id.toString())
+        }
         binding.rvChat.adapter = adapter
+    }
+
+    @Deprecated("Deprecated in Java",
+        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
+    )
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 }

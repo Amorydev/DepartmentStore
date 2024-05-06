@@ -105,14 +105,14 @@ class DangNhapActivity : AppCompatActivity() {
                                 "Đăng nhập thành công",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            isLogin = true
-                            Paper.book().write("isLogin", isLogin)
                             binding.prgbar.visibility = View.GONE
                             Utils.user_current = response.body()?.result?.get(0)!!
                             if (Utils.user_current!!.role != 1) {
+                                isLogin = true
                                 Paper.book().write("user", Utils.user_current!!)
                                 Paper.book().write("email", email)
                                 Paper.book().write("password", password)
+                                Paper.book().write("isLogin", isLogin)
                                 val intent = Intent(this@DangNhapActivity, MainActivity::class.java)
                                 startActivity(intent)
                                 finish()
@@ -122,18 +122,17 @@ class DangNhapActivity : AppCompatActivity() {
                                 startActivity(intent)
                                 finish()
                             }
-                        } else {
-                            binding.prgbar.visibility = View.GONE
-                            Toast.makeText(
-                                applicationContext,
-                                "Đăng nhập không thành công",
-                                Toast.LENGTH_SHORT
-                            ).show()
                         }
                     }
                 }
 
                 override fun onFailure(call: Call<UserModel>, t: Throwable) {
+                    binding.prgbar.visibility = View.GONE
+                    Toast.makeText(
+                        applicationContext,
+                        "Đăng nhập không thành công",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     t.printStackTrace()
                 }
             })

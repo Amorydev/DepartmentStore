@@ -5,9 +5,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.ItemOffsetDecoration
 import com.amory.departmentstore.adapter.RvLoadMoreScroll
 import com.amory.departmentstore.adapter.RvSanPhamCacLoai
@@ -23,6 +27,9 @@ import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import com.amory.departmentstore.viewModel.OnClickSanPhamTheoLoai
 import com.amory.departmentstore.viewModel.OnLoadMoreListener
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import io.paperdb.Paper
 import retrofit2.Call
 import retrofit2.Response
 
@@ -39,13 +46,100 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
         quayLaiTrangChu()
         goToGioHang()
         setGiaoDien()
+        onClickDanhMuc()
+        onCLickNav()
+        OnclickNavHeader()
+        onClickSearch()
+    }
+    private fun OnclickNavHeader() {
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        val headerView: View = navigationView.getHeaderView(0)
+        val btnSignIn: Button = headerView.findViewById(R.id.btnSignIn)
+        val btnLogin: Button = headerView.findViewById(R.id.btnLogin)
+        btnSignIn.setOnClickListener {
+            val intent = Intent(this, DangKiActivity::class.java)
+            startActivity(intent)
+        }
+        btnLogin.setOnClickListener {
+            val intent = Intent(this, DangNhapActivity::class.java)
+            startActivity(intent)
+        }
+        if (Paper.book().read<String>("user") != null) {
+            btnLogin.visibility = View.INVISIBLE
+            btnSignIn.visibility = View.INVISIBLE
+            val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
+            txt_nav.text = Paper.book().read<String>("email")
+        } else {
+            btnLogin.visibility = View.VISIBLE
+            btnSignIn.visibility = View.VISIBLE
+            val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
+            txt_nav.text = Utils.user_current?.email
+        }
+
+    }
+
+
+    private fun onCLickNav() {
+        binding.navView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.btnSignIn -> {
+                    val intent = Intent(this, DangKiActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+
+                R.id.cart -> {
+                    val intent = Intent(this, GioHangActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+
+                R.id.details_order -> {
+                    val intent = Intent(this, ChiTietDatHangActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+
+                R.id.logout -> {
+                    Paper.book().delete("user")
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent(this, DangNhapActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+
+                else -> {
+                    true
+                }
+            }
+        }
+    }
+
+    private fun onClickDanhMuc() {
+        binding.imbTrangchu.setOnClickListener {
+            binding.layoutDrawer.openDrawer(binding.navView)
+        }
+    }
+
+
+    private fun onClickSearch() {
+        binding.imbSearch.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
+        binding.edtSearch.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
     }
 
     private fun setGiaoDien() {
         var tenloaisanpham = intent.getStringExtra("tenloaisanpham")
         binding.txtLoaisanpham.text = tenloaisanpham
         tenloaisanpham = tenloaisanpham?.lowercase()
-        binding.edtSearch.hint = "Tìm kiếm trong trang $tenloaisanpham"
+        binding.edtSearch.hint = "Tìm kiếm $tenloaisanpham"
     }
 
     private fun quayLaiTrangChu() {
@@ -128,8 +222,8 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                                             Utils.manggiohang.add(gioHang)
                                         }
 
-                                        binding.badgeCart.setText(
-                                            Utils.manggiohang.getSoluong().toString()
+                                        binding.badgeCart.setNumber(
+                                            Utils.manggiohang.getSoluong(),true
                                         )
                                     }
                                 })
@@ -139,7 +233,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                             binding.rvsanphamtheoloaiGao.addItemDecoration(itemDecoration)
                             setRVLayoutManager()
                             addEventLoad(produce, list as MutableList<SanPham>)
-                            binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
+                            binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(),true)
 
                         } else {
                             Toast.makeText(
@@ -160,20 +254,19 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
 
             }
 
-            private fun MutableList<GioHang>.getSoluong(): Int {
-                var totalSoluong = 0
-                for (gioHang in Utils.manggiohang) {
-                    totalSoluong += gioHang.soluongsanphamgiohang
-                }
-                return totalSoluong
-            }
-
             override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
                 t.printStackTrace()
             }
         }
 
         )
+    }
+    private fun MutableList<GioHang>.getSoluong(): Int {
+        var totalSoluong = 0
+        for (gioHang in Utils.manggiohang) {
+            totalSoluong += gioHang.soluongsanphamgiohang
+        }
+        return totalSoluong
     }
 
     private fun goToGioHang() {
@@ -233,6 +326,20 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                 }
             }
     }
+    @Deprecated("Deprecated in Java",
+        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
+    )
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        if (Utils.manggiohang.getSoluong() != 0) {
+            binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(),true)
+        }else{
+            binding.badgeCart.setNumber(0)
+        }
+    }
 
 }

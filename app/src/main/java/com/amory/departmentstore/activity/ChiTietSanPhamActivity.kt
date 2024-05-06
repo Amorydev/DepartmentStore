@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import android.widget.Toast
 import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.Utils
@@ -19,7 +20,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
     private lateinit var giasanpham: String
     private lateinit var hinhanhsanpham: String
     private lateinit var motasanpham: String
-    private  var idsanpham: Int = 0
+    private var idsanpham: Int = 0
     private var soluongsanpham = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,10 +58,10 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
 
         }
         binding.txtTruSanpham.setOnClickListener {
-            if (soluongsanpham > 0){
+            if (soluongsanpham > 0) {
                 soluongsanpham -= 1
             }
-                CapNhatSoLuongSanPham()
+            CapNhatSoLuongSanPham()
         }
     }
 
@@ -71,7 +72,6 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
     private fun onClickBack() {
         binding.imvBack.setOnClickListener {
             onBackPressed()
-            finish()
         }
     }
 
@@ -79,17 +79,18 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         binding.btnThemvaogiohang.setOnClickListener {
             if (Utils.manggiohang.size > 0) {
                 val soluong = soluongsanpham
-                var flags= false
-                for (i in 0 until Utils.manggiohang.size){
-                    if (Utils.manggiohang[i].idsanphamgiohang == idsanpham){
+                var flags = false
+                for (i in 0 until Utils.manggiohang.size) {
+                    if (Utils.manggiohang[i].idsanphamgiohang == idsanpham) {
                         Utils.manggiohang[i].soluongsanphamgiohang += soluong
-                        val tongGiaTriSanPham = giasanpham.toLong() * Utils.manggiohang[i].soluongsanphamgiohang
+                        val tongGiaTriSanPham =
+                            giasanpham.toLong() * Utils.manggiohang[i].soluongsanphamgiohang
                         Utils.manggiohang[i].giasanphamgiohang = tongGiaTriSanPham.toString()
                         flags = true
                         break
                     }
                 }
-                if (!flags){
+                if (!flags) {
                     val tongGiaTriSanPham = giasanpham.toLong() * soluong
                     val gioHang = GioHang(
                         idsanphamgiohang = idsanpham,
@@ -113,9 +114,12 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
                 Utils.manggiohang.add(gioHang)
 
             }
-            binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
+            if (Utils.manggiohang.getSoluong() != 0) {
+                binding.badgeCart.setNumber(Utils.manggiohang.getSoluong())
+            }
         }
     }
+
     private fun MutableList<GioHang>.getSoluong(): Int {
         var totalSoluong = 0
         for (gioHang in this) {
@@ -123,13 +127,18 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         }
         return totalSoluong
     }
+
     private fun init() {
         tensanpham = intent.getStringExtra("name").toString()
         giasanpham = intent.getStringExtra("price").toString()
         hinhanhsanpham = intent.getStringExtra("hinhanhsanpham").toString()
         motasanpham = intent.getStringExtra("motasanpham").toString()
-        idsanpham = intent.getIntExtra("idsanpham",0)
-        binding.badgeCart.setText(Utils.manggiohang.getSoluong().toString())
+        idsanpham = intent.getIntExtra("idsanpham", 0)
+        if (Utils.manggiohang.getSoluong() != 0) {
+            binding.badgeCart.setNumber(Utils.manggiohang.getSoluong())
+        } else {
+            binding.badgeCart.setNumber(0)
+        }
     }
 
     private fun XulyChiTiet() {
@@ -145,5 +154,14 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         val number = amount.toLong()
         val formatter = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${formatter.format(number)}đ"
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (Utils.manggiohang.getSoluong() != 0) {
+            binding.badgeCart.setNumber(Utils.manggiohang.getSoluong())
+        } else {
+            binding.badgeCart.setNumber(0)
+        }
     }
 }

@@ -67,7 +67,9 @@ class ChatAdminActivity : AppCompatActivity() {
                 }
         }
         binding.txtChat.setText("")
+/*
         Toast.makeText(applicationContext, list.toString(), Toast.LENGTH_SHORT).show()
+*/
     }
 
     private fun getChat() {
@@ -122,5 +124,21 @@ class ChatAdminActivity : AppCompatActivity() {
         binding.rvChatAdmin.setHasFixedSize(true)
         adapter = RvChatAdapter(list, Utils.user_current?.id.toString())
         binding.rvChatAdmin.adapter = adapter
+    }
+    @Deprecated("Deprecated in Java",
+        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
+    )
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getChat()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        getChat()
     }
 }

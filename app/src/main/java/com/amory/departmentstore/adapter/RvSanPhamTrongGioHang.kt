@@ -1,6 +1,7 @@
 package com.amory.departmentstore.adapter
 
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -23,15 +24,22 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
     inner class viewHolder(private var binding: LayoutChitietGiohangBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private var gioHang = Utils.manggiohang
+
+        @SuppressLint("SetTextI18n")
         fun bind(data: GioHang) {
+
             binding.txtTensanphamtronggiohang.text = data.tensanphamgiohang
             binding.soluongsanpham.text = data.soluongsanphamgiohang.toString()
             binding.txtTonggiasanpham.text = formatAmount(data.giasanphamgiohang)
+
             Glide.with(binding.root).load(data.hinhanhsanphamgiohang)
                 .into(binding.imvHinhanhsanphamtrongiohang)
 
             val position = adapterPosition
             val gioHangItem = gioHang[position]
+            val giaGoc =
+                gioHangItem.giasanphamgiohang.toLong() / (gioHangItem.soluongsanphamgiohang)
+            binding.txtGiagoc.text = "x1 " + formatAmount(giaGoc.toString())
             binding.txtCongSanpham.setOnClickListener {
                 val soluongmoi = gioHangItem.soluongsanphamgiohang + 1
                 gioHangItem.soluongsanphamgiohang = soluongmoi
@@ -55,13 +63,20 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
                     binding.soluongsanpham.text = gioHangItem.soluongsanphamgiohang.toString()
                     binding.txtTonggiasanpham.text = formatAmount(gioHangItem.giasanphamgiohang)
                     EventBus.getDefault().postSticky(TinhTongEvent())
+                } else {
+                    ds.removeAt(position)
+                    notifyItemRemoved(position)
+                    notifyItemRangeChanged(position, ds.size)
+                    updateUtilsMangGioHang()
+                    EventBus.getDefault().postSticky(TinhTongEvent())
+
                 }
             }
             binding.checkboxSanpham.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked){
+                if (isChecked) {
                     Utils.mangmuahang.add(gioHangItem)
                     EventBus.getDefault().postSticky(TinhTongEvent())
-                }else{
+                } else {
                     val iterator = Utils.mangmuahang.iterator()
                     while (iterator.hasNext()) {
                         val item = iterator.next()
@@ -75,7 +90,12 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
         }
 
     }
-
+    private fun updateUtilsMangGioHang() {
+        if (ds.isNotEmpty()) {
+            Utils.manggiohang.clear()
+            Utils.manggiohang.addAll(ds)
+        }
+    }
 
     //dinh dang thanh gia 999.999d
     fun formatAmount(amount: String): String {
