@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,7 +14,7 @@ import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.ItemOffsetDecoration
 import com.amory.departmentstore.adapter.RvLoadMoreScroll
 import com.amory.departmentstore.adapter.RvSanPhamCacLoai
-import com.amory.departmentstore.adapter.Utils
+import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivitySanPhamTheoLoaiBinding
 import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.model.GioHang
@@ -54,24 +53,11 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
     private fun OnclickNavHeader() {
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         val headerView: View = navigationView.getHeaderView(0)
-        val btnSignIn: Button = headerView.findViewById(R.id.btnSignIn)
-        val btnLogin: Button = headerView.findViewById(R.id.btnLogin)
-        btnSignIn.setOnClickListener {
-            val intent = Intent(this, DangKiActivity::class.java)
-            startActivity(intent)
-        }
-        btnLogin.setOnClickListener {
-            val intent = Intent(this, DangNhapActivity::class.java)
-            startActivity(intent)
-        }
+
         if (Paper.book().read<String>("user") != null) {
-            btnLogin.visibility = View.INVISIBLE
-            btnSignIn.visibility = View.INVISIBLE
             val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
             txt_nav.text = Paper.book().read<String>("email")
         } else {
-            btnLogin.visibility = View.VISIBLE
-            btnSignIn.visibility = View.VISIBLE
             val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
             txt_nav.text = Utils.user_current?.email
         }
@@ -82,12 +68,6 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
     private fun onCLickNav() {
         binding.navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.btnSignIn -> {
-                    val intent = Intent(this, DangKiActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-
                 R.id.cart -> {
                     val intent = Intent(this, GioHangActivity::class.java)
                     startActivity(intent)

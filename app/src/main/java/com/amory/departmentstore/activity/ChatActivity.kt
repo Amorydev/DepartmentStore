@@ -4,12 +4,11 @@ import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextPaint
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.adapter.RvChatAdapter
-import com.amory.departmentstore.adapter.Utils
+import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityChatBinding
 import com.amory.departmentstore.model.ChatMessage
 import com.amory.departmentstore.model.User
@@ -19,10 +18,6 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import io.paperdb.Paper
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.Objects
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatBinding

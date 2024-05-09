@@ -20,6 +20,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.AdminKhuyeMaiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AdminAddKhuyenMaiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.KhuyenMaiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.LienHeActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ChatAdminActivity"
             android:exported="false" />
         <activity

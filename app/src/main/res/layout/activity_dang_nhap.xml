@@ -35,8 +35,8 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="400sp"
-            android:layout_margin="40sp"
+            android:layout_height="420sp"
+            android:layout_margin="30sp"
             app:cardCornerRadius="20sp"
 
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,7 +44,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_dangnhap">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="329dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -111,7 +111,7 @@
                     android:id="@+id/btn_dangnhap"
                     android:layout_width="150sp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40sp"
+                    android:layout_marginTop="60sp"
                     android:background="@color/main"
                     android:text="Đăng nhập"
                     app:layout_constraintEnd_toEndOf="parent"

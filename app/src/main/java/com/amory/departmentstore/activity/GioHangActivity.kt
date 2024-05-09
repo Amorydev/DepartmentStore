@@ -4,13 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvSanPhamTrongGioHang
-import com.amory.departmentstore.adapter.Utils
+import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityGioHangBinding
 import com.amory.departmentstore.model.EventBus.TinhTongEvent
 import org.greenrobot.eventbus.EventBus
@@ -30,10 +27,11 @@ class GioHangActivity : AppCompatActivity() {
         if (Utils.manggiohang.size == 0) {
             binding.imvNoProducts.visibility = View.VISIBLE
             binding.txtNoProducts.visibility = View.VISIBLE
+            binding.rvSanphamTronggiohang.visibility = View.INVISIBLE
         } else {
             binding.imvNoProducts.visibility = View.INVISIBLE
             binding.txtNoProducts.visibility = View.INVISIBLE
-            OnClickBack()
+            binding.rvSanphamTronggiohang.visibility = View.VISIBLE
             onCLickMuaHang()
             tienHang()
             /* Toast.makeText(this,tinhTongTienHang().toString(),Toast.LENGTH_SHORT).show()*/
@@ -43,13 +41,34 @@ class GioHangActivity : AppCompatActivity() {
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         }
 
+        OnClickBack()
+        onClickCbTatCa()
+    }
+
+    private fun onClickCbTatCa() {
+        binding.cbTatca.setOnCheckedChangeListener { _, isChecked ->
+            for (i in 0 until binding.rvSanphamTronggiohang.childCount) {
+                val viewHolder =
+                    binding.rvSanphamTronggiohang.findViewHolderForAdapterPosition(i) as RvSanPhamTrongGioHang.viewHolder?
+                viewHolder?.binding?.checkboxSanpham?.isChecked = isChecked
+                val sanPham = Utils.manggiohang[i]
+                if (isChecked) {
+                    if (!Utils.mangmuahang.contains(sanPham)) {
+                        Utils.mangmuahang.add(sanPham)
+                    }
+                } else {
+                    Utils.mangmuahang.remove(sanPham)
+                }
+            }
+            EventBus.getDefault().postSticky(TinhTongEvent())
+        }
     }
 
     private fun onCLickMuaHang() {
         binding.btnMuahang.setOnClickListener {
-            if (Utils.mangmuahang.isEmpty()){
-                Toast.makeText(this,"Bạn chưa chọn sản phẩm để mua",Toast.LENGTH_SHORT).show()
-            }else {
+            if (Utils.mangmuahang.isEmpty()) {
+                Toast.makeText(this, "Bạn chưa chọn sản phẩm để mua", Toast.LENGTH_SHORT).show()
+            } else {
                 val intent = Intent(this, ThanhToanActivity::class.java)
                 intent.putExtra("tienhang", tinhTongTienHang())
                 startActivity(intent)
@@ -98,7 +117,9 @@ class GioHangActivity : AppCompatActivity() {
     public fun eventTinhTien(event: TinhTongEvent) {
         tienHang()
     }
-    @Deprecated("Deprecated in Java",
+
+    @Deprecated(
+        "Deprecated in Java",
         ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
     )
     override fun onBackPressed() {

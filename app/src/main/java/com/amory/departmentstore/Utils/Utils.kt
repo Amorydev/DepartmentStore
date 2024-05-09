@@ -1,4 +1,4 @@
-package com.amory.departmentstore.adapter
+package com.amory.departmentstore.Utils
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,6 +10,7 @@ import com.amory.departmentstore.model.User
 
 class Utils {
     companion object{
+        const val BASE_URL = "http://192.168.80.184/banhang/"
         val manggiohang: MutableList<GioHang> = mutableListOf()
         val mangmuahang: MutableList<GioHang> = mutableListOf()
         var user_current: User? = null

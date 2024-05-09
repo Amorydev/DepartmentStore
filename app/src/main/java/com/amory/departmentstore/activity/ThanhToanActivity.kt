@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
-import com.amory.departmentstore.adapter.Utils
+import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityThanhToanBinding
 import com.amory.departmentstore.model.GioHang
 import com.amory.departmentstore.model.NotificationReponse
@@ -23,7 +23,6 @@ import io.paperdb.Paper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.create
 import java.text.NumberFormat
 import java.util.Locale
 

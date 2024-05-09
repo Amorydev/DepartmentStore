@@ -5,7 +5,7 @@
     android:id="@+id/layout_drawer_admin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.AdminQLSanPhamActivity">
+    tools:context=".activity.AdminKhuyeMaiActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Quản lý sản phẩm"
+                android:text="Quản lý khuyến mãi"
                 android:textAlignment="center"
                 android:textSize="25sp"
                 android:textStyle="bold"
@@ -59,7 +59,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_suasanpham"
+            android:id="@+id/rv_khuyenmai"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="10sp"

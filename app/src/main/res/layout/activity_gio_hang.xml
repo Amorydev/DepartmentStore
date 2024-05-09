@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="UseCompoundDrawables">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/imv_back"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -53,11 +53,11 @@
         android:id="@+id/imv_no_products"
         android:layout_width="200sp"
         android:layout_height="200sp"
-        android:layout_marginTop="20sp"
+        android:layout_marginTop="100sp"
         android:background="@drawable/no_products"
         app:layout_constraintEnd_toEndOf="@id/rv_sanpham_tronggiohang"
         app:layout_constraintStart_toStartOf="@+id/rv_sanpham_tronggiohang"
-        app:layout_constraintTop_toTopOf="@+id/rv_sanpham_tronggiohang"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -77,21 +77,29 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout7"
         android:layout_width="match_parent"
-        android:layout_height="70sp"
-        android:background="@drawable/bg_muahang"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-
+        <View
+            android:id="@+id/view2"
+            android:layout_width="0sp"
+            android:layout_height="2sp"
+            android:background="#9F9E9E"
+            app:layout_constraintEnd_toStartOf="@id/btn_muahang"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_muahang"
+            app:layout_constraintWidth_percent="0.8"
+            tools:ignore="SmallSp" />
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tổng thanh toán"
             android:layout_marginEnd="10sp"
-            android:layout_marginBottom="25sp"
-            android:textSize="15sp"
+            android:layout_marginBottom="20sp"
+            android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txt_tongtien" />
 
@@ -101,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="0đ"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:textColor="@color/red"
             app:layout_constraintBottom_toBottomOf="@+id/textView4"
             app:layout_constraintEnd_toStartOf="@+id/btn_muahang"
@@ -111,12 +119,31 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_muahang"
             android:layout_width="150sp"
-            android:layout_height="wrap_content"
+            android:layout_height="55sp"
             android:background="@color/main"
             android:text="@string/mua_hang"
-            android:layout_marginBottom="10sp"
-            android:layout_marginEnd="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <CheckBox
+            android:id="@+id/cb_tatca"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="10sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tất cả"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="5sp"
+            app:layout_constraintEnd_toEndOf="@+id/cb_tatca"
+            app:layout_constraintStart_toStartOf="@+id/cb_tatca"
+            app:layout_constraintTop_toBottomOf="@+id/cb_tatca" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

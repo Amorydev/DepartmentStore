@@ -1,14 +1,13 @@
 package com.amory.departmentstore.retrofit
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.amory.departmentstore.Utils.Utils
 import retrofit2.Retrofit
 
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
     private lateinit var retrofit: Retrofit
-    private var BASE_URL = "http://192.168.1.19/banhang/"
+    private var BASE_URL = Utils.BASE_URL
 
     val retrofitInstance: Retrofit
         get() {

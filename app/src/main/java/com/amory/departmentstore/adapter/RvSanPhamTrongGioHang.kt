@@ -2,17 +2,13 @@ package com.amory.departmentstore.adapter
 
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.amory.departmentstore.R
+import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.LayoutChitietGiohangBinding
 import com.amory.departmentstore.model.EventBus.TinhTongEvent
 import com.amory.departmentstore.model.GioHang
-import com.amory.departmentstore.model.SanPham
 
 import com.bumptech.glide.Glide
 import org.greenrobot.eventbus.EventBus
@@ -21,7 +17,7 @@ import java.util.Locale
 
 class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
     RecyclerView.Adapter<RvSanPhamTrongGioHang.viewHolder>() {
-    inner class viewHolder(private var binding: LayoutChitietGiohangBinding) :
+    inner class viewHolder(var binding: LayoutChitietGiohangBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private var gioHang = Utils.manggiohang
 

@@ -5,11 +5,9 @@ import android.content.ContentValues
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvChatAdapter
-import com.amory.departmentstore.adapter.Utils
+import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityChatAdminBinding
 import com.amory.departmentstore.model.ChatMessage
 import com.google.firebase.Timestamp

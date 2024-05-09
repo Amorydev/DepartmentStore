@@ -13,8 +13,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvCHiTietDonHangAdmin
-import com.amory.departmentstore.adapter.RvChiTietDatHang
-import com.amory.departmentstore.adapter.Utils
 import com.amory.departmentstore.databinding.ActivityAdminChiTietDonHangBinding
 import com.amory.departmentstore.model.DonHangModel
 import com.amory.departmentstore.model.Donhang

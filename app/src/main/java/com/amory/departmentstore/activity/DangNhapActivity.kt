@@ -3,21 +3,16 @@ package com.amory.departmentstore.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.text.Editable
 import android.text.TextUtils
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
-import com.amory.departmentstore.adapter.Utils
+import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityDangNhapBinding
 import com.amory.departmentstore.model.User
 import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import io.paperdb.Paper
@@ -54,6 +49,10 @@ class DangNhapActivity : AppCompatActivity() {
         Paper.init(this)
         val emailPaper = Paper.book().read<String>("email")
         val passwordPaper = Paper.book().read<String>("password")
+        val checked = Paper.book().read<Boolean>("checked")
+        if (checked == true){
+            binding.checkBoxNhodangnhap.isChecked = true
+        }
         if (emailPaper != null && passwordPaper != null) {
             binding.emailEt.setText(emailPaper)
             binding.passET.setText(passwordPaper)
@@ -109,10 +108,13 @@ class DangNhapActivity : AppCompatActivity() {
                             Utils.user_current = response.body()?.result?.get(0)!!
                             if (Utils.user_current!!.role != 1) {
                                 isLogin = true
-                                Paper.book().write("user", Utils.user_current!!)
-                                Paper.book().write("email", email)
-                                Paper.book().write("password", password)
-                                Paper.book().write("isLogin", isLogin)
+                                if (binding.checkBoxNhodangnhap.isChecked){
+                                    Paper.book().write("isLogin", isLogin)
+                                    Paper.book().write("user", Utils.user_current!!)
+                                    Paper.book().write("email", email)
+                                    Paper.book().write("password", password)
+                                    Paper.book().write("checked",true)
+                                }
                                 val intent = Intent(this@DangNhapActivity, MainActivity::class.java)
                                 startActivity(intent)
                                 finish()
@@ -123,6 +125,13 @@ class DangNhapActivity : AppCompatActivity() {
                                 finish()
                             }
                         }
+                    }else{
+                        binding.prgbar.visibility = View.GONE
+                        Toast.makeText(
+                            applicationContext,
+                            "Đăng nhập không thành công",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 

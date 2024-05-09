@@ -30,9 +30,9 @@ import retrofit2.Response
 
 class AdminQLSanPhamActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminQlsanPhamBinding
-    private lateinit var itemOffsetDecoration: ItemOffsetDecoration
     var list = mutableListOf<SanPham>()
     private var listSanPham: SanPham? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminQlsanPhamBinding.inflate(layoutInflater)

@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/home"
-        android:title="Sản phẩm"
-        android:icon="@drawable/home"/>
-    <item android:id="@+id/discount"
-        android:title="Khuyến mãi"
-        android:icon="@drawable/discount"/>
-    <item android:id="@+id/cart"
-        android:title="Giỏ hàng"
-        android:icon="@drawable/carts"/>
-    <item android:id="@+id/account"
-        android:title="Tài khoản"
-        android:icon="@drawable/user"/>
-    <item android:id="@+id/details_order"
-        android:title="Chi tiết đơn hàng"
-        android:icon="@drawable/ic_detail_products"/>
-    <item android:id="@+id/feedback"
-        android:title="Liên hệ"
-        android:icon="@drawable/ic_phone"/>
-    <item android:id="@+id/logout"
-        android:title="Đăng xuất"
-        android:icon="@drawable/ic_logout"/>
+    <item
+        android:id="@+id/product"
+        android:icon="@drawable/home"
+        android:title="Sản phẩm" />
+    <item
+        android:id="@+id/discount"
+        android:icon="@drawable/discount"
+        android:title="Khuyến mãi" />
+    <item
+        android:id="@+id/cart"
+        android:icon="@drawable/carts"
+        android:title="Giỏ hàng" />
+    <item
+        android:id="@+id/details_order"
+        android:icon="@drawable/ic_detail_products"
+        android:title="Chi tiết đơn hàng" />
+    <item
+        android:id="@+id/contact"
+        android:icon="@drawable/ic_phone"
+        android:title="Liên hệ" />
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/ic_logout"
+        android:title="Đăng xuất" />
 </menu>

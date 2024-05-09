@@ -27,7 +27,7 @@ import retrofit2.Response
 
 class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminLoaiSanPhamBinding
-    private var loaiSanPham:LoaiSanPham? = null
+    private var loaiSanPham: LoaiSanPham? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminLoaiSanPhamBinding.inflate(layoutInflater)
@@ -37,10 +37,11 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
         hienThiLoai()
         onClickThem()
     }
+
     private fun onClickThem() {
         binding.btnThem.setOnClickListener {
-            val intent = Intent(this,AdminThemLoaiSanPhamActivity::class.java)
-            intent.putExtra("sua",loaiSanPham)
+            val intent = Intent(this, AdminThemLoaiSanPhamActivity::class.java)
+            intent.putExtra("sua", loaiSanPham)
             startActivity(intent)
         }
     }
@@ -59,11 +60,10 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
                     /*Toast.makeText(this@MainActivity, list, Toast.LENGTH_SHORT).show()*/
                     val adapter = list?.let { RvLoaiSanPhamAdmin(it) }
                     binding.rvAdminLoaisanpham.adapter = adapter
-                    binding.rvAdminLoaisanpham.layoutManager =  GridLayoutManager(
+                    binding.rvAdminLoaisanpham.layoutManager = GridLayoutManager(
                         this@AdminQLLoaiSanPhamActivity,
-                        2,
-                        GridLayoutManager.VERTICAL
-                        ,false
+                        4,
+                        GridLayoutManager.VERTICAL, false
                     )
 
                 }
@@ -71,7 +71,11 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
                 t.printStackTrace()
-                Toast.makeText(this@AdminQLLoaiSanPhamActivity, "Lấy loại sản phẩm thất bại", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    this@AdminQLLoaiSanPhamActivity,
+                    "Lấy loại sản phẩm thất bại",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
 
@@ -79,9 +83,9 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        if (item.title=="Sửa"){
+        if (item.title == "Sửa") {
             SuaLoaiSanPham()
-        }else{
+        } else {
             XoaLoaiSanPham()
         }
         return super.onContextItemSelected(item)
@@ -89,8 +93,9 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
     }
 
     private fun SuaLoaiSanPham() {
-        val intent = Intent(this@AdminQLLoaiSanPhamActivity,AdminThemLoaiSanPhamActivity::class.java)
-        intent.putExtra("sua",loaiSanPham)
+        val intent =
+            Intent(this@AdminQLLoaiSanPhamActivity, AdminThemLoaiSanPhamActivity::class.java)
+        intent.putExtra("sua", loaiSanPham)
         startActivity(intent)
     }
 
@@ -99,10 +104,11 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
         val call = service.xoaloaisanpham(loaiSanPham!!.id)
         call.enqueue(object : Callback<SanPhamModel> {
             override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     hienThiLoai()
                 }
             }
+
             override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
                 t.printStackTrace()
             }
@@ -123,15 +129,15 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-                R.id.dangxuat ->
-                {
+
+                R.id.dangxuat -> {
                     Paper.book().delete("user")
                     val intent = Intent(this, DangNhapActivity::class.java)
                     startActivity(intent)
                     true
                 }
-                R.id.xemdonhang ->
-                {
+
+                R.id.xemdonhang -> {
                     val intent = Intent(this, AdminChiTietDonHangActivity::class.java)
                     startActivity(intent)
                     true
@@ -150,10 +156,12 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
             binding.layoutDrawerAdmin.openDrawer(binding.navViewAdmin)
         }
     }
+
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    fun eventBus(event : SuaXoaLoaiEvent){
+    fun eventBus(event: SuaXoaLoaiEvent) {
         loaiSanPham = event.loaiSanPham
     }
+
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
@@ -163,7 +171,9 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
         super.onStop()
         EventBus.getDefault().unregister(this)
     }
-    @Deprecated("Deprecated in Java",
+
+    @Deprecated(
+        "Deprecated in Java",
         ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
     )
     override fun onBackPressed() {

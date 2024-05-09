@@ -9,9 +9,6 @@ import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import android.view.animation.AnimationUtils
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 
 import android.widget.Toast
@@ -23,11 +20,14 @@ import com.amory.departmentstore.adapter.ItemOffsetDecoration
 import com.amory.departmentstore.adapter.RvLoadMoreScroll
 import com.amory.departmentstore.adapter.RvLoaiSanPham
 import com.amory.departmentstore.adapter.RvSanPham
-import com.amory.departmentstore.adapter.Utils
+import com.amory.departmentstore.Utils.Utils
+import com.amory.departmentstore.adapter.RvKhuyenMai
 import com.amory.departmentstore.databinding.ActivityMainBinding
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_ITEM
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_LOADING
 import com.amory.departmentstore.model.GioHang
+import com.amory.departmentstore.model.KhuyenMai
+import com.amory.departmentstore.model.KhuyenMaiModel
 import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.viewModel.OnCLickButtonSanPham
 import com.amory.departmentstore.model.SanPham
@@ -38,7 +38,6 @@ import com.amory.departmentstore.retrofit.RetrofitClient
 import com.amory.departmentstore.viewModel.OnClickRvLoaiSanPham
 import com.amory.departmentstore.viewModel.OnClickRvSanPham
 import com.amory.departmentstore.viewModel.OnLoadMoreListener
-import com.bumptech.glide.Glide
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
@@ -58,6 +57,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var scrollListener: RvLoadMoreScroll
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private var isLoadMore = false
+    private lateinit var listKhuyenMai:MutableList<KhuyenMai>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,9 +69,10 @@ class MainActivity : AppCompatActivity() {
 
         /*  onTouch()*/
         /*  showSanPham()*/
-        /*Toast.makeText(this,Utils.user_current?.email,Toast.LENGTH_SHORT).show()*/
+        Log.d("paper",Paper.book().path)
         if (Utils.kiemTraKetNoi(this)) {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
+            listKhuyenMai = mutableListOf()
             paddingRv()
             laySanPham()
             layLoaiSanPham()
@@ -118,39 +119,19 @@ class MainActivity : AppCompatActivity() {
     private fun OnclickNavHeader() {
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         val headerView: View = navigationView.getHeaderView(0)
-        val btnSignIn: Button = headerView.findViewById(R.id.btnSignIn)
-        val btnLogin: Button = headerView.findViewById(R.id.btnLogin)
-        btnSignIn.setOnClickListener {
-            val intent = Intent(this, DangKiActivity::class.java)
-            startActivity(intent)
-        }
-        btnLogin.setOnClickListener {
-            val intent = Intent(this, DangNhapActivity::class.java)
-            startActivity(intent)
-        }
         if (Paper.book().read<String>("user") != null) {
-            btnLogin.visibility = View.INVISIBLE
-            btnSignIn.visibility = View.INVISIBLE
             val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
             txt_nav.text = Paper.book().read<String>("email")
         } else {
-            btnLogin.visibility = View.VISIBLE
-            btnSignIn.visibility = View.VISIBLE
             val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
             txt_nav.text = Utils.user_current?.email
         }
-
     }
 
 
     private fun onCLickNav() {
         binding.navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.btnSignIn -> {
-                    val intent = Intent(this, DangKiActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
 
                 R.id.cart -> {
                     val intent = Intent(this, GioHangActivity::class.java)
@@ -171,7 +152,20 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-
+                R.id.contact ->{
+                    val intent = Intent(this, LienHeActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.product ->{
+                    binding.layoutDrawer.closeDrawer(binding.navView)
+                    true
+                }
+                R.id.discount ->{
+                    val intent = Intent(this, KhuyenMaiActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> {
                     true
                 }
@@ -490,22 +484,43 @@ class MainActivity : AppCompatActivity() {
 
     private fun SlideQuangCao() {
         val imageList = ArrayList<SlideModel>()
-        imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/thanh-ly-giam-soc-22032024894.jpg"))
+       /* imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/thanh-ly-giam-soc-22032024894.jpg"))
         imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/san-sale-gia-soc-cung-bhx-12032024133716.jpg"))
-        imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/sua-cac-loai-3012202311948.jpg"))
+        imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/sua-cac-loai-3012202311948.jpg"))*/
+        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val call = service.laykhuyenmai()
+        call.enqueue(object : Callback<KhuyenMaiModel>{
+            override fun onResponse(
+                call: Call<KhuyenMaiModel>,
+                response: Response<KhuyenMaiModel>
+            ) {
+                if (response.isSuccessful){
+                    listKhuyenMai = response.body()?.result!!
+                    for (i in 0 until  listKhuyenMai.size){
+                        val image_url = listKhuyenMai[i].image_url
+                       imageList.add(SlideModel("$image_url"))
+                    }
+                    binding.imageSlider.setImageList(imageList,ScaleTypes.FIT)
+                    binding.imageSlider.setItemClickListener(
+                        object : ItemClickListener{
+                            override fun doubleClick(position: Int) {
 
-        binding.imageSlider.setImageList(imageList,ScaleTypes.FIT)
-        binding.imageSlider.setItemClickListener(
-            object : ItemClickListener{
-                override fun doubleClick(position: Int) {
+                            }
 
-                }
-
-                override fun onItemSelected(position: Int) {
-
+                            override fun onItemSelected(position: Int) {
+                                val intent = Intent(this@MainActivity,KhuyenMaiActivity::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                startActivity(intent)
+                            }
+                        }
+                    )
                 }
             }
-        )
+
+            override fun onFailure(call: Call<KhuyenMaiModel>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
     }
 
     @Deprecated("Deprecated in Java")
@@ -522,7 +537,7 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { p0 ->
                 if (!TextUtils.isEmpty(p0)) {
                     val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
-                    val call = service.updateToken(p0.toString(),Utils.user_current?.id)
+                    val call = service.updateToken(p0.toString(), Utils.user_current?.id)
                     call.enqueue(object : Callback<UserModel> {
                         override fun onResponse(
                             call: Call<UserModel>,

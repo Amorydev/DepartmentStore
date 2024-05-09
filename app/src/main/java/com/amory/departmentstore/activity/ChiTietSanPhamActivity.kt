@@ -3,11 +3,7 @@ package com.amory.departmentstore.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.view.View
-import android.widget.Toast
-import com.amory.departmentstore.R
-import com.amory.departmentstore.adapter.Utils
+import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityChiTietSanPhamBinding
 import com.amory.departmentstore.model.GioHang
 import com.bumptech.glide.Glide
