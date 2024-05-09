@@ -41,9 +41,9 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.firebase:firebase-auth:23.0.0")
     implementation("com.google.firebase:firebase-messaging:24.0.0")
@@ -83,4 +83,6 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.10.1")
     //ImagePicker
     implementation ("com.github.dhaval2404:imagepicker:2.1")
+    //Skeleton loader
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
 }

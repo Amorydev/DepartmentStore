@@ -191,6 +191,8 @@ class MainActivity : AppCompatActivity() {
     private fun layLoaiSanPham() {
         val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
         val call = service.getLoaisanPham()
+        binding.shimmerframe.visibility = View.VISIBLE
+        binding.shimmerframe.startShimmer()
         call.enqueue(object : Callback<LoaiSanPhamModel> {
             override fun onResponse(
                 call: Call<LoaiSanPhamModel>,
@@ -290,11 +292,16 @@ class MainActivity : AppCompatActivity() {
                             }
                         })
                     }
-                    binding.rvloaisanpham.adapter = adapter
-                    binding.rvloaisanpham.layoutManager = LinearLayoutManager(
-                        this@MainActivity,
-                        RecyclerView.HORIZONTAL, false
-                    )
+                    Handler().postDelayed({
+                        binding.shimmerframe.visibility = View.GONE
+                        binding.shimmerframe.stopShimmer()
+                        binding.layoutContrains.visibility = View.VISIBLE
+                        binding.rvloaisanpham.adapter = adapter
+                        binding.rvloaisanpham.layoutManager = LinearLayoutManager(
+                            this@MainActivity,
+                            RecyclerView.HORIZONTAL, false
+                        )
+                    },2000)
 
                 }
             }
@@ -312,6 +319,9 @@ class MainActivity : AppCompatActivity() {
     private fun laySanPham() {
         val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
         val call = service.getData()
+        binding.shimmerframe.visibility = View.VISIBLE
+        binding.layoutContrains.visibility = View.INVISIBLE
+        binding.shimmerframe.startShimmer()
         call.enqueue(object : Callback<SanPhamModel> {
             override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
                 t.printStackTrace()
@@ -393,10 +403,16 @@ class MainActivity : AppCompatActivity() {
                                         binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(),true)
                                     }
                                 })
-                            adapter.notifyDataSetChanged()
-                            binding.rvSanpham.adapter = adapter
-                            setRVLayoutManager()
-                            addEventLoad(produce, list)
+                            Handler().postDelayed({
+                                binding.shimmerframe.visibility = View.GONE
+                                binding.shimmerframe.stopShimmer()
+                                binding.layoutContrains.visibility = View.VISIBLE
+                                adapter.notifyDataSetChanged()
+                                binding.rvSanpham.adapter = adapter
+                                setRVLayoutManager()
+                                addEventLoad(produce, list)
+                            },2000)
+
                         } else {
                             Toast.makeText(
                                 this@MainActivity,
@@ -489,6 +505,8 @@ class MainActivity : AppCompatActivity() {
         imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/sua-cac-loai-3012202311948.jpg"))*/
         val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
         val call = service.laykhuyenmai()
+        binding.shimmerframe.visibility = View.VISIBLE
+        binding.shimmerframe.startShimmer()
         call.enqueue(object : Callback<KhuyenMaiModel>{
             override fun onResponse(
                 call: Call<KhuyenMaiModel>,
@@ -500,20 +518,26 @@ class MainActivity : AppCompatActivity() {
                         val image_url = listKhuyenMai[i].image_url
                        imageList.add(SlideModel("$image_url"))
                     }
-                    binding.imageSlider.setImageList(imageList,ScaleTypes.FIT)
-                    binding.imageSlider.setItemClickListener(
-                        object : ItemClickListener{
-                            override fun doubleClick(position: Int) {
+                    Handler().postDelayed({
+                        binding.shimmerframe.visibility = View.GONE
+                        binding.shimmerframe.stopShimmer()
+                        binding.layoutContrains.visibility = View.VISIBLE
+                        binding.imageSlider.setImageList(imageList,ScaleTypes.FIT)
+                        binding.imageSlider.setItemClickListener(
+                            object : ItemClickListener{
+                                override fun doubleClick(position: Int) {
 
-                            }
+                                }
 
-                            override fun onItemSelected(position: Int) {
-                                val intent = Intent(this@MainActivity,KhuyenMaiActivity::class.java)
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                startActivity(intent)
+                                override fun onItemSelected(position: Int) {
+                                    val intent = Intent(this@MainActivity,KhuyenMaiActivity::class.java)
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    startActivity(intent)
+                                }
                             }
-                        }
-                    )
+                        )
+                    },2000)
+
                 }
             }
 

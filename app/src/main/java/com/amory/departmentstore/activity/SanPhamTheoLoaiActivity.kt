@@ -138,6 +138,9 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
         val loai = intent.getIntExtra("loai", 1)
         val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
         val call = service.getSanPhamTheoLoai(loai)
+        binding.shimmerframe.visibility = View.VISIBLE
+        binding.rvsanphamtheoloaiGao.visibility = View.INVISIBLE
+        binding.shimmerframe.startShimmer()
         call.enqueue(object : retrofit2.Callback<SanPhamModel> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
@@ -207,13 +210,17 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                                         )
                                     }
                                 })
-                            binding.rvsanphamtheoloaiGao.adapter = adapter
-                            adapter.notifyDataSetChanged()
-                            val itemDecoration = ItemOffsetDecoration(3)
-                            binding.rvsanphamtheoloaiGao.addItemDecoration(itemDecoration)
-                            setRVLayoutManager()
-                            addEventLoad(produce, list as MutableList<SanPham>)
-                            binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(),true)
+                           Handler().postDelayed({
+                               binding.rvsanphamtheoloaiGao.adapter = adapter
+                               adapter.notifyDataSetChanged()
+                               binding.shimmerframe.stopShimmer()
+                               binding.rvsanphamtheoloaiGao.visibility = View.VISIBLE
+                               val itemDecoration = ItemOffsetDecoration(3)
+                               binding.rvsanphamtheoloaiGao.addItemDecoration(itemDecoration)
+                               setRVLayoutManager()
+                               addEventLoad(produce, list as MutableList<SanPham>)
+                               binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(),true)
+                           },2000)
 
                         } else {
                             Toast.makeText(
