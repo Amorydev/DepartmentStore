@@ -25,4 +25,4 @@ This is an API written by me in PHP language. Use to call the database that I st
 ## Android Application Screens 📱
 ### User
 When you open the application, a splash screen will appear and then go to the login screen. If you do not have an account, you can create a new account and log in.
-<img src="dangnhap.png" width="250" /> <img src="dangki.png" width="250" /> 
+<img src="screenshots/dangnhap.png" width="250" /> <img src="screenshots/dangki.png" width="250" /> 
