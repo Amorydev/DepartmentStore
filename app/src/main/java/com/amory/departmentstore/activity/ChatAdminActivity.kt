@@ -132,11 +132,9 @@ class ChatAdminActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        getChat()
     }
 
     override fun onPause() {
         super.onPause()
-        getChat()
     }
 }

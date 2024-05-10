@@ -12,7 +12,7 @@ class RvKhuyenMai(val list:MutableList<KhuyenMai>):RecyclerView.Adapter<RvKhuyen
         fun bind(data:KhuyenMai){
             binding.txtKhuyenmai.text = data.khuyenmai
             binding.txtThongtinKhuyenmai.text = data.thongtin
-            Glide.with(binding.root).load(data.image_url).centerCrop().into(binding.imgKhuyenmai)
+            Glide.with(binding.root).load(data.image_url).fitCenter().into(binding.imgKhuyenmai)
         }
     }
 

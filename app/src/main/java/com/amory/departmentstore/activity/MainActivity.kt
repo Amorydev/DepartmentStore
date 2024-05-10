@@ -301,7 +301,7 @@ class MainActivity : AppCompatActivity() {
                             this@MainActivity,
                             RecyclerView.HORIZONTAL, false
                         )
-                    },2000)
+                    },3000)
 
                 }
             }
@@ -411,7 +411,7 @@ class MainActivity : AppCompatActivity() {
                                 binding.rvSanpham.adapter = adapter
                                 setRVLayoutManager()
                                 addEventLoad(produce, list)
-                            },2000)
+                            },3000)
 
                         } else {
                             Toast.makeText(
@@ -494,7 +494,7 @@ class MainActivity : AppCompatActivity() {
             binding.rvSanpham.post {
                 adapter.notifyDataSetChanged()
             }
-        }, 2000)
+        }, 3000)
     }
 
 
@@ -536,7 +536,7 @@ class MainActivity : AppCompatActivity() {
                                 }
                             }
                         )
-                    },2000)
+                    },3000)
 
                 }
             }
