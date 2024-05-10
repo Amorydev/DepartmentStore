@@ -34,17 +34,18 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onClickSearch() {
-        binding.edtSearch.addTextChangedListener(object : TextWatcher{
+        binding.edtSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s?.length == 0){
+                if (s?.length == 0) {
                     list.clear()
-                    val adapter = ArrayAdapter(this@SearchActivity,android.R.layout.simple_list_item_1,list)
+                    val adapter =
+                        ArrayAdapter(this@SearchActivity, android.R.layout.simple_list_item_1, list)
                     binding.lvSearch.adapter = adapter
-                }else{
+                } else {
                     Search(s.toString())
                 }
             }
@@ -54,23 +55,31 @@ class SearchActivity : AppCompatActivity() {
         })
     }
 
-    private fun Search(search:String) {
+    private fun Search(search: String) {
         list.clear()
         val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
         val call = service.timkiem(search)
-        call.enqueue(object : retrofit2.Callback<SanPhamModel>{
+        val adapter = ArrayAdapter(this@SearchActivity, android.R.layout.simple_list_item_1, list)
+        call.enqueue(object : retrofit2.Callback<SanPhamModel> {
             override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     val result = response.body()?.result
-                    for (i in 0 until response.body()?.result?.size!!)
-                    {
+                    for (i in 0 until response.body()?.result?.size!!) {
                         list.add(result?.get(i)?.name!!)
                     }
-                    val adapter = ArrayAdapter(this@SearchActivity,android.R.layout.simple_list_item_1,list)
                     binding.lvSearch.adapter = adapter
-                }else{
+                    binding.lvSearch.setOnItemClickListener { parent, view, position, id ->
+                        val intent = Intent(this@SearchActivity, ChiTietSanPhamActivity::class.java)
+                        intent.putExtra("name", result?.get(position)?.name)
+                        intent.putExtra("idsanpham", result?.get(position)?.id)
+                        intent.putExtra("price", result?.get(position)?.price)
+                        intent.putExtra("hinhanhsanpham", result?.get(position)?.image_url)
+                        intent.putExtra("motasanpham", result?.get(position)?.description)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                    }
+                } else {
                     list.clear()
-                    val adapter = ArrayAdapter(this@SearchActivity,android.R.layout.simple_list_item_1,list)
                     adapter.notifyDataSetChanged()
                 }
             }
@@ -86,7 +95,9 @@ class SearchActivity : AppCompatActivity() {
             onBackPressed()
         }
     }
-    @Deprecated("Deprecated in Java",
+
+    @Deprecated(
+        "Deprecated in Java",
         ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
     )
     override fun onBackPressed() {
