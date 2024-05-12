@@ -83,6 +83,7 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
                             ).show()
                             val intent = Intent(this@AdminAddKhuyenMaiActivity,AdminKhuyeMaiActivity::class.java)
                             startActivity(intent)
+                            finish()
                         }
                     }
 
@@ -104,6 +105,7 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
                             Toast.makeText(this@AdminAddKhuyenMaiActivity,"Cập nhật thành công",Toast.LENGTH_SHORT).show()
                             val intent = Intent(this@AdminAddKhuyenMaiActivity,AdminKhuyeMaiActivity::class.java)
                             startActivity(intent)
+                            finish()
                         }
                     }
 

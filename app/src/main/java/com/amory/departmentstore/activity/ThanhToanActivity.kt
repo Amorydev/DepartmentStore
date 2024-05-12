@@ -74,7 +74,7 @@ class ThanhToanActivity : AppCompatActivity() {
         /*  Toast.makeText(this,user_id.toString(),Toast.LENGTH_LONG).show()*/
         binding.btnDathang.setOnClickListener {
             val address = binding.addressET.text.toString().trim()
-            if (TextUtils.isEmpty(address)) {
+            if (!TextUtils.isEmpty(address)) {
                 val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
                 val call =
                     service.taodonhang(

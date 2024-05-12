@@ -106,7 +106,7 @@ class DangNhapActivity : AppCompatActivity() {
                             ).show()
                             binding.prgbar.visibility = View.GONE
                             Utils.user_current = response.body()?.result?.get(0)!!
-                            if (Utils.user_current!!.role != 1) {
+                            if (Utils.user_current!!.role == 2) {
                                 isLogin = true
                                 if (binding.checkBoxNhodangnhap.isChecked){
                                     Paper.book().write("isLogin", isLogin)

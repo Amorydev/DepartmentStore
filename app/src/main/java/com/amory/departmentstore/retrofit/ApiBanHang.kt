@@ -73,15 +73,13 @@ interface ApiBanHang {
     @FormUrlEncoded
     fun themloaisanphammoi(
         @Field("name") name: String,
-        @Field("image_url") image_url:String,
-        @Field("category_id") category_id:Int
+        @Field("image_url") image_url:String
     ):Call<LoaiSanPhamModel>
     @POST("sualoaisanpham.php")
     @FormUrlEncoded
     fun sualoaisanpham(
         @Field("name") name: String,
         @Field("image_url") image_url:String,
-        @Field("category_id") category_id:Int,
         @Field("id") id: Int
     ):Call<LoaiSanPhamModel>
 

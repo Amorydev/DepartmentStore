@@ -142,7 +142,11 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-
+                R.id.khuyenmai -> {
+                    val intent = Intent(this, AdminKhuyeMaiActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> {
                     true
                 }

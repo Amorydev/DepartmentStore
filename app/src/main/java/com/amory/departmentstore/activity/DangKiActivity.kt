@@ -65,8 +65,7 @@ class DangKiActivity : AppCompatActivity() {
             &&!email.let { Patterns.EMAIL_ADDRESS.matcher(it).matches() } && email.isEmpty()) {
             binding.txtBatbuocnhapmobile.visibility = View.VISIBLE
             binding.progressBar.visibility = View.INVISIBLE
-            Toast.makeText(this, "Vui lòng nhập đủ dữ liệu", Toast.LENGTH_SHORT).show()
-            binding.progressBar.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.GONE
         } else {
             firebaseAuth = FirebaseAuth.getInstance()
             firebaseAuth.createUserWithEmailAndPassword(email,password)
@@ -95,9 +94,6 @@ class DangKiActivity : AppCompatActivity() {
         /*kiem tra dinh dang email*/
         if (!email.let { Patterns.EMAIL_ADDRESS.matcher(it).matches() } && email.isEmpty()) {
             binding.txtBatbuocnhapemail.visibility = View.VISIBLE
-            /*
-                        Toast.makeText(this, "Vui lòng nhập đúng định dạng email", Toast.LENGTH_SHORT).show()
-            */
         }
         if (!isValidPassword(password)) {
             binding.txtBatbuocnhappass.visibility = View.VISIBLE

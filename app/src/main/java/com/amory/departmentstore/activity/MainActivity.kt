@@ -210,7 +210,7 @@ class MainActivity : AppCompatActivity() {
                                     "Bạn chọn " + list[position].tenloaisanpham,
                                     Toast.LENGTH_SHORT
                                 ).show()*/
-                                when (list[position].category_id) {
+                                when (list[position].id) {
                                     1 -> {
                                         /*
                                                                                 GoToSanPhamGao()
@@ -219,71 +219,17 @@ class MainActivity : AppCompatActivity() {
                                             this@MainActivity,
                                             SanPhamTheoLoaiActivity::class.java
                                         )
-                                        intent.putExtra("loai", list[position].category_id)
+                                        intent.putExtra("loai", list[position].id)
                                         intent.putExtra("tenloaisanpham", list[position].name)
                                         startActivity(intent)
                                     }
 
-                                    2 -> {
-                                        /* GoToSanPhamSnack()*/
+                                    else -> {
                                         val intent = Intent(
                                             this@MainActivity,
                                             SanPhamTheoLoaiActivity::class.java
                                         )
-                                        intent.putExtra("loai", list[position].category_id)
-                                        intent.putExtra("tenloaisanpham", list[position].name)
-
-                                        startActivity(intent)
-                                    }
-
-                                    3 -> {
-                                        /*   GoToSanPhamTraiCay()*/
-                                        val intent = Intent(
-                                            this@MainActivity,
-                                            SanPhamTheoLoaiActivity::class.java
-                                        )
-                                        intent.putExtra("loai", list[position].category_id)
-                                        intent.putExtra("tenloaisanpham", list[position].name)
-
-                                        startActivity(intent)
-                                    }
-
-                                    4 -> {
-                                        val intent = Intent(
-                                            this@MainActivity,
-                                            SanPhamTheoLoaiActivity::class.java
-                                        )
-                                        intent.putExtra("loai", list[position].category_id)
-                                        intent.putExtra("tenloaisanpham", list[position].name)
-                                        startActivity(intent)
-                                    }
-
-                                    5 -> {
-                                        val intent = Intent(
-                                            this@MainActivity,
-                                            SanPhamTheoLoaiActivity::class.java
-                                        )
-                                        intent.putExtra("loai", list[position].category_id)
-                                        intent.putExtra("tenloaisanpham", list[position].name)
-                                        startActivity(intent)
-                                    }
-
-                                    6 -> {
-                                        val intent = Intent(
-                                            this@MainActivity,
-                                            SanPhamTheoLoaiActivity::class.java
-                                        )
-                                        intent.putExtra("loai", list[position].category_id)
-                                        intent.putExtra("tenloaisanpham", list[position].name)
-                                        startActivity(intent)
-                                    }
-
-                                    7 -> {
-                                        val intent = Intent(
-                                            this@MainActivity,
-                                            SanPhamTheoLoaiActivity::class.java
-                                        )
-                                        intent.putExtra("loai", list[position].category_id)
+                                        intent.putExtra("loai", list[position].id)
                                         intent.putExtra("tenloaisanpham", list[position].name)
                                         startActivity(intent)
                                     }

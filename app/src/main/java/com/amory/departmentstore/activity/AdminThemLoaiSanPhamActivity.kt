@@ -46,7 +46,6 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
         if (loaiSanPham != null) {
             binding.txt.text = "Sửa loại sản phẩm"
             binding.edtTensanpham.setText(loaiSanPham!!.name)
-            binding.edtLoaisanpham.setText(loaiSanPham!!.category_id.toString())
             Glide.with(this).load(loaiSanPham!!.image_url).into(binding.imvHinhanh)
         } else {
             flags = true
@@ -56,14 +55,13 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
     private fun onClickAddLoaiSanPham() {
         binding.imbAdd.setOnClickListener {
             val name = binding.edtTensanpham.text.toString().trim()
-            val idLoaiSanPham = binding.edtLoaisanpham.text.toString().trim()
             var image_url = mediaPath
             if (mediaPath.isEmpty()){
                 image_url = loaiSanPham?.image_url.toString()
             }
             if (flags == true){
                 val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
-                val call = service.themloaisanphammoi(name,image_url,idLoaiSanPham.toInt())
+                val call = service.themloaisanphammoi(name,image_url)
                 call.enqueue(object :Callback<LoaiSanPhamModel>{
                     override fun onResponse(
                         call: Call<LoaiSanPhamModel>,
@@ -75,6 +73,9 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                                 "thành công",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            val intent = Intent(this@AdminThemLoaiSanPhamActivity,AdminQLLoaiSanPhamActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         }
                     }
 
@@ -91,7 +92,7 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
             }else
             {
                 val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
-                val call = service.sualoaisanpham(name,image_url,idLoaiSanPham.toInt(),loaiSanPham!!.id)
+                val call = service.sualoaisanpham(name,image_url,loaiSanPham!!.id)
                 call.enqueue(object :Callback<LoaiSanPhamModel>{
                     override fun onResponse(
                         call: Call<LoaiSanPhamModel>,
@@ -103,6 +104,9 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                                 "thành công",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            val intent = Intent(this@AdminThemLoaiSanPhamActivity,AdminQLLoaiSanPhamActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         }
                     }
 
@@ -165,7 +169,7 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
         call.enqueue(object : Callback<SanPhamModel> {
             override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(applicationContext, "thành công", Toast.LENGTH_SHORT).show()
+                    /*Toast.makeText(applicationContext, "thành công", Toast.LENGTH_SHORT).show()*/
                 }
             }
 

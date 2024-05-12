@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.AdminThemLoaiSanPhamActivity">
+    tools:context=".activity.AdminThemLoaiSanPhamActivity"
+    tools:layout_editor_absoluteX="-4dp"
+    tools:layout_editor_absoluteY="-72dp">
 
     <LinearLayout
         android:id="@+id/linearLayout7"
@@ -62,47 +64,19 @@
                 android:hint="Tên loại sản phẩm mới" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
-        <TextView
-            android:id="@+id/idloaisanpham"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20sp"
-            android:layout_marginTop="40sp"
-            android:text="ID loại sản phẩm: "
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tensanphamLayout" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/loaisanphamLayout"
-            android:layout_width="60sp"
-            android:layout_height="60dp"
-            android:layout_marginHorizontal="16dp"
-
-            app:boxStrokeColor="@color/black"
-            app:hintTextColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/idloaisanpham"
-            app:layout_constraintStart_toEndOf="@+id/idloaisanpham"
-            app:layout_constraintTop_toTopOf="@+id/idloaisanpham">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_loaisanpham"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="id" />
-        </com.google.android.material.textfield.TextInputLayout>
-
         <TextView
             android:id="@+id/txt_hinhanh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20sp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="80sp"
+            android:layout_marginBottom="60sp"
             android:text="Hình ảnh: "
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/idloaisanpham" />
+            app:layout_constraintTop_toBottomOf="@id/tensanphamLayout"
+            app:layout_constraintVertical_bias="0.493" />
 
         <ImageView
             android:id="@+id/imv_hinhanh"
@@ -134,8 +108,8 @@
         android:id="@+id/imb_add"
         android:layout_width="60sp"
         android:layout_height="60sp"
-        android:layout_marginBottom="40sp"
         android:layout_marginEnd="20sp"
+        android:layout_marginBottom="40sp"
         android:background="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

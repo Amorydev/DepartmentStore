@@ -124,7 +124,7 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                         }
                         val description = binding.edtmotasanpham.text?.trim().toString()
 
-                        if (flags == true){
+                        if (flags){
                             val call2 =
                                 service.themsanphammoi(name, price, image_url, category_id, description)
                             call2.enqueue(object : Callback<SanPhamModel> {
@@ -138,7 +138,9 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                             "thành công",
                                             Toast.LENGTH_SHORT
                                         ).show()
-                                        onBackPressed()
+                                        val intent = Intent(this@AdminThemSanPhamActivity,AdminQLSanPhamActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
                                     }
                                 }
 
@@ -160,7 +162,9 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                             "thành công",
                                             Toast.LENGTH_SHORT
                                         ).show()
-                                        onBackPressed()
+                                        val intent = Intent(this@AdminThemSanPhamActivity,AdminQLSanPhamActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
                                     }
                                 }
 
