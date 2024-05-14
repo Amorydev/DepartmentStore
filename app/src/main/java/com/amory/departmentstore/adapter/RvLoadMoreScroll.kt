@@ -2,7 +2,7 @@ package com.amory.departmentstore.adapter
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.amory.departmentstore.viewModel.OnLoadMoreListener
+import com.amory.departmentstore.Interface.OnLoadMoreListener
 
 
 class RvLoadMoreScroll(layoutManager: GridLayoutManager) :

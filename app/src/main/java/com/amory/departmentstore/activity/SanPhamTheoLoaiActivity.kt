@@ -18,14 +18,14 @@ import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivitySanPhamTheoLoaiBinding
 import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.model.GioHang
-import com.amory.departmentstore.viewModel.OnCLickButtonSanPham
+import com.amory.departmentstore.Interface.OnCLickButtonSanPham
 
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
-import com.amory.departmentstore.viewModel.OnClickSanPhamTheoLoai
-import com.amory.departmentstore.viewModel.OnLoadMoreListener
+import com.amory.departmentstore.Interface.OnClickSanPhamTheoLoai
+import com.amory.departmentstore.Interface.OnLoadMoreListener
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import io.paperdb.Paper
@@ -215,12 +215,12 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                                adapter.notifyDataSetChanged()
                                binding.shimmerframe.stopShimmer()
                                binding.rvsanphamtheoloaiGao.visibility = View.VISIBLE
-                               val itemDecoration = ItemOffsetDecoration(3)
-                               binding.rvsanphamtheoloaiGao.addItemDecoration(itemDecoration)
-                               setRVLayoutManager()
-                               addEventLoad(produce, list as MutableList<SanPham>)
-                               binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(),true)
                            },2000)
+                            val itemDecoration = ItemOffsetDecoration(3)
+                            binding.rvsanphamtheoloaiGao.addItemDecoration(itemDecoration)
+                            setRVLayoutManager()
+                            addEventLoad(produce, list as MutableList<SanPham>)
+                            binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(),true)
 
                         } else {
                             Toast.makeText(

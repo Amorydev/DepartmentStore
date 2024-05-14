@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintSet
+import com.amory.departmentstore.R
 import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityThanhToanBinding
 import com.amory.departmentstore.model.GioHang
@@ -32,10 +35,24 @@ class ThanhToanActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityThanhToanBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        tienHang()
+        tinhTongThanhToan()
         onClickBack()
         onClickDatHang()
-        binding.txtTongtien.text = formatAmount(tienHang().toString())
+    }
+
+    private fun tinhTongThanhToan() {
+        binding.txtTamtinh.text = formatAmount(tienHang().toString())
+        binding.txtPhivanchuyen.text = formatAmount("30000")
+        if (tienHang() >= 300000){
+            binding.txtGiamgia.text = formatAmount("30000")
+            val tongtien = tienHang() - 30000
+            binding.txtTongtien.text = tongtien.toString()
+            binding.txtTongtienTam.text = tongtien.toString()
+        }else{
+            binding.txtGiamgia.text = formatAmount("0")
+            binding.txtTongtien.text = formatAmount(tienHang().toString())
+            binding.txtTongtienTam.text = formatAmount(tienHang().toString())
+        }
 
     }
 

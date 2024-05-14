@@ -1,4 +1,4 @@
-package com.amory.departmentstore.viewModel
+package com.amory.departmentstore.Interface
 
 interface OnCLickButtonSanPham {
     fun onCLickButtonSanPham(position : Int)

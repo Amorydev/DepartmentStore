@@ -21,7 +21,6 @@ import com.amory.departmentstore.adapter.RvLoadMoreScroll
 import com.amory.departmentstore.adapter.RvLoaiSanPham
 import com.amory.departmentstore.adapter.RvSanPham
 import com.amory.departmentstore.Utils.Utils
-import com.amory.departmentstore.adapter.RvKhuyenMai
 import com.amory.departmentstore.databinding.ActivityMainBinding
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_ITEM
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_LOADING
@@ -29,15 +28,15 @@ import com.amory.departmentstore.model.GioHang
 import com.amory.departmentstore.model.KhuyenMai
 import com.amory.departmentstore.model.KhuyenMaiModel
 import com.amory.departmentstore.model.LoaiSanPhamModel
-import com.amory.departmentstore.viewModel.OnCLickButtonSanPham
+import com.amory.departmentstore.Interface.OnCLickButtonSanPham
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
-import com.amory.departmentstore.viewModel.OnClickRvLoaiSanPham
-import com.amory.departmentstore.viewModel.OnClickRvSanPham
-import com.amory.departmentstore.viewModel.OnLoadMoreListener
+import com.amory.departmentstore.Interface.OnClickRvLoaiSanPham
+import com.amory.departmentstore.Interface.OnClickRvSanPham
+import com.amory.departmentstore.Interface.OnLoadMoreListener
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
@@ -88,6 +87,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 
     private fun gotoChat() {
         binding.btnChat.setOnClickListener {
@@ -242,12 +242,12 @@ class MainActivity : AppCompatActivity() {
                         binding.shimmerframe.visibility = View.GONE
                         binding.shimmerframe.stopShimmer()
                         binding.layoutContrains.visibility = View.VISIBLE
-                        binding.rvloaisanpham.adapter = adapter
-                        binding.rvloaisanpham.layoutManager = LinearLayoutManager(
-                            this@MainActivity,
-                            RecyclerView.HORIZONTAL, false
-                        )
                     },3000)
+                    binding.rvloaisanpham.adapter = adapter
+                    binding.rvloaisanpham.layoutManager = LinearLayoutManager(
+                        this@MainActivity,
+                        RecyclerView.HORIZONTAL, false
+                    )
 
                 }
             }
@@ -353,11 +353,11 @@ class MainActivity : AppCompatActivity() {
                                 binding.shimmerframe.visibility = View.GONE
                                 binding.shimmerframe.stopShimmer()
                                 binding.layoutContrains.visibility = View.VISIBLE
-                                adapter.notifyDataSetChanged()
-                                binding.rvSanpham.adapter = adapter
-                                setRVLayoutManager()
-                                addEventLoad(produce, list)
                             },3000)
+                            adapter.notifyDataSetChanged()
+                            binding.rvSanpham.adapter = adapter
+                            setRVLayoutManager()
+                            addEventLoad(produce, list)
 
                         } else {
                             Toast.makeText(
@@ -538,6 +538,7 @@ class MainActivity : AppCompatActivity() {
         })
 
     }
+
 
     override fun onResume() {
         super.onResume()

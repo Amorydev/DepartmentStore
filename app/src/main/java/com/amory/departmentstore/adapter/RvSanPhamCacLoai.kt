@@ -11,9 +11,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
-import com.amory.departmentstore.viewModel.OnCLickButtonSanPham
+import com.amory.departmentstore.Interface.OnCLickButtonSanPham
 import com.amory.departmentstore.model.SanPham
-import com.amory.departmentstore.viewModel.OnClickSanPhamTheoLoai
+import com.amory.departmentstore.Interface.OnClickSanPhamTheoLoai
 import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import java.util.Locale

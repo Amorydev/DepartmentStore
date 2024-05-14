@@ -1,19 +1,23 @@
 package com.amory.departmentstore.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.amory.departmentstore.adapter.RvSanPhamTrongGioHang
+import com.amory.departmentstore.R
 import com.amory.departmentstore.Utils.Utils
+import com.amory.departmentstore.adapter.RvSanPhamTrongGioHang
 import com.amory.departmentstore.databinding.ActivityGioHangBinding
 import com.amory.departmentstore.model.EventBus.TinhTongEvent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -43,6 +47,15 @@ class GioHangActivity : AppCompatActivity() {
 
         OnClickBack()
         onClickCbTatCa()
+        onShowProgress()
+
+    }
+
+    private fun onShowProgress() {
+        binding.niftySlider.apply {
+            setThumbCustomDrawable(R.drawable.ic_fast_delivery)
+            visibility = View.VISIBLE
+        }
     }
 
     private fun onClickCbTatCa() {
@@ -60,6 +73,10 @@ class GioHangActivity : AppCompatActivity() {
                     Utils.mangmuahang.remove(sanPham)
                 }
             }
+            val totalAmount = tinhTongTienHang().toFloat()
+            binding.niftySlider.valueTo = 300000F
+            binding.niftySlider.setValue(totalAmount)
+            onShowProgress()
             EventBus.getDefault().postSticky(TinhTongEvent())
         }
     }
@@ -87,14 +104,17 @@ class GioHangActivity : AppCompatActivity() {
         var tongtienhang: Long = 0
         for (i in 0 until Utils.mangmuahang.size) {
             tongtienhang += Utils.mangmuahang[i].giasanphamgiohang.toLong()
-            /* Toast.makeText(this,Utils.manggiohang[i].soluongsanphamgiohang.toString(),Toast.LENGTH_SHORT).show()
-             Toast.makeText(this,Utils.manggiohang[i].giasanphamgiohang,Toast.LENGTH_SHORT).show()*/
         }
         return tongtienhang
     }
 
     private fun tienHang() {
         binding.txtTongtien.text = formatAmount(tinhTongTienHang().toString())
+        binding.niftySlider.apply {
+            setThumbCustomDrawable(R.drawable.ic_fast_delivery)
+            visibility = View.VISIBLE
+            setValue(tinhTongTienHang().toFloat())
+        }
     }
 
     private fun formatAmount(amount: String): String {

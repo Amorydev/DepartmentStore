@@ -39,6 +39,77 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frameLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100k"
+            android:textSize="10sp"
+            app:layout_constraintEnd_toEndOf="@+id/nifty_slider"
+            app:layout_constraintHorizontal_bias="0.34"
+            app:layout_constraintStart_toStartOf="@+id/nifty_slider"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SmallSp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10sp"
+            android:text="300k (freeship 30k)"
+            android:textSize="8sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SmallSp" />
+
+        <com.litao.slider.NiftySlider
+            android:id="@+id/nifty_slider"
+            android:layout_width="350sp"
+            android:layout_height="10sp"
+            android:padding="2dp"
+            android:value="0"
+            android:valueFrom="0"
+            android:valueTo="300000"
+            app:haloColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:sliderTouchMode="disableTouch"
+            app:trackColor="@color/main"
+            app:trackColorInactive="#C2C2C2C2"
+            tools:ignore="MissingConstraints,SmallSp" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="15sp"
+            android:layout_height="15sp"
+            android:background="@drawable/ic_check"
+            app:layout_constraintBottom_toBottomOf="@id/nifty_slider"
+            app:layout_constraintEnd_toEndOf="@id/nifty_slider"
+            app:layout_constraintHorizontal_bias="0.34"
+            app:layout_constraintStart_toStartOf="@id/nifty_slider"
+            app:layout_constraintTop_toTopOf="@id/nifty_slider"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="15sp"
+            android:layout_height="15sp"
+            android:layout_marginEnd="10sp"
+            android:background="@drawable/ic_check"
+            app:layout_constraintBottom_toBottomOf="@id/nifty_slider"
+            app:layout_constraintEnd_toEndOf="@id/nifty_slider"
+            app:layout_constraintTop_toTopOf="@id/nifty_slider"
+            tools:ignore="ContentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_sanpham_tronggiohang"
         android:layout_width="match_parent"
@@ -47,7 +118,7 @@
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout2" />
 
     <ImageView
         android:id="@+id/imv_no_products"
@@ -65,10 +136,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="152dp"
+        android:layout_marginTop="10sp"
         android:layout_marginEnd="154dp"
         android:text="Không có sản phẩm nào trong giỏ hàng!"
         android:textColor="#ACACAC"
-        android:layout_marginTop="10sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="@+id/rv_sanpham_tronggiohang"
         app:layout_constraintStart_toStartOf="@+id/rv_sanpham_tronggiohang"
@@ -92,13 +163,14 @@
             app:layout_constraintTop_toTopOf="@id/btn_muahang"
             app:layout_constraintWidth_percent="0.8"
             tools:ignore="SmallSp" />
+
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tổng thanh toán"
             android:layout_marginEnd="10sp"
             android:layout_marginBottom="20sp"
+            android:text="Tổng thanh toán"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txt_tongtien" />
@@ -109,8 +181,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="0đ"
-            android:textSize="15sp"
             android:textColor="@color/red"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView4"
             app:layout_constraintEnd_toStartOf="@+id/btn_muahang"
             app:layout_constraintTop_toTopOf="@+id/textView4"
@@ -137,10 +209,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5sp"
             android:text="Tất cả"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="5sp"
             app:layout_constraintEnd_toEndOf="@+id/cb_tatca"
             app:layout_constraintStart_toStartOf="@+id/cb_tatca"
             app:layout_constraintTop_toBottomOf="@+id/cb_tatca" />

@@ -10,17 +10,14 @@ import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import java.util.Locale
 import android.os.Handler
-import android.view.ContextMenu
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
-import com.amory.departmentstore.model.EventBus.SuaXoaEvent
-import com.amory.departmentstore.viewModel.OnCLickButtonSanPham
-import com.amory.departmentstore.viewModel.OnClickRvSanPham
-import org.greenrobot.eventbus.EventBus
+import com.amory.departmentstore.Interface.OnCLickButtonSanPham
+import com.amory.departmentstore.Interface.OnClickRvSanPham
 
 class RvSanPham(private var ds: MutableList<SanPham>, private val onClickRvSanPham: OnClickRvSanPham, private val onCLickButtonSanPham: OnCLickButtonSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private lateinit var mcontext: Context

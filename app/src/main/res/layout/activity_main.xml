@@ -136,7 +136,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="115dp"
+                    android:layout_height="110dp"
                     android:orientation="horizontal">
 
                     <include
@@ -192,83 +192,82 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="185sp"
                         android:orientation="horizontal"
                         tools:ignore="DisableBaselineAlignment,UselessParent">
 
                         <include
                             layout="@layout/layout_sanpham_shimmer"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="185sp"
                             android:layout_margin="5sp"
                             android:layout_weight="1" />
 
                         <include
                             layout="@layout/layout_sanpham_shimmer"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="185sp"
                             android:layout_margin="5sp"
                             android:layout_weight="1" />
 
                         <include
                             layout="@layout/layout_sanpham_shimmer"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="185sp"
                             android:layout_margin="5sp"
                             android:layout_weight="1" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="185sp"
                         android:orientation="horizontal"
                         tools:ignore="DisableBaselineAlignment,UselessParent">
 
                         <include
                             layout="@layout/layout_sanpham_shimmer"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="185sp"
                             android:layout_margin="5sp"
                             android:layout_weight="1" />
 
                         <include
                             layout="@layout/layout_sanpham_shimmer"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5sp"
+                            android:layout_height="185sp"
                             android:layout_weight="1" />
 
                         <include
                             layout="@layout/layout_sanpham_shimmer"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5sp"
+                            android:layout_height="185sp"
                             android:layout_weight="1" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="185sp"
                         android:orientation="horizontal"
                         tools:ignore="DisableBaselineAlignment,UselessParent">
 
                         <include
                             layout="@layout/layout_sanpham_shimmer"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="185sp"
                             android:layout_margin="5sp"
                             android:layout_weight="1" />
 
                         <include
                             layout="@layout/layout_sanpham_shimmer"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="185sp"
                             android:layout_margin="5sp"
                             android:layout_weight="1" />
 
                         <include
                             layout="@layout/layout_sanpham_shimmer"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="185sp"
                             android:layout_margin="5sp"
                             android:layout_weight="1" />
                     </LinearLayout>

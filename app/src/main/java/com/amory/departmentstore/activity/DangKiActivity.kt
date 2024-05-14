@@ -11,9 +11,6 @@ import com.amory.departmentstore.databinding.ActivityDangKiBinding
 import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import retrofit2.Call

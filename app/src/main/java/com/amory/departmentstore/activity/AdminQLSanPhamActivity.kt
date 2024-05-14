@@ -9,17 +9,13 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amory.departmentstore.R
-import com.amory.departmentstore.adapter.ItemOffsetDecoration
-import com.amory.departmentstore.adapter.RvSanPham
 import com.amory.departmentstore.adapter.RvSanPhamAdmin
 import com.amory.departmentstore.databinding.ActivityAdminQlsanPhamBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaEvent
-import com.amory.departmentstore.viewModel.OnCLickButtonSanPham
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
-import com.amory.departmentstore.viewModel.OnClickRvSanPham
 import io.paperdb.Paper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe

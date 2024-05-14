@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amory.departmentstore.R
-import com.amory.departmentstore.adapter.RvLoaiSanPham
 import com.amory.departmentstore.adapter.RvLoaiSanPhamAdmin
 import com.amory.departmentstore.databinding.ActivityAdminLoaiSanPhamBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaLoaiEvent
@@ -16,7 +15,6 @@ import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
-import com.amory.departmentstore.viewModel.OnClickRvLoaiSanPham
 import io.paperdb.Paper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe

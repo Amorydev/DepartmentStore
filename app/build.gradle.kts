@@ -85,4 +85,6 @@ dependencies {
     implementation ("com.github.dhaval2404:imagepicker:2.1")
     //Skeleton loader
     implementation("com.facebook.shimmer:shimmer:0.5.0")
+    //Progress bar
+    implementation ("io.github.litao0621:nifty-slider:1.4.6")
 }

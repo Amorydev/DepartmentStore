@@ -10,7 +10,7 @@ import com.amory.departmentstore.model.User
 
 class Utils {
     companion object{
-        const val BASE_URL = "http://192.168.1.35/banhang/"
+        const val BASE_URL = "http://amorytech.io.vn/banhang/"
         val manggiohang: MutableList<GioHang> = mutableListOf()
         val mangmuahang: MutableList<GioHang> = mutableListOf()
         var user_current: User? = null

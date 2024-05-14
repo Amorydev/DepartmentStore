@@ -1,4 +1,4 @@
-package com.amory.departmentstore.viewModel
+package com.amory.departmentstore.Interface
 
 interface OnClickSanPhamTheoLoai {
     fun onClickSanPhamTheoLoai(position: Int)

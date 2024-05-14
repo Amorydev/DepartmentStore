@@ -19,5 +19,6 @@
     <string name="don_hang">Đơn hàng của bạn</string>
     <string name="tat_ca_don_hang">Tất cả đơn hàng</string>
     <string name="lien_he">"Liên hệ với chúng tôi"</string>
+    <string name="dieule">(Giá này đã bao gồm thuế GTGT, phí đóng gói, phí vận chuyển và các chi phí phát sinh khác)</string>
 
 </resources>
