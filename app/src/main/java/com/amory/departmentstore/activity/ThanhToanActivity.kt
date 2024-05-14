@@ -8,8 +8,10 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.Utils.Utils
+import com.amory.departmentstore.adapter.RvMuaNgay
 import com.amory.departmentstore.databinding.ActivityThanhToanBinding
 import com.amory.departmentstore.model.GioHang
 import com.amory.departmentstore.model.NotificationReponse
@@ -38,6 +40,14 @@ class ThanhToanActivity : AppCompatActivity() {
         tinhTongThanhToan()
         onClickBack()
         onClickDatHang()
+        showRV()
+    }
+
+    private fun showRV() {
+        val adapter = RvMuaNgay(Utils.mangmuahang)
+        binding.rvSanphamTrongthanhtoan.adapter = adapter
+        binding.rvSanphamTrongthanhtoan.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+        binding.rvSanphamTrongthanhtoan.setHasFixedSize(true)
     }
 
     private fun tinhTongThanhToan() {
@@ -73,8 +83,8 @@ class ThanhToanActivity : AppCompatActivity() {
             total_money = tienHang().toFloat()
             val gson: Gson = GsonBuilder().setLenient().create()
             detail = gson.toJson(Utils.mangmuahang)
-            binding.nameEt.setText(full_name)
-            binding.phoneET.setText(phone)
+            binding.txtName.text = full_name
+            binding.txtPhone.text = phone
         }else{
            full_name =
                 Utils.user_current?.first_name.toString() + " " + Utils.user_current?.last_name.toString()
@@ -84,8 +94,8 @@ class ThanhToanActivity : AppCompatActivity() {
             total_money = tienHang().toFloat()
             val gson: Gson = GsonBuilder().setLenient().create()
             detail = gson.toJson(Utils.mangmuahang)
-            binding.nameEt.setText(full_name)
-            binding.phoneET.setText(phone)
+            binding.txtName.text = full_name
+            binding.txtPhone.text = phone
         }
 
         /*  Toast.makeText(this,user_id.toString(),Toast.LENGTH_LONG).show()*/
@@ -195,6 +205,7 @@ class ThanhToanActivity : AppCompatActivity() {
     private fun onClickBack() {
         binding.imvBackThanhtoan.setOnClickListener {
             onBackPressed()
+            Utils.mangmuahang.clear()
         }
     }
 

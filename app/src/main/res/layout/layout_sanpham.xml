@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="126sp"
-    android:layout_height="210dp"
+    android:layout_height="195dp"
    android:layout_margin="2sp"
     app:cardCornerRadius="10dp"
     app:cardBackgroundColor="@android:color/transparent"
@@ -57,6 +57,7 @@
                 android:text="Cá ba sa cắt khúc đông lạnh 450-500g"
                 android:textColor="@color/black"
                 android:textSize="10sp"
+                android:layout_marginEnd="5sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -69,38 +70,34 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
             <TextView
                 android:id="@+id/txtgiasanpham"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5sp"
                 android:text="@string/_89_900"
+                android:layout_marginStart="5sp"
                 android:textColor="#FFEB3B"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/btnMua"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <TextView
                 android:id="@+id/btnMua"
-                android:layout_width="65sp"
-                android:layout_height="30sp"
-                android:layout_marginBottom="10sp"
-                android:background="@drawable/bk_item"
-                android:text="@string/mua"
-                android:textStyle="bold"
-                android:textColor="#013002"
-                android:textSize="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8sp"
+                android:text="@string/daban"
+                android:textColor="#C2252525"
+                android:textSize="9sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/txtgiasanpham" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </androidx.cardview.widget.CardView>

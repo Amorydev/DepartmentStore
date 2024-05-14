@@ -25,7 +25,6 @@ class RvSanPham(private var ds: MutableList<SanPham>, private val onClickRvSanPh
         val tensanpham: TextView = itemView.findViewById(R.id.txt_tensanpham)
         val giasanpham: TextView = itemView.findViewById(R.id.txtgiasanpham)
         val hinhanhsanpham: ImageView = itemView.findViewById(R.id.img_sanpham)
-        val btnMua: Button = itemView.findViewById(R.id.btnMua)
 
 
     }
@@ -89,11 +88,6 @@ class RvSanPham(private var ds: MutableList<SanPham>, private val onClickRvSanPh
             sanPhamViewHolder.giasanpham.text = formatAmount(ds[position].price)
             Glide.with(mcontext).load(ds[position].image_url).centerCrop()
                 .into(sanPhamViewHolder.hinhanhsanpham)
-
-            sanPhamViewHolder.btnMua.setOnClickListener {
-                onCLickButtonSanPham.onCLickButtonSanPham(position)
-            }
-
         }
         holder.itemView.setOnClickListener {
             onClickRvSanPham.onClickSanPham(position)

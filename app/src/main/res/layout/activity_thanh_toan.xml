@@ -39,63 +39,55 @@
         android:id="@+id/constraintLayout10"
         android:layout_width="match_parent"
         android:layout_height="0sp"
-        android:layout_marginTop="8sp"
-        android:layout_marginBottom="10sp"
+        android:layout_marginTop="5sp"
+
         android:background="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="60sp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="40sp"
-            app:boxStrokeColor="@color/black"
-            app:hintTextColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/txt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nguyễn Đức Quyền"
+            android:layout_marginTop="5sp"
+            android:layout_marginStart="20sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/nameEt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Họ và tên" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/phoneLayout"
-            android:layout_width="match_parent"
-            android:layout_height="60sp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="24dp"
-            app:boxStrokeColor="@color/black"
-            app:hintTextColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/nameLayout">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/phoneET"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Số điện thoại" />
-        </com.google.android.material.textfield.TextInputLayout>
-
+        <View
+            android:id="@+id/view_2"
+            android:layout_width="1sp"
+            android:layout_height="20sp"
+            android:background="@color/black"
+            android:layout_marginStart="5sp"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_name"
+            app:layout_constraintStart_toEndOf="@id/txt_name"
+            app:layout_constraintTop_toTopOf="@+id/txt_name" />
+        <TextView
+            android:id="@+id/txt_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0123456789"
+            android:layout_marginStart="10sp"
+            app:layout_constraintStart_toEndOf="@+id/view_2"
+            app:layout_constraintBottom_toBottomOf="@id/txt_name"
+            app:layout_constraintTop_toTopOf="@id/txt_name"
+            />
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/diachiLayout"
             android:layout_width="match_parent"
-            android:layout_height="60sp"
+            android:layout_height="50sp"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="24dp"
             app:boxStrokeColor="@color/black"
+            android:layout_marginBottom="5sp"
+            android:layout_marginTop="6sp"
             app:hintTextColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/phoneLayout">
+            app:layout_constraintTop_toBottomOf="@id/txt_name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/addressET"
@@ -105,6 +97,18 @@
                 android:hint="Địa chỉ" />
         </com.google.android.material.textfield.TextInputLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_sanpham_trongthanhtoan"
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        android:layout_marginTop="5sp"
+        android:layout_marginBottom="5sp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout13"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout10" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout11"

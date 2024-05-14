@@ -29,7 +29,25 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         onCLickCongTruSanPham()
         ThemVaoGioHang()
         GoToGioHang()
+        onCLickMuaNgay()
         /*Toast.makeText(this,idsanpham.toString(),Toast.LENGTH_SHORT).show()*/
+    }
+
+    private fun onCLickMuaNgay() {
+        binding.btnMuangay.setOnClickListener {
+            val soluong = soluongsanpham
+            val tongGiaTriSanPham = giasanpham.toLong() * soluong
+            val gioHang = GioHang(
+                idsanphamgiohang = idsanpham,
+                tensanphamgiohang = tensanpham,
+                giasanphamgiohang = tongGiaTriSanPham.toString(),
+                hinhanhsanphamgiohang = hinhanhsanpham,
+                soluongsanphamgiohang = soluong
+            )
+            Utils.mangmuahang.add(gioHang)
+            val intent = Intent(this, ThanhToanActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun GoToGioHang() {
@@ -72,7 +90,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
     }
 
     private fun ThemVaoGioHang() {
-        binding.btnThemvaogiohang.setOnClickListener {
+        binding.layoutThemvaogiohang.setOnClickListener {
             if (Utils.manggiohang.size > 0) {
                 val soluong = soluongsanpham
                 var flags = false

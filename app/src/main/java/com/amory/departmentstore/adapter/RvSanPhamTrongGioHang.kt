@@ -33,8 +33,7 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
 
             val position = adapterPosition
             val gioHangItem = gioHang[position]
-            val giaGoc =
-                gioHangItem.giasanphamgiohang.toLong() / (gioHangItem.soluongsanphamgiohang)
+            val giaGoc = gioHangItem.giasanphamgiohang.toLong() / (gioHangItem.soluongsanphamgiohang)
             binding.txtGiagoc.text = "x1 " + formatAmount(giaGoc.toString())
             binding.txtCongSanpham.setOnClickListener {
                 val soluongmoi = gioHangItem.soluongsanphamgiohang + 1
@@ -86,6 +85,7 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
         }
 
     }
+
     private fun updateUtilsMangGioHang() {
         if (ds.isNotEmpty()) {
             Utils.manggiohang.clear()

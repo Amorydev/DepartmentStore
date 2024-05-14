@@ -24,7 +24,6 @@ class RvSanPhamCacLoai(private var ds:MutableList<SanPham>, private val onClickS
         val txtTenSanPhamCacLoai = itemView.findViewById<TextView>(R.id.txt_tensanpham)!!
         val txtGiaSanPhamCacLoai = itemView.findViewById<TextView>(R.id.txtgiasanpham)!!
         val imvHinhAnhSanPhamCacLoai = itemView.findViewById<ImageView>(R.id.img_sanpham)!!
-        val btnMua: Button = itemView.findViewById(R.id.btnMua)
     }
     inner class LoadingViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
     //chuyen sang dinh dang 000.000d
@@ -76,9 +75,6 @@ class RvSanPhamCacLoai(private var ds:MutableList<SanPham>, private val onClickS
             sanPhamTheoLoaiViewHolder.txtGiaSanPhamCacLoai.text = formatAmount(ds[position].price)
             Glide.with(mcontext).load(ds[position].image_url).centerCrop()
                 .into(sanPhamTheoLoaiViewHolder.imvHinhAnhSanPhamCacLoai)
-            sanPhamTheoLoaiViewHolder.btnMua.setOnClickListener {
-                onCLickButtonSanPham.onCLickButtonSanPham(position)
-            }
         }
         holder.itemView.setOnClickListener {
             onClickSanPhamTheoLoai.onClickSanPhamTheoLoai(position)

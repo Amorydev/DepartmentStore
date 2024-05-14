@@ -3,7 +3,7 @@
     <string name="lua_chon_dang_tin_cay">Lựa chọn đáng tin cậy của bạn</string>
     <string name="rau_cu">Rau củ</string>
     <string name="_89_900">89.900đ</string>
-    <string name="mua">MUA</string>
+    <string name="mua">Đã bán</string>
     <string name="t_m_ki_m">Tìm kiếm</string>
     <string name="test_chitiet">Chuối cau nải từ 1kg trở lên (Giao ngẫu nhiên sống hoặc chín)</string>
     <string name="test_gia_chitiet">23.000đ</string>
@@ -20,5 +20,6 @@
     <string name="tat_ca_don_hang">Tất cả đơn hàng</string>
     <string name="lien_he">"Liên hệ với chúng tôi"</string>
     <string name="dieule">(Giá này đã bao gồm thuế GTGT, phí đóng gói, phí vận chuyển và các chi phí phát sinh khác)</string>
+    <string name="daban">Đã bán 100</string>
 
 </resources>
