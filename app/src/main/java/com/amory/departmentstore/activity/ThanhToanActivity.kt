@@ -33,6 +33,7 @@ import java.util.Locale
 
 class ThanhToanActivity : AppCompatActivity() {
     private lateinit var binding: ActivityThanhToanBinding
+    private var tongtien:Long = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityThanhToanBinding.inflate(layoutInflater)
@@ -40,58 +41,105 @@ class ThanhToanActivity : AppCompatActivity() {
         tinhTongThanhToan()
         onClickBack()
         onClickDatHang()
+        onClickVoucher()
         showRV()
+        onCLickDiaChi()
+    }
+
+    private fun onCLickDiaChi() {
+        binding.constraintLayout10.setOnClickListener {
+            val intent = Intent(this,DiaChiActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    private fun onClickVoucher() {
+        binding.voucher.setOnClickListener {
+            val intent = Intent(this,VoucherActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun showRV() {
         val adapter = RvMuaNgay(Utils.mangmuahang)
         binding.rvSanphamTrongthanhtoan.adapter = adapter
-        binding.rvSanphamTrongthanhtoan.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+        binding.rvSanphamTrongthanhtoan.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvSanphamTrongthanhtoan.setHasFixedSize(true)
     }
 
     private fun tinhTongThanhToan() {
-        binding.txtTamtinh.text = formatAmount(tienHang().toString())
+        val loaigiamgia = intent.getStringExtra("discount_type")
+        val tiengiamgia = intent.getDoubleExtra("discount_value",0.0)
+        var giamgiavoucher:Long = 0
+        binding.txtTamtinh.text = formatAmount(tinhTongTienHang().toString())
         binding.txtPhivanchuyen.text = formatAmount("30000")
-        if (tienHang() >= 300000){
-            binding.txtGiamgia.text = formatAmount("30000")
-            val tongtien = tienHang() - 30000
-            binding.txtTongtien.text = tongtien.toString()
-            binding.txtTongtienTam.text = tongtien.toString()
+
+        giamgiavoucher = if (loaigiamgia.equals("percent")){
+            (tinhTongTienHang() *(tiengiamgia/100)).toLong()
         }else{
+            tiengiamgia.toLong()
+        }
+
+        if (tinhTongTienHang() >= 300000) {
+            binding.txtGiamgia.text = formatAmount("30000")
+            val tonggiamgia = giamgiavoucher + 30000
+            binding.txtTonggiamgia.text = formatAmount(tonggiamgia.toString())
+            tongtien = tinhTongTienHang() - tonggiamgia
+            binding.txtTongtien.text = formatAmount(tongtien.toString())
+            binding.txtTongtienTam.text = formatAmount(tongtien.toString())
+        } else {
             binding.txtGiamgia.text = formatAmount("0")
-            binding.txtTongtien.text = formatAmount(tienHang().toString())
-            binding.txtTongtienTam.text = formatAmount(tienHang().toString())
+            val tonggiamgia = giamgiavoucher
+            binding.txtTonggiamgia.text = formatAmount(tonggiamgia.toString())
+            tongtien = tinhTongTienHang() + 30000 - giamgiavoucher
+            if (tongtien > 0){
+            binding.txtTongtien.text = formatAmount(tongtien.toString())
+            binding.txtTongtienTam.text = formatAmount(tongtien.toString())
+            }else{
+                binding.txtTongtien.text = formatAmount("0")
+                binding.txtTongtienTam.text = formatAmount("0")
+            }
         }
 
     }
 
+    private fun tinhTongTienHang(): Long {
+        var tongtienhang: Long = 0
+        for (i in 0 until Utils.mangmuahang.size) {
+            tongtienhang += Utils.mangmuahang[i].giasanphamgiohang.toLong()
+        }
+        return tongtienhang
+    }
+
     private fun onClickDatHang() {
-        val full_name:String
-        val user_id:Int
-        val phone:String
-        val total:Int
-        val total_money:Float
-        val detail:String
+        val full_name: String
+        val user_id: Int
+        val phone: String
+        val total: Int
+        val total_money: Float
+        val detail: String
         val user = Paper.book().read<User>("user")
-        if (user != null){
+        if (user != null) {
             full_name =
                 user.first_name + " " + user.last_name
             phone = user.mobiphone
             user_id = user.id
             total = Utils.mangmuahang.getSoluong()
-            total_money = tienHang().toFloat()
+            total_money = tongtien.toFloat()
             val gson: Gson = GsonBuilder().setLenient().create()
             detail = gson.toJson(Utils.mangmuahang)
             binding.txtName.text = full_name
             binding.txtPhone.text = phone
-        }else{
-           full_name =
+        } else {
+            full_name =
                 Utils.user_current?.first_name.toString() + " " + Utils.user_current?.last_name.toString()
             phone = Utils.user_current?.mobiphone.toString()
             user_id = Utils.user_current?.id!!
             total = Utils.mangmuahang.getSoluong()
-            total_money = tienHang().toFloat()
+            total_money = tongtien.toFloat()
             val gson: Gson = GsonBuilder().setLenient().create()
             detail = gson.toJson(Utils.mangmuahang)
             binding.txtName.text = full_name
@@ -100,7 +148,7 @@ class ThanhToanActivity : AppCompatActivity() {
 
         /*  Toast.makeText(this,user_id.toString(),Toast.LENGTH_LONG).show()*/
         binding.btnDathang.setOnClickListener {
-            val address = binding.addressET.text.toString().trim()
+            val address = binding.txtAddress.text.toString().trim()
             if (!TextUtils.isEmpty(address)) {
                 val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
                 val call =
@@ -125,7 +173,11 @@ class ThanhToanActivity : AppCompatActivity() {
                             val intent = Intent(this@ThanhToanActivity, MainActivity::class.java)
                             startActivity(intent)
                             finish()
-                            Toast.makeText(this@ThanhToanActivity,"Đặt hàng thành công", Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                this@ThanhToanActivity,
+                                "Đặt hàng thành công",
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
 
                         }
@@ -141,7 +193,7 @@ class ThanhToanActivity : AppCompatActivity() {
                         t.printStackTrace()
                     }
                 })
-            }else{
+            } else {
                 Toast.makeText(
                     this@ThanhToanActivity,
                     "Vui lòng nhập địa chỉ",
@@ -220,7 +272,9 @@ class ThanhToanActivity : AppCompatActivity() {
         val format = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${format.format(number)}đ"
     }
-    @Deprecated("Deprecated in Java",
+
+    @Deprecated(
+        "Deprecated in Java",
         ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
     )
     override fun onBackPressed() {

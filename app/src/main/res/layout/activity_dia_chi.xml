@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.DiaChiActivity">
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/main"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UseCompoundDrawables">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/imv_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/back"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="364dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Địa chỉ giao hàng"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="Họ tên"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailLayout"
+            android:layout_width="match_parent"
+            android:layout_height="40sp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            app:boxStrokeColor="@color/black"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/textView14"
+            app:layout_constraintStart_toStartOf="@+id/textView14"
+            app:layout_constraintTop_toBottomOf="@+id/textView14">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameET"
+                android:layout_width="match_parent"
+                android:layout_height="35sp"
+                android:hint="Nhập họ tên" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginTop="10dp"
+            android:text="Số điện thoai"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailLayout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordLayout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="10dp"
+            app:boxStrokeColor="@color/black"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/textView15"
+            app:layout_constraintStart_toStartOf="@+id/textView15"
+            app:layout_constraintTop_toBottomOf="@+id/textView15">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/mobileET"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:hint="Nhập số điện thoại" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginTop="10dp"
+            android:text="Tỉnh"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tinhLayout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="10dp"
+            app:boxStrokeColor="@color/black"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/textView16"
+            app:layout_constraintStart_toStartOf="@+id/textView16"
+            app:layout_constraintTop_toBottomOf="@+id/textView16">
+
+            <Spinner
+                android:id="@+id/spiner_tinh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginTop="10dp"
+            android:text="Quận/Huyện"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tinhLayout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/huyenLayout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="10dp"
+            app:boxStrokeColor="@color/black"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/textView17"
+            app:layout_constraintStart_toStartOf="@+id/textView17"
+            app:layout_constraintTop_toBottomOf="@+id/textView17">
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginTop="10dp"
+            android:text="Phường/Xã"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/huyenLayout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/xaLayout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="10dp"
+            app:boxStrokeColor="@color/black"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/textView18"
+            app:layout_constraintStart_toStartOf="@+id/textView18"
+            app:layout_constraintTop_toBottomOf="@+id/textView18">
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="Tên đường, tòa nhà, số nhà"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/xaLayout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/diachilLayout"
+            android:layout_width="match_parent"
+            android:layout_height="40sp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            app:boxStrokeColor="@color/black"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/textView19"
+            app:layout_constraintStart_toStartOf="@+id/textView19"
+            app:layout_constraintTop_toBottomOf="@+id/textView19">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/diachiET"
+                android:layout_width="match_parent"
+                android:layout_height="35sp"
+                android:hint="Nhập tên đường, tòa nhà, số nhà" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_xacnhan"
+        android:layout_width="150sp"
+        android:layout_height="40sp"
+        android:layout_marginBottom="10sp"
+        android:text="Xác nhận"
+        android:background="@color/main"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

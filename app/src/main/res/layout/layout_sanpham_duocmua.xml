@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout12"
+        android:layout_width="match_parent"
+        android:layout_height="120sp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="120dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imv_hinhanhsanphammuangay"
+                android:layout_width="115dp"
+                android:layout_height="90dp"
+                android:layout_gravity="center"
+                android:background="@drawable/image_test"
+                android:scaleType="fitXY"
+                tools:ignore="ContentDescription" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/txt_tensanphammuangay"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/test_chitiet"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cardView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_soluong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20sp"
+            android:text="x1"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/txt_giasanpham"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/txt_giasanpham"
+            tools:ignore="SmallSp" />
+
+
+        <TextView
+            android:id="@+id/txt_giasanpham"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25sp"
+            android:layout_marginBottom="13dp"
+            android:text="123.000đ"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cardView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/black"
+        android:layout_margin="5sp"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:layout_marginBottom="5sp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/txt_tongsoluongsanpham"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10sp"
+            android:text="Tổng tiền(1 sản phẩm):"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_tongtien"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20sp"
+            android:text="100.000đ"
+            android:textColor="@color/red"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

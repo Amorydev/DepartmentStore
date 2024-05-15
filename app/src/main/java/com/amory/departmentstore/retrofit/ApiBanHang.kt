@@ -6,6 +6,7 @@ import com.amory.departmentstore.model.KhuyenMaiModel
 import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.model.SanPhamModel
+import com.amory.departmentstore.model.VoucherModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -161,4 +162,13 @@ interface ApiBanHang {
         @Field("image_url") image_url: String,
         @Field("id") id: Int
     ):Call<KhuyenMaiModel>
+
+    @GET("layvoucher.php")
+    fun getVoucher(
+    ):Call<VoucherModel>
+    @POST("timkiemvoucher.php")
+    @FormUrlEncoded
+    fun timkiemvoucher(
+        @Field("search") search:String
+    ):Call<VoucherModel>
 }
