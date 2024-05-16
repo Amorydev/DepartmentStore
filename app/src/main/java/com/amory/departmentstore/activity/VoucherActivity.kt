@@ -97,6 +97,7 @@ class VoucherActivity : AppCompatActivity() {
                                 val intent = Intent(this@VoucherActivity,ThanhToanActivity::class.java)
                                 intent.putExtra("discount_type",resultList[position].discount_type)
                                 intent.putExtra("discount_value",resultList[position].discount_value)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                                 startActivity(intent)
                                 finish()
                             }

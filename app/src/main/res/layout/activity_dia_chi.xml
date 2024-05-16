@@ -41,10 +41,8 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
         <TextView
             android:id="@+id/textView14"
@@ -60,7 +58,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailLayout"
             android:layout_width="match_parent"
-            android:layout_height="40sp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
             app:boxStrokeColor="@color/black"
@@ -72,7 +70,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nameET"
                 android:layout_width="match_parent"
-                android:layout_height="35sp"
+                android:layout_height="50sp"
+                android:textSize="15sp"
                 android:hint="Nhập họ tên" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,7 +89,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordLayout"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="10dp"
             app:boxStrokeColor="@color/black"
@@ -102,7 +101,9 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/mobileET"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="50sp"
+                android:textSize="15sp"
+
                 android:hint="Nhập số điện thoại" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -159,6 +160,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView17">
 
             <Spinner
+                android:id="@+id/spiner_huyen"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -187,6 +189,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView18">
 
             <Spinner
+                android:id="@+id/spiner_xa"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -205,7 +208,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/diachilLayout"
             android:layout_width="match_parent"
-            android:layout_height="40sp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
             app:boxStrokeColor="@color/black"
@@ -217,7 +220,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/diachiET"
                 android:layout_width="match_parent"
-                android:layout_height="35sp"
+                android:layout_height="50sp"
+                android:textSize="15sp"
                 android:hint="Nhập tên đường, tòa nhà, số nhà" />
         </com.google.android.material.textfield.TextInputLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
