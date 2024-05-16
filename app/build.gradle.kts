@@ -87,4 +87,7 @@ dependencies {
     implementation("com.facebook.shimmer:shimmer:0.5.0")
     //Progress bar
     implementation ("io.github.litao0621:nifty-slider:1.4.6")
+    //okhttp
+    implementation ("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.1")
 }
