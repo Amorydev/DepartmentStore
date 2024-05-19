@@ -22,6 +22,7 @@ import com.amory.departmentstore.retrofit.APIPushNotification
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import com.amory.departmentstore.retrofit.RetrofitNotification
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.paperdb.Paper
@@ -45,8 +46,17 @@ class ThanhToanActivity : AppCompatActivity() {
         onClickVoucher()
         showRV()
         onCLickDiaChi()
+        showBottomSheet()
     }
-
+    private fun showBottomSheet() {
+        binding.chonphuongthuc.setOnClickListener {
+            val dialog = BottomSheetDialog(this)
+            val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_chonphuongthuc,null)
+            dialog.setCancelable(true)
+            dialog.setContentView(view)
+            dialog.show()
+        }
+    }
     private fun initViews() {
         var fullname = ""
         var phone = ""

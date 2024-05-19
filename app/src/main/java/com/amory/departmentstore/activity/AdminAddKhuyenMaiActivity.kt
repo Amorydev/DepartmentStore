@@ -20,6 +20,7 @@ import com.amory.departmentstore.retrofit.RetrofitClient
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -153,7 +154,7 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
     private fun uploadMultipleFiles() {
         val uri: Uri = Uri.parse(mediaPath)
         val file = File(getPath(uri))
-        val requestBody = RequestBody.create(MediaType.parse("*/*"), file)
+        val requestBody = RequestBody.create("*/*".toMediaTypeOrNull(), file)
         val fileToUpload = MultipartBody.Part.createFormData("file", file.name, requestBody)
         val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
         val call = service.uploadFile(fileToUpload, requestBody)

@@ -209,7 +209,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout13"
                 android:layout_width="match_parent"
-                android:layout_height="100sp"
+                android:layout_height="120sp"
                 android:layout_marginBottom="5sp"
                 android:background="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/constrainLayout_tinhtien"
@@ -218,17 +218,43 @@
 
                 <TextView
                     android:id="@+id/textView12"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10sp"
                     android:layout_marginTop="5sp"
                     android:text="Phương thức thanh toán"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+                <LinearLayout
+                    android:id="@+id/chonphuongthuc"
+                    android:layout_width="160dp"
+                    app:layout_goneMarginTop="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView12"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textView12"
+                    tools:ignore="UseCompoundDrawables,UselessLeaf">
 
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Chọn phương thức thanh toán"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="20sp"
+                        android:layout_height="20sp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="10sp"
+                        android:layout_marginEnd="5sp"
+                        android:background="@drawable/ic_next"
+                        tools:ignore="ContentDescription" />
+
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="350sp"
                     android:layout_height="50sp"
