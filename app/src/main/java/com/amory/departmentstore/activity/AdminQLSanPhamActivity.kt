@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvSanPhamAdmin
@@ -14,7 +15,7 @@ import com.amory.departmentstore.databinding.ActivityAdminQlsanPhamBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaEvent
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
-import com.amory.departmentstore.retrofit.ApiBanHang
+import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
 import com.amory.departmentstore.retrofit.RetrofitClient
 import io.paperdb.Paper
 import org.greenrobot.eventbus.EventBus
@@ -94,29 +95,20 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
         }
     }
     private fun hienThiSanPham() {
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val service = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
         val call = service.getData()
         call.enqueue(object : Callback<SanPhamModel> {
-            override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
-                t.printStackTrace()
-                Log.e("Amory", "Error occurred: ${t.message}", t)
-                Toast.makeText(this@AdminQLSanPhamActivity, "Lấy sản phẩm thất bại", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
                 call: Call<SanPhamModel>,
                 response: Response<SanPhamModel>
             ) {
                 if (response.isSuccessful) {
-                    val produce = response.body()?.products
+                    val produce = response.body()?.data
                     /*
                       Toast.makeText(this@MainActivity, produce, Toast.LENGTH_SHORT).show()
                     */
-
                     if (!produce.isNullOrEmpty()) {
-
                         if (produce.isNotEmpty()) {
                             list = produce
                             val adapter = RvSanPhamAdmin(list)
@@ -142,6 +134,12 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
                     }
                 }
             }
+            override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
+                t.printStackTrace()
+                Log.e("Amory", "Error occurred: ${t.message}", t)
+                Toast.makeText(this@AdminQLSanPhamActivity, "Lấy sản phẩm thất bại", Toast.LENGTH_SHORT)
+                    .show()
+            }
         })
     }
 
@@ -155,18 +153,26 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
     }
 
     private fun XoaSanPham() {
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
-        val call = service.xoasanpham(listSanPham!!.id)
-        call.enqueue(object : Callback<SanPhamModel> {
-            override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
-                if (response.isSuccessful){
-                    hienThiSanPham()
+        val dialog = AlertDialog.Builder(this)
+        dialog.setTitle("Bạn có chắc chắn muốn xóa")
+        dialog.setPositiveButton("Có") { dialog, which ->
+            val service = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
+            val call = service.xoaSanPham(listSanPham!!.id)
+            call.enqueue(object : Callback<SanPhamModel> {
+                override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
+                    if (response.isSuccessful){
+                        hienThiSanPham()
+                    }
                 }
-            }
-            override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
-                t.printStackTrace()
-            }
-        })
+                override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
+                    t.printStackTrace()
+                }
+            })
+        }
+        dialog.setNegativeButton("Không") { dialog, _ ->
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun SuaSanPham() {

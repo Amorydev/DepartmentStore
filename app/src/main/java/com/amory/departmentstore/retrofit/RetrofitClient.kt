@@ -1,5 +1,7 @@
 package com.amory.departmentstore.retrofit
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.Utils.Utils.Companion.BASE_URL
 import com.google.gson.Gson
@@ -14,11 +16,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
     private lateinit var retrofit: Retrofit
     private var BASE_URL = Utils.BASE_URL
+    private lateinit var sharedPreferences: SharedPreferences
+
+    fun init(context: Context){
+        sharedPreferences = context.getSharedPreferences("SAVE_TOKEN",Context.MODE_PRIVATE)
+    }
 
     private val interceptor:Interceptor = Interceptor { chain ->
+        val token = sharedPreferences.getString("token","")
         val request = chain.request()
         val builder = request.newBuilder()
-        builder.addHeader("Authorization","Bearer ${Utils.token}")
+        builder.addHeader("Authorization","Bearer $token")
         chain.proceed(builder.build())
     }
     private val okBuilder : OkHttpClient.Builder = OkHttpClient.Builder().addInterceptor(interceptor)

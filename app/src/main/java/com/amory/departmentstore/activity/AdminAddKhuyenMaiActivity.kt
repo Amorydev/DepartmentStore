@@ -10,10 +10,9 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.amory.departmentstore.databinding.ActivityAdminAddKhuyenMaiBinding
-import com.amory.departmentstore.model.KhuyenMai
-import com.amory.departmentstore.model.KhuyenMaiModel
-import com.amory.departmentstore.model.SanPhamModel
-import com.amory.departmentstore.retrofit.ApiBanHang
+import com.amory.departmentstore.model.Banner
+import com.amory.departmentstore.model.BannerModel
+import com.amory.departmentstore.retrofit.APIBanHang.APICallBanners
 import com.amory.departmentstore.retrofit.RetrofitClient
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -26,10 +25,10 @@ import retrofit2.Response
 import java.io.File
 
 class AdminAddKhuyenMaiActivity : AppCompatActivity() {
-    private lateinit var binding:ActivityAdminAddKhuyenMaiBinding
+    private lateinit var binding: ActivityAdminAddKhuyenMaiBinding
     private var mediaPath = ""
     var flags = false
-    var listKhuyenMai:KhuyenMai ?= null
+    var listBanner: Banner? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,13 +38,14 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
         onCLickThemHinhAnh()
         onClickBack()
         if (intent != null && intent.hasExtra("khuyenmai")) {
-            listKhuyenMai = intent.getSerializableExtra("khuyenmai") as? KhuyenMai
+            listBanner = intent.getSerializableExtra("khuyenmai") as? Banner
         }
-        if (listKhuyenMai != null) {
+        if (listBanner != null) {
             binding.txt.text = "Sửa khuyến mãi"
-            binding.edtKhuyenmai.setText(listKhuyenMai?.name)
-            binding.edtThongtin.setText(listKhuyenMai?.description)
-            Glide.with(binding.root).load(listKhuyenMai?.imageUrl).centerCrop().into(binding.imvHinhanh)
+            binding.edtKhuyenmai.setText(listBanner?.name)
+            binding.edtThongtin.setText(listBanner?.description)
+            Glide.with(binding.root).load(listBanner?.imageUrl).centerCrop()
+                .into(binding.imvHinhanh)
         } else {
             flags = true
         }
@@ -61,60 +61,173 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
         binding.imbAdd.setOnClickListener {
             val khuyenmai = binding.edtKhuyenmai.text?.trim().toString()
             val thongtin = binding.edtThongtin.text?.trim().toString()
-            var image_url = ""
-            image_url = mediaPath.ifEmpty {
-                "https://cdn.tgdd.vn/bachhoaxanh/banners/5599/san-sale-gia-soc-cung-bhx-12032024133716.jpg"
-            }
+            val imagePath =
+                mediaPath.takeIf { it.isNotEmpty() } ?: listBanner?.imageUrl.toString()
             if (flags) {
-                val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
-                val call = service.themkhuyenmai(khuyenmai, thongtin, image_url)
-                call.enqueue(object : Callback<KhuyenMaiModel> {
-                    override fun onResponse(
-                        call: Call<KhuyenMaiModel>,
-                        response: Response<KhuyenMaiModel>
-                    ) {
-                        if (response.isSuccessful) {
-                            Toast.makeText(
-                                this@AdminAddKhuyenMaiActivity,
-                                "Thêm khuyến mãi thành công",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            val intent = Intent(this@AdminAddKhuyenMaiActivity,AdminKhuyeMaiActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                val nameRequestBody =
+                    RequestBody.create("text/plain".toMediaTypeOrNull(), khuyenmai)
+                val descRequestBody =
+                    RequestBody.create("text/plain".toMediaTypeOrNull(), thongtin)
+
+                val imagePart: MultipartBody.Part? = if (imagePath.isNotEmpty()) {
+                    val file = File(imagePath)
+                    val requestFile =
+                        RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                    MultipartBody.Part.createFormData(
+                        "fileImage",
+                        file.name,
+                        requestFile
+                    )
+                } else {
+                    null
+                }
+                if (imagePart?.equals("") == true) {
+                    val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
+                    val call = service.themKhuyenMaiMoi(nameRequestBody, imagePart, descRequestBody)
+                    call.enqueue(object : Callback<BannerModel> {
+                        override fun onResponse(
+                            call: Call<BannerModel>,
+                            response: Response<BannerModel>
+                        ) {
+                            if (response.isSuccessful) {
+                                Toast.makeText(
+                                    this@AdminAddKhuyenMaiActivity,
+                                    "Thêm khuyến mãi thành công",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                val intent = Intent(
+                                    this@AdminAddKhuyenMaiActivity,
+                                    AdminKhuyeMaiActivity::class.java
+                                )
+                                startActivity(intent)
+                                finish()
+                            }
                         }
-                    }
 
-                    override fun onFailure(call: Call<KhuyenMaiModel>, t: Throwable) {
-                        t.printStackTrace()
-                    }
-                })
-            }else{
-
-                val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
-                val call = service.suakhuyenmai(khuyenmai,thongtin,
-                    listKhuyenMai?.imageUrl.toString(), listKhuyenMai?.id!!)
-                call.enqueue(object : Callback<KhuyenMaiModel>{
-                    override fun onResponse(
-                        call: Call<KhuyenMaiModel>,
-                        response: Response<KhuyenMaiModel>
-                    ) {
-                        if (response.isSuccessful){
-                            Toast.makeText(this@AdminAddKhuyenMaiActivity,"Cập nhật thành công",Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this@AdminAddKhuyenMaiActivity,AdminKhuyeMaiActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                        override fun onFailure(call: Call<BannerModel>, t: Throwable) {
+                            t.printStackTrace()
+                            Log.d("loi banner", t.message.toString())
                         }
-                    }
+                    })
+                }
+                if (imagePart?.equals("") != true) {
+                    val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
+                    val call = service.themKhuyenMaiMoi(nameRequestBody, descRequestBody)
+                    call.enqueue(object : Callback<BannerModel> {
+                        override fun onResponse(
+                            call: Call<BannerModel>,
+                            response: Response<BannerModel>
+                        ) {
+                            if (response.isSuccessful) {
+                                Toast.makeText(
+                                    this@AdminAddKhuyenMaiActivity,
+                                    "Thêm khuyến mãi thành công",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                val intent = Intent(
+                                    this@AdminAddKhuyenMaiActivity,
+                                    AdminKhuyeMaiActivity::class.java
+                                )
+                                startActivity(intent)
+                                finish()
+                            }
+                        }
 
-                    override fun onFailure(call: Call<KhuyenMaiModel>, t: Throwable) {
-                        t.printStackTrace()
-                    }
-                })
+                        override fun onFailure(call: Call<BannerModel>, t: Throwable) {
+                            t.printStackTrace()
+                            Log.d("loi banner", t.message.toString())
+                        }
+                    })
+                }
+            } else {
+                val nameRequestBody =
+                    RequestBody.create("text/plain".toMediaTypeOrNull(), khuyenmai)
+                val descRequestBody =
+                    RequestBody.create("text/plain".toMediaTypeOrNull(), thongtin)
+
+                val imagePart: MultipartBody.Part? = if (imagePath.isNotEmpty()) {
+                    val file = File(imagePath)
+                    val requestFile =
+                        RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                    MultipartBody.Part.createFormData(
+                        "fileImage",
+                        file.name,
+                        requestFile
+                    )
+                } else {
+                    null
+                }
+                if (imagePart!=null) {
+                    val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
+                    val call = service.suaKhuyenMai(
+                        listBanner?.id,
+                        nameRequestBody,
+                        imagePart,
+                        descRequestBody
+                    )
+                    call.enqueue(object : Callback<BannerModel> {
+                        override fun onResponse(
+                            call: Call<BannerModel>,
+                            response: Response<BannerModel>
+                        ) {
+                            if (response.isSuccessful) {
+                                Toast.makeText(
+                                    this@AdminAddKhuyenMaiActivity,
+                                    "Cập nhật thành công",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                val intent = Intent(
+                                    this@AdminAddKhuyenMaiActivity,
+                                    AdminKhuyeMaiActivity::class.java
+                                )
+                                startActivity(intent)
+                                finish()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<BannerModel>, t: Throwable) {
+                            t.printStackTrace()
+                        }
+                    })
+                }
+                if (imagePart?.equals("") != true) {
+                    val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
+                    val call = service.suaKhuyenMai(
+                        listBanner?.id,
+                        nameRequestBody,
+                        descRequestBody
+                    )
+                    call.enqueue(object : Callback<BannerModel> {
+                        override fun onResponse(
+                            call: Call<BannerModel>,
+                            response: Response<BannerModel>
+                        ) {
+                            if (response.isSuccessful) {
+                                Toast.makeText(
+                                    this@AdminAddKhuyenMaiActivity,
+                                    "Cập nhật thành công",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                val intent = Intent(
+                                    this@AdminAddKhuyenMaiActivity,
+                                    AdminKhuyeMaiActivity::class.java
+                                )
+                                startActivity(intent)
+                                finish()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<BannerModel>, t: Throwable) {
+                            t.printStackTrace()
+
+                        }
+                    })
+                }
             }
 
         }
     }
+
     private fun onCLickThemHinhAnh() {
         binding.imbThemhinhanh.setOnClickListener {
             ImagePicker.with(this)
@@ -124,47 +237,32 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
                 .start()
         }
     }
-    private fun getPath(uri: Uri): String {
-        val result: String
-        val cursor: Cursor? = contentResolver.query(uri, null, null, null)
-        if (cursor == null) {
-            result = uri.path.toString()
-        } else {
-            cursor.moveToFirst()
-            val index: Int = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-            result = cursor.getString(index)
-            cursor.close()
-        }
-        return result
+
+    private fun getPath(uri: Uri): String? {
+        val cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
+        return cursor?.use {
+            if (it.moveToFirst()) {
+                val index = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                it.getString(index)
+            } else {
+                ""
+            }
+        } ?: uri.path
     }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        mediaPath = data?.dataString.toString()
-        uploadMultipleFiles()
-        Glide.with(this).load(mediaPath).into(binding.imvHinhanh)
-        binding.imbThemhinhanh.visibility = View.INVISIBLE
-        Log.d("Log", mediaPath)
+        if (resultCode == RESULT_OK && data != null && data.data != null) {
+            val fileUri = data.data!!
+            mediaPath = getPath(fileUri).toString()
+            Glide.with(this).load(fileUri).into(binding.imvHinhanh)
+            binding.imbThemhinhanh.visibility = View.INVISIBLE
+            Log.d("Log", mediaPath ?: "No Path Found")
+        } else {
+            Toast.makeText(this, "Image selection failed", Toast.LENGTH_SHORT).show()
+        }
     }
 
-    private fun uploadMultipleFiles() {
-        val uri: Uri = Uri.parse(mediaPath)
-        val file = File(getPath(uri))
-        val requestBody = RequestBody.create("*/*".toMediaTypeOrNull(), file)
-        val fileToUpload = MultipartBody.Part.createFormData("file", file.name, requestBody)
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
-        val call = service.uploadFile(fileToUpload, requestBody)
-        call.enqueue(object : Callback<SanPhamModel> {
-            override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
-                if (response.isSuccessful) {
-                    Toast.makeText(applicationContext, "thành công", Toast.LENGTH_SHORT).show()
-                }
-            }
 
-            override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
-                t.printStackTrace()
-            }
-        })
-    }
 }

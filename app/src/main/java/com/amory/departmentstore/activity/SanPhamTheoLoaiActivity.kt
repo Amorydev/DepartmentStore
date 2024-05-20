@@ -22,10 +22,10 @@ import com.amory.departmentstore.Interface.OnCLickButtonSanPham
 
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
-import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import com.amory.departmentstore.Interface.OnClickSanPhamTheoLoai
 import com.amory.departmentstore.Interface.OnLoadMoreListener
+import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import io.paperdb.Paper
@@ -136,7 +136,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
 
     private fun laySanPhamGao() {
         val loai = intent.getIntExtra("loai", 0)
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val service = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
         val call = service.getSanPhamTheoLoai(loai)
         binding.shimmerframe.visibility = View.VISIBLE
         binding.rvsanphamtheoloaiGao.visibility = View.INVISIBLE
@@ -145,7 +145,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
                 if (response.isSuccessful) {
-                    val produce = response.body()?.products
+                    val produce = response.body()?.data
                     /*
                       Toast.makeText(this@MainActivity, produce, Toast.LENGTH_SHORT).show()
                     */

@@ -25,18 +25,22 @@ import com.amory.departmentstore.databinding.ActivityMainBinding
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_ITEM
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_LOADING
 import com.amory.departmentstore.model.GioHang
-import com.amory.departmentstore.model.KhuyenMai
-import com.amory.departmentstore.model.KhuyenMaiModel
+import com.amory.departmentstore.model.Banner
+import com.amory.departmentstore.model.BannerModel
 import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.Interface.OnCLickButtonSanPham
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.model.UserModel
-import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import com.amory.departmentstore.Interface.OnClickRvLoaiSanPham
 import com.amory.departmentstore.Interface.OnClickRvSanPham
 import com.amory.departmentstore.Interface.OnLoadMoreListener
+import com.amory.departmentstore.model.Constant
+import com.amory.departmentstore.retrofit.APIBanHang.APICallBanners
+import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
+import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
+import com.amory.departmentstore.retrofit.APIBanHang.APICallUser
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
@@ -56,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var scrollListener: RvLoadMoreScroll
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private var isLoadMore = false
-    private lateinit var listKhuyenMai:MutableList<KhuyenMai>
+    private lateinit var listBanners:MutableList<Banner>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("paper",Paper.book().path)
         if (Utils.kiemTraKetNoi(this)) {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
-            listKhuyenMai = mutableListOf()
+            listBanners = mutableListOf()
             paddingRv()
             laySanPham()
             layLoaiSanPham()
@@ -80,7 +84,6 @@ class MainActivity : AppCompatActivity() {
             OnclickNavHeader()
             onClickSearch()
             goToGioHang()
-            getToken()
             gotoChat()
             SlideQuangCao()
         } else {
@@ -190,7 +193,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun layLoaiSanPham() {
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val service = RetrofitClient.retrofitInstance.create(APICallCategories::class.java)
         val call = service.getLoaisanPham()
         binding.shimmerframe.visibility = View.VISIBLE
         binding.shimmerframe.startShimmer()
@@ -201,7 +204,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
 
-                    val list = response.body()?.categories
+                    val list = response.body()?.data
                     /*Toast.makeText(this@MainActivity, list, Toast.LENGTH_SHORT).show()*/
                     val adapter = list?.let {
                         RvLoaiSanPham(it, object : OnClickRvLoaiSanPham {
@@ -264,7 +267,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun laySanPham() {
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val service = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
         val call = service.getData()
         binding.shimmerframe.visibility = View.VISIBLE
         binding.layoutContrains.visibility = View.INVISIBLE
@@ -283,7 +286,7 @@ class MainActivity : AppCompatActivity() {
                 response: Response<SanPhamModel>
             ) {
                 if (response.isSuccessful) {
-                    val produce = response.body()?.products
+                    val produce = response.body()?.data
                     /*
                       Toast.makeText(this@MainActivity, produce, Toast.LENGTH_SHORT).show()
                     */
@@ -451,18 +454,18 @@ class MainActivity : AppCompatActivity() {
         imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/san-sale-gia-soc-cung-bhx-12032024133716.jpg"))
         imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/sua-cac-loai-3012202311948.jpg"))
         binding.imageSlider.setImageList(imageList,ScaleTypes.FIT)*/
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
         val call = service.laykhuyenmai()
         binding.shimmerframe.visibility = View.VISIBLE
         binding.shimmerframe.startShimmer()
-        call.enqueue(object : Callback<KhuyenMaiModel>{
+        call.enqueue(object : Callback<BannerModel>{
             override fun onResponse(
-                call: Call<KhuyenMaiModel>,
-                response: Response<KhuyenMaiModel>
+                call: Call<BannerModel>,
+                response: Response<BannerModel>
             ) {
                 if (response.isSuccessful){
-                    listKhuyenMai = response.body()?.banners!!
-                    for (element in listKhuyenMai){
+                    listBanners = response.body()?.data!!
+                    for (element in listBanners){
                         val image_url = element.imageUrl
                        imageList.add(SlideModel("$image_url"))
                     }
@@ -490,7 +493,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<KhuyenMaiModel>, t: Throwable) {
+            override fun onFailure(call: Call<BannerModel>, t: Throwable) {
                 t.printStackTrace()
                 Log.d("banners",t.message.toString())
             }
@@ -506,33 +509,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getToken() {
-        FirebaseMessaging.getInstance().token
-            .addOnSuccessListener { p0 ->
-                if (!TextUtils.isEmpty(p0)) {
-                    val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
-                    val call = service.updateToken(p0.toString(), Utils.user_current?.id)
-                    call.enqueue(object : Callback<UserModel> {
-                        override fun onResponse(
-                            call: Call<UserModel>,
-                            response: Response<UserModel>
-                        ) {
-                        }
-
-                        override fun onFailure(call: Call<UserModel>, t: Throwable) {
-                            t.printStackTrace()
-                        }
-                    })
-                }
-            }
-
-        val serviceToken = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+    /*private fun getToken() {
+        val serviceToken = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
         val callToken = serviceToken.getToken(1)
         callToken.enqueue(object : Callback<UserModel>{
             override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
                 if (response.isSuccessful)
                 {
-                   /* Utils.ID_NHAN = response.body()?.result?.get(0)?.id.toString()*/
+                   *//* Utils.ID_NHAN = response.body()?.result?.get(0)?.id.toString()*//*
                 }
             }
 
@@ -541,7 +525,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-    }
+    }*/
 
 
     override fun onResume() {
@@ -551,11 +535,9 @@ class MainActivity : AppCompatActivity() {
         }else{
             binding.badgeCart.setNumber(0)
         }
-        getToken()
     }
 
     override fun onStart() {
         super.onStart()
-        getToken()
     }
 }

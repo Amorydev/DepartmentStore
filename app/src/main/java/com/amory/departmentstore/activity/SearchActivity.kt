@@ -8,7 +8,7 @@ import android.text.TextWatcher
 import android.widget.ArrayAdapter
 import com.amory.departmentstore.databinding.ActivitySearchBinding
 import com.amory.departmentstore.model.SanPhamModel
-import com.amory.departmentstore.retrofit.ApiBanHang
+import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
 import com.amory.departmentstore.retrofit.RetrofitClient
 import retrofit2.Call
 import retrofit2.Response
@@ -49,14 +49,14 @@ class SearchActivity : AppCompatActivity() {
 
     private fun Search(search: String) {
         list.clear()
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val service = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
         val call = service.timkiem(search)
         val adapter = ArrayAdapter(this@SearchActivity, android.R.layout.simple_list_item_1, list)
         call.enqueue(object : retrofit2.Callback<SanPhamModel> {
             override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
                 if (response.isSuccessful) {
-                    val result = response.body()?.products
-                    for (i in 0 until response.body()?.products?.size!!) {
+                    val result = response.body()?.data
+                    for (i in 0 until response.body()?.data?.size!!) {
                         list.add(result?.get(i)?.name!!)
                     }
                     binding.lvSearch.adapter = adapter

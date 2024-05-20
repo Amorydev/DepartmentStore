@@ -4,14 +4,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvKhuyenMaiAdmin
 import com.amory.departmentstore.databinding.ActivityAdminKhuyeMaiBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaKhuyenMaiEvent
-import com.amory.departmentstore.model.KhuyenMai
-import com.amory.departmentstore.model.KhuyenMaiModel
-import com.amory.departmentstore.retrofit.ApiBanHang
+import com.amory.departmentstore.model.Banner
+import com.amory.departmentstore.model.BannerModel
+import com.amory.departmentstore.retrofit.APIBanHang.APICallBanners
 import com.amory.departmentstore.retrofit.RetrofitClient
 import io.paperdb.Paper
 import org.greenrobot.eventbus.EventBus
@@ -23,7 +24,7 @@ import retrofit2.Response
 
 class AdminKhuyeMaiActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminKhuyeMaiBinding
-    private var listKhuyenMai:KhuyenMai ?= null
+    private var listBanner: Banner? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminKhuyeMaiBinding.inflate(layoutInflater)
@@ -36,21 +37,21 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
 
     private fun onCLickAdd() {
         binding.btnThem.setOnClickListener {
-            val intent = Intent(this , AdminAddKhuyenMaiActivity::class.java)
+            val intent = Intent(this, AdminAddKhuyenMaiActivity::class.java)
             startActivity(intent)
         }
     }
 
     private fun showKhuyenMai() {
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
         val call = service.laykhuyenmai()
-        call.enqueue(object : Callback<KhuyenMaiModel> {
+        call.enqueue(object : Callback<BannerModel> {
             override fun onResponse(
-                call: Call<KhuyenMaiModel>,
-                response: Response<KhuyenMaiModel>
+                call: Call<BannerModel>,
+                response: Response<BannerModel>
             ) {
                 if (response.isSuccessful) {
-                    val listKhuyenMai = response.body()?.banners!!
+                    val listKhuyenMai = response.body()?.data!!
                     val adapter = RvKhuyenMaiAdmin(listKhuyenMai)
                     binding.rvKhuyenmai.adapter = adapter
                     binding.rvKhuyenmai.layoutManager = LinearLayoutManager(
@@ -61,7 +62,7 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<KhuyenMaiModel>, t: Throwable) {
+            override fun onFailure(call: Call<BannerModel>, t: Throwable) {
                 t.printStackTrace()
             }
         })
@@ -111,36 +112,45 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        if (item.title?.equals("Sửa")==true){
+        if (item.title?.equals("Sửa") == true) {
             SuaKhuyenMai()
-        }else{
+        } else {
             XoaKhuyenMai()
         }
         return super.onContextItemSelected(item)
     }
 
     private fun XoaKhuyenMai() {
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
-        val call = service.xoakhuyenmai(listKhuyenMai?.id)
-        call.enqueue(object : Callback<KhuyenMaiModel> {
-            override fun onResponse(
-                call: Call<KhuyenMaiModel>,
-                response: Response<KhuyenMaiModel>
-            ) {
-                if (response.isSuccessful){
-                    showKhuyenMai()
-                }
-            }
+        val dialog = AlertDialog.Builder(this)
 
-            override fun onFailure(call: Call<KhuyenMaiModel>, t: Throwable) {
-                t.printStackTrace()
-            }
-        })
+        dialog.setTitle("Bạn có chắc chắn muốn xóa")
+        dialog.setPositiveButton("Có") { dialog, which ->
+            val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
+            val call = service.xoaKhuyenMai(listBanner?.id)
+            call.enqueue(object : Callback<BannerModel> {
+                override fun onResponse(
+                    call: Call<BannerModel>,
+                    response: Response<BannerModel>
+                ) {
+                    if (response.isSuccessful) {
+                        showKhuyenMai()
+                    }
+                }
+
+                override fun onFailure(call: Call<BannerModel>, t: Throwable) {
+                    t.printStackTrace()
+                }
+            })
+        }
+        dialog.setNegativeButton("Không") { dialog, _ ->
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun SuaKhuyenMai() {
-        val intent = Intent(this , AdminAddKhuyenMaiActivity::class.java)
-        intent.putExtra("khuyenmai",listKhuyenMai)
+        val intent = Intent(this, AdminAddKhuyenMaiActivity::class.java)
+        intent.putExtra("khuyenmai", listBanner)
         startActivity(intent)
     }
 
@@ -149,10 +159,12 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
             binding.layoutDrawerAdmin.openDrawer(binding.navViewAdmin)
         }
     }
-    @Subscribe(sticky =  true , threadMode = ThreadMode.MAIN)
-    fun eventSuaXoaKhuyenMai(event: SuaXoaKhuyenMaiEvent){
-        listKhuyenMai = event.khuyenmai
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    fun eventSuaXoaKhuyenMai(event: SuaXoaKhuyenMaiEvent) {
+        listBanner = event.khuyenmai
     }
+
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)

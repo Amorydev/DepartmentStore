@@ -17,7 +17,7 @@ import com.amory.departmentstore.databinding.ActivityAdminChiTietDonHangBinding
 import com.amory.departmentstore.model.DonHangModel
 import com.amory.departmentstore.model.Donhang
 import com.amory.departmentstore.model.EventBus.DonHangEvent
-import com.amory.departmentstore.retrofit.ApiBanHang
+import com.amory.departmentstore.retrofit.APIBanHang.APICallDonHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import io.paperdb.Paper
 import org.greenrobot.eventbus.EventBus
@@ -40,7 +40,7 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
         onClickNavViewAdmin()
     }
     private fun layChiTietDonHang() {
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val service = RetrofitClient.retrofitInstance.create(APICallDonHang::class.java)
         val call = service.xemdonhang(0)
         call.enqueue(object : Callback<DonHangModel> {
             override fun onResponse(call: Call<DonHangModel>, response: Response<DonHangModel>) {
@@ -150,7 +150,7 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
     }
 
     private fun capNhatTrangThaiDonHang() {
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val service = RetrofitClient.retrofitInstance.create(APICallDonHang::class.java)
         val call = service.updatetinhtrang(donhang.id,status)
         call.enqueue(object : Callback<DonHangModel>{
             override fun onResponse(call: Call<DonHangModel>, response: Response<DonHangModel>) {

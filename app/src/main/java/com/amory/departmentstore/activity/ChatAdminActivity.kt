@@ -10,6 +10,7 @@ import com.amory.departmentstore.adapter.RvChatAdapter
 import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityChatAdminBinding
 import com.amory.departmentstore.model.ChatMessage
+import com.amory.departmentstore.model.Constant
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
@@ -51,11 +52,11 @@ class ChatAdminActivity : AppCompatActivity() {
         val txt_chat = binding.txtChat.text.toString().trim()
         if (txt_chat.isNotEmpty() && ID_NHAN.isNotEmpty()) {
             val message: HashMap<String, Any> = hashMapOf()
-            message[Utils.GUI_ID] = Utils.user_current?.id.toString()
-            message[Utils.NHAN_ID] = ID_NHAN
-            message[Utils.MESS] = txt_chat
-            message[Utils.DATE_TIME] = Timestamp.now()
-            db.collection(Utils.PATH)
+            message[Constant.GUI_ID] = Utils.user_current?.id.toString()
+            message[Constant.NHAN_ID] = ID_NHAN
+            message[Constant.MESS] = txt_chat
+            message[Constant.DATE_TIME] = Timestamp.now()
+            db.collection(Constant.PATH)
                 .add(message)
                 .addOnSuccessListener { documentReference ->
                     Log.d(ContentValues.TAG, " ${documentReference.id}")
@@ -71,13 +72,13 @@ class ChatAdminActivity : AppCompatActivity() {
     }
 
     private fun getChat() {
-        db.collection(Utils.PATH)
-            .whereEqualTo(Utils.GUI_ID, Utils.user_current?.id.toString())
-            .whereEqualTo(Utils.NHAN_ID, ID_NHAN)
+        db.collection(Constant.PATH)
+            .whereEqualTo(Constant.GUI_ID, Utils.user_current?.id.toString())
+            .whereEqualTo(Constant.NHAN_ID, ID_NHAN)
             .addSnapshotListener(eventListener)
-        db.collection(Utils.PATH)
-            .whereEqualTo(Utils.GUI_ID, ID_NHAN)
-            .whereEqualTo(Utils.NHAN_ID, Utils.user_current?.id.toString())
+        db.collection(Constant.PATH)
+            .whereEqualTo(Constant.GUI_ID, ID_NHAN)
+            .whereEqualTo(Constant.NHAN_ID, Utils.user_current?.id.toString())
             .addSnapshotListener(eventListener)
     }
 
@@ -91,11 +92,11 @@ class ChatAdminActivity : AppCompatActivity() {
             for (documentChange in value.documentChanges) {
                 if (documentChange.type == DocumentChange.Type.ADDED) {
                     val chatMessage = ChatMessage(
-                        documentChange.document.get(Utils.GUI_ID).toString(),
-                        documentChange.document.get(Utils.NHAN_ID).toString(),
-                        documentChange.document.get(Utils.MESS).toString(),
-                        documentChange.document.getTimestamp(Utils.DATE_TIME),
-                        documentChange.document.getDate(Utils.DATE_TIME)!!
+                        documentChange.document.get(Constant.GUI_ID).toString(),
+                        documentChange.document.get(Constant.NHAN_ID).toString(),
+                        documentChange.document.get(Constant.MESS).toString(),
+                        documentChange.document.getTimestamp(Constant.DATE_TIME),
+                        documentChange.document.getDate(Constant.DATE_TIME)!!
                     )
                     list.add(chatMessage)
                 }

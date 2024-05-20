@@ -12,7 +12,20 @@
           "package_name": "com.amory.departmentstore"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "722296007873-qk5rglu3kopnhb0umfh56diglpfv98hm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.amory.departmentstore",
+            "certificate_hash": "1350b732a999336c0d39e06c9db741f859e89894"
+          }
+        },
+        {
+          "client_id": "722296007873-t2ficosr82928ti5q9nflj792avpiu14.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBQAibr1mMApd1DPa-h8rbw1tb0Isdd6io"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "722296007873-t2ficosr82928ti5q9nflj792avpiu14.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

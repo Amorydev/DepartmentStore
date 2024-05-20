@@ -43,10 +43,7 @@ class RvSanPhamAdmin(private var ds: MutableList<SanPham>) :
     }
 
     //chuyen sang dinh dang 000.000d
-    private fun formatAmount(amount: String): String {
-        if (amount.isEmpty()) {
-            return ""
-        }
+    private fun formatAmount(amount: Float): String {
         val number = amount.toLong()
         val formatter = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${formatter.format(number)}đ"
@@ -67,7 +64,7 @@ class RvSanPhamAdmin(private var ds: MutableList<SanPham>) :
         if (holder.itemViewType == Constant.VIEW_TYPE_ITEM) {
             val sanPhamViewHolder = holder as SanPhamViewHolder
             sanPhamViewHolder.tensanpham.text = ds[position].name
-            sanPhamViewHolder.giasanpham.text = formatAmount(ds[position].price.toString())
+            sanPhamViewHolder.giasanpham.text = formatAmount(ds[position].price)
             Glide.with(mcontext).load(ds[position].imageUrl).centerCrop()
                 .into(sanPhamViewHolder.hinhanhsanpham)
 

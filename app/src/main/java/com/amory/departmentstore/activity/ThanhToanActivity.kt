@@ -7,12 +7,10 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.text.TextUtils
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.Utils.Utils
@@ -20,14 +18,10 @@ import com.amory.departmentstore.adapter.RvMuaNgay
 import com.amory.departmentstore.databinding.ActivityThanhToanBinding
 import com.amory.departmentstore.model.CreateOrder
 import com.amory.departmentstore.model.GioHang
-import com.amory.departmentstore.model.NotificationReponse
-import com.amory.departmentstore.model.SendNotification
 import com.amory.departmentstore.model.User
 import com.amory.departmentstore.model.UserModel
-import com.amory.departmentstore.retrofit.APIPushNotification
-import com.amory.departmentstore.retrofit.ApiBanHang
+import com.amory.departmentstore.retrofit.APIBanHang.APICallUser
 import com.amory.departmentstore.retrofit.RetrofitClient
-import com.amory.departmentstore.retrofit.RetrofitNotification
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -235,7 +229,7 @@ class ThanhToanActivity : AppCompatActivity() {
         binding.btnDathang.setOnClickListener {
             val address = binding.txtAddress.text.toString().trim()
             if (!TextUtils.isEmpty(address)) {
-                val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+                val service = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
                 val call =
                     service.taodonhang(
                         user_id,

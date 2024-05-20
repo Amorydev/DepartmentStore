@@ -8,7 +8,7 @@ import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityChiTietDatHangBinding
 import com.amory.departmentstore.model.DonHangModel
 import com.amory.departmentstore.model.User
-import com.amory.departmentstore.retrofit.ApiBanHang
+import com.amory.departmentstore.retrofit.APIBanHang.APICallDonHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import io.paperdb.Paper
 import retrofit2.Call
@@ -34,7 +34,7 @@ class ChiTietDatHangActivity : AppCompatActivity() {
     private fun layChiTietDatHang() {
         val account = Paper.book().read<User>("user")
         val user_id = account?.id ?: Utils.user_current?.id
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val service = RetrofitClient.retrofitInstance.create(APICallDonHang::class.java)
         val call = service.xemdonhang(user_id)
         call.enqueue(object : Callback<DonHangModel>{
             override fun onResponse(call: Call<DonHangModel>, response: Response<DonHangModel>) {

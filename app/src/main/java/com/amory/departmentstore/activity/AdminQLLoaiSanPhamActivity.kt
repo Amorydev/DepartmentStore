@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvLoaiSanPhamAdmin
@@ -14,10 +13,8 @@ import com.amory.departmentstore.databinding.ActivityAdminLoaiSanPhamBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaLoaiEvent
 import com.amory.departmentstore.model.LoaiSanPham
 import com.amory.departmentstore.model.LoaiSanPhamModel
-import com.amory.departmentstore.model.SanPhamModel
-import com.amory.departmentstore.retrofit.ApiBanHang
+import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
 import com.amory.departmentstore.retrofit.RetrofitClient
-import com.google.android.play.integrity.internal.w
 import io.paperdb.Paper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -48,7 +45,7 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
     }
 
     private fun hienThiLoai() {
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val service = RetrofitClient.retrofitInstance.create(APICallCategories::class.java)
         val call = service.getLoaisanPham()
         call.enqueue(object : Callback<LoaiSanPhamModel> {
             override fun onResponse(
@@ -57,7 +54,7 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
 
-                    val list = response.body()?.categories
+                    val list = response.body()?.data
                     /*Toast.makeText(this@MainActivity, list, Toast.LENGTH_SHORT).show()*/
                     val adapter = list?.let { RvLoaiSanPhamAdmin(it) }
                     binding.rvAdminLoaisanpham.adapter = adapter
@@ -104,7 +101,7 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
         val dialog = AlertDialog.Builder(this)
         dialog.setTitle("Bạn có chắc chắn muốn xóa")
         dialog.setPositiveButton("Có") { dialog, which ->
-            val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+            val service = RetrofitClient.retrofitInstance.create(APICallCategories::class.java)
             val call = service.xoaLoaiSanPham(loaiSanPham!!.id)
             call.enqueue(object : Callback<LoaiSanPhamModel> {
                 override fun onResponse(
@@ -117,6 +114,7 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
                             "Xóa thành công",
                             Toast.LENGTH_SHORT
                         ).show()
+                        loaiSanPham = null
                         hienThiLoai()
                     }
                 }

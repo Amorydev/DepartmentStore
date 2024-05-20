@@ -12,7 +12,7 @@ import android.widget.Toast
 import com.amory.departmentstore.databinding.ActivityAdminThemLoaiSanPhamBinding
 import com.amory.departmentstore.model.LoaiSanPham
 import com.amory.departmentstore.model.LoaiSanPhamModel
-import com.amory.departmentstore.retrofit.ApiBanHang
+import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
 import com.amory.departmentstore.retrofit.RetrofitClient
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -56,22 +56,20 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
     private fun onClickAddLoaiSanPham() {
         binding.imbAdd.setOnClickListener {
             val name = binding.edtTensanpham.text.toString().trim()
-            var imagePath = mediaPath
-            if (mediaPath?.isEmpty() == true){
-                imagePath = loaiSanPham?.imageUrl.toString()
+            val imagePath = mediaPath.takeIf { !it.isNullOrEmpty() } ?: loaiSanPham?.imageUrl ?: ""
+            val service = RetrofitClient.retrofitInstance.create(APICallCategories::class.java)
+
+            val nameRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), name)
+            val imagePart: MultipartBody.Part? = if (imagePath.isNotEmpty()) {
+                val file = File(imagePath)
+                val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                MultipartBody.Part.createFormData("fileImage", file.name, requestFile)
+            } else {
+                null
             }
-            val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
 
             if (flags) {
-                val nameRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), name)
-                val imagePart: MultipartBody.Part? = if (!imagePath.isNullOrEmpty()) {
-                    val file = File(imagePath)
-                    val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
-                    MultipartBody.Part.createFormData("fileImage", file.name, requestFile)
-                } else {
-                    null
-                }
-                if (imagePart != null) {
+                if (imagePart!=null) {
                     val call = service.themLoaiSanPhamMoi(nameRequestBody, imagePart)
                     call.enqueue(object : Callback<LoaiSanPhamModel> {
                         override fun onResponse(
@@ -80,11 +78,8 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                         ) {
                             Log.d("Response", response.toString())
                             if (response.isSuccessful) {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Thành công",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                Toast.makeText(applicationContext, "Thành công", Toast.LENGTH_SHORT)
+                                    .show()
                                 val intent = Intent(
                                     this@AdminThemLoaiSanPhamActivity,
                                     AdminQLLoaiSanPhamActivity::class.java
@@ -105,23 +100,48 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                         }
                     })
                 }
-            }else{
-                val id = loaiSanPham?.id
-                val nameRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), name)
-                val imagePart: MultipartBody.Part? = if (!imagePath.isNullOrEmpty()) {
-                    val file = File(imagePath)
-                    val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
-                    MultipartBody.Part.createFormData("fileImage", file.name, requestFile)
-                } else {
-                    null
-                }
-                if (imagePart != null) {
-                    val call = service.suaLoaiSanPham(id,nameRequestBody,imagePart)
-                    call.enqueue(object : Callback<LoaiSanPhamModel>{
+                if (imagePart?.equals("") != true){
+                    val call = service.themLoaiSanPhamMoi(nameRequestBody)
+                    call.enqueue(object : Callback<LoaiSanPhamModel> {
                         override fun onResponse(
                             call: Call<LoaiSanPhamModel>,
                             response: Response<LoaiSanPhamModel>
                         ) {
+                            Log.d("Response", response.toString())
+                            if (response.isSuccessful) {
+                                Toast.makeText(applicationContext, "Thành công", Toast.LENGTH_SHORT)
+                                    .show()
+                                val intent = Intent(
+                                    this@AdminThemLoaiSanPhamActivity,
+                                    AdminQLLoaiSanPhamActivity::class.java
+                                )
+                                startActivity(intent)
+                                finish()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
+                            t.printStackTrace()
+                            Log.d("loi", t.message.toString())
+                            Toast.makeText(
+                                applicationContext,
+                                "Không thành công",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
+                }
+            } else {
+
+                val id = loaiSanPham?.id ?: return@setOnClickListener
+                if (imagePart != null) {
+                    val call = service.suaLoaiSanPham(id, nameRequestBody, imagePart)
+                    call.enqueue(object : Callback<LoaiSanPhamModel> {
+                        override fun onResponse(
+                            call: Call<LoaiSanPhamModel>,
+                            response: Response<LoaiSanPhamModel>
+                        ) {
+                            Log.d("Response", response.toString())
                             if (response.isSuccessful) {
                                 Toast.makeText(
                                     this@AdminThemLoaiSanPhamActivity,
@@ -134,17 +154,43 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                                 )
                                 startActivity(intent)
                                 finish()
+                                loaiSanPham = null
                             }
                         }
 
                         override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
                             t.printStackTrace()
                             Log.d("loisua", t.message.toString())
-                            Toast.makeText(
-                                applicationContext,
-                                "Không thành công",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                        }
+                    })
+                }
+                if (imagePart?.equals("") != true){
+                    val call = service.suaLoaiSanPham(id, nameRequestBody)
+                    call.enqueue(object : Callback<LoaiSanPhamModel> {
+                        override fun onResponse(
+                            call: Call<LoaiSanPhamModel>,
+                            response: Response<LoaiSanPhamModel>
+                        ) {
+                            Log.d("Response", response.toString())
+                            if (response.isSuccessful) {
+                                Toast.makeText(
+                                    this@AdminThemLoaiSanPhamActivity,
+                                    "Sửa thành công",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                val intent = Intent(
+                                    this@AdminThemLoaiSanPhamActivity,
+                                    AdminQLLoaiSanPhamActivity::class.java
+                                )
+                                startActivity(intent)
+                                finish()
+                                loaiSanPham = null
+                            }
+                        }
+
+                        override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
+                            t.printStackTrace()
+                            Log.d("loisua", t.message.toString())
                         }
                     })
                 }
@@ -170,15 +216,14 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
 
     private fun getPath(uri: Uri): String? {
         val cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
-        return if (cursor != null) {
-            cursor.moveToFirst()
-            val index: Int = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-            val result = cursor.getString(index)
-            cursor.close()
-            result
-        } else {
-            uri.path
-        }
+        return cursor?.use {
+            if (it.moveToFirst()) {
+                val index = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                it.getString(index)
+            } else {
+                ""
+            }
+        } ?: uri.path
     }
 
     @Deprecated("Deprecated in Java")
@@ -186,7 +231,7 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && data != null && data.data != null) {
             val fileUri = data.data!!
-            mediaPath = getPath(fileUri)
+            mediaPath = getPath(fileUri).toString()
             Glide.with(this).load(fileUri).into(binding.imvHinhanh)
             binding.imbThemhinhanh.visibility = View.INVISIBLE
             Log.d("Log", mediaPath ?: "No Path Found")

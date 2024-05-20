@@ -8,14 +8,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.Interface.OnClickRvVoucher
-import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvVouvher
 import com.amory.departmentstore.databinding.ActivityVoucherBinding
-import com.amory.departmentstore.model.Voucher
 import com.amory.departmentstore.model.VoucherModel
-import com.amory.departmentstore.retrofit.ApiBanHang
+import com.amory.departmentstore.retrofit.APIBanHang.APICallVouchers
 import com.amory.departmentstore.retrofit.RetrofitClient
-import com.google.android.play.integrity.internal.m
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,7 +41,7 @@ class VoucherActivity : AppCompatActivity() {
 
     private fun searchVoucher() {
         val txtVoucher = binding.txtVoucher.text?.trim().toString()
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val service = RetrofitClient.retrofitInstance.create(APICallVouchers::class.java)
         val call = service.timkiemvoucher(txtVoucher)
 
         call.enqueue(object : Callback<VoucherModel> {
@@ -85,7 +82,7 @@ class VoucherActivity : AppCompatActivity() {
     }
 
     private fun showVoucher() {
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+        val service = RetrofitClient.retrofitInstance.create(APICallVouchers::class.java)
         val call = service.getVoucher()
         call.enqueue(object : Callback<VoucherModel> {
             override fun onResponse(call: Call<VoucherModel>, response: Response<VoucherModel>) {
