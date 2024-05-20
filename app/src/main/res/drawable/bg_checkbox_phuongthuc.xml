@@ -1,23 +1,55 @@
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Hình dạng checkbox được chọn -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Trạng thái được chọn -->
     <item android:state_checked="true">
-        <shape android:shape="oval">
-            <solid android:color="#DEFDDF" />
-            <stroke
-                android:width="2dp"
-                android:color="@color/main" />
-        </shape>
+        <layer-list>
+            <item>
+                <shape android:shape="oval">
+                    <solid android:color="#DEFDDF" />
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/main" />
+                </shape>
+            </item>
+            <item
+                android:gravity="center"
+                android:width="20dp"
+                android:height="20dp"
+                android:start="10sp"
+                android:top="10sp"
+                android:bottom="10sp"
+                android:end="10sp">
+                <shape android:shape="oval">
+                    <solid android:color="#06F110" />
+                </shape>
+            </item>
+        </layer-list>
     </item>
-    <!-- Hình dạng hình trong nhỏ ở tâm -->
-    <item android:gravity="center"
-        android:width="20dp"
-        android:height="20dp"
-        android:start="10sp"
-        android:top="10sp"
-        android:bottom="10sp"
-        android:right="10sp">
-        <shape android:shape="oval">
-            <solid android:color="#06F110" />
-        </shape>
+
+    <!-- Trạng thái không được chọn -->
+    <item android:state_checked="false">
+        <layer-list>
+            <item>
+                <shape android:shape="oval">
+                    <solid android:color="#DEFDDF" />
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/main" />
+                </shape>
+            </item>
+            <item
+                android:gravity="center"
+                android:width="20dp"
+                android:height="20dp"
+                android:start="10sp"
+                android:top="10sp"
+                android:bottom="10sp"
+                android:end="10sp">
+                <shape android:shape="oval">
+                    <solid android:color="@android:color/transparent" />
+                </shape>
+            </item>
+        </layer-list>
     </item>
-</layer-list>
+
+</selector>

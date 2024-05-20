@@ -30,9 +30,11 @@
         app:layout_constraintTop_toBottomOf="@+id/textView20">
 
         <CheckBox
+            android:id="@+id/checkboxtienmat"
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:layout_gravity="center"
+            android:checked="true"
             android:layout_marginStart="15sp"
             android:background="@drawable/bg_checkbox_phuongthuc"
             android:button="@null"
@@ -67,9 +69,11 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
 
         <CheckBox
+            android:id="@+id/checkboxzalopay"
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:layout_gravity="center"
+            android:checked="false"
             android:layout_marginStart="15sp"
             android:background="@drawable/bg_checkbox_phuongthuc"
             android:button="@null"
@@ -94,6 +98,7 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnxacnhanphuongthuc"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:background="@color/main"

@@ -1,18 +1,24 @@
 package com.amory.departmentstore.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.StrictMode
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.CheckBox
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.adapter.RvMuaNgay
 import com.amory.departmentstore.databinding.ActivityThanhToanBinding
+import com.amory.departmentstore.model.CreateOrder
 import com.amory.departmentstore.model.GioHang
 import com.amory.departmentstore.model.NotificationReponse
 import com.amory.departmentstore.model.SendNotification
@@ -29,16 +35,29 @@ import io.paperdb.Paper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import vn.zalopay.sdk.Environment
+import vn.zalopay.sdk.ZaloPayError
+import vn.zalopay.sdk.ZaloPaySDK
+import vn.zalopay.sdk.listeners.PayOrderListener
 import java.text.NumberFormat
 import java.util.Locale
 
 class ThanhToanActivity : AppCompatActivity() {
     private lateinit var binding: ActivityThanhToanBinding
     private var tongtien: Long = 0
+    var isTienMat: Boolean = true
+    var isZalopay: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityThanhToanBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+
+        // ZaloPay SDK Init
+        ZaloPaySDK.init(2553, Environment.SANDBOX)
+
         initViews()
         tinhTongThanhToan()
         onClickBack()
@@ -48,15 +67,54 @@ class ThanhToanActivity : AppCompatActivity() {
         onCLickDiaChi()
         showBottomSheet()
     }
+
+    @SuppressLint("InflateParams", "MissingInflatedId")
     private fun showBottomSheet() {
         binding.chonphuongthuc.setOnClickListener {
             val dialog = BottomSheetDialog(this)
-            val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_chonphuongthuc,null)
+            val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_chonphuongthuc, null)
+            val checkboxtienmat = view.findViewById<CheckBox>(R.id.checkboxtienmat)
+            val checkboxzalo = view.findViewById<CheckBox>(R.id.checkboxzalopay)
+            val btnXacNhan = view.findViewById<Button>(R.id.btnxacnhanphuongthuc)
+
+            checkboxtienmat.isChecked = isTienMat
+            checkboxzalo.isChecked = isZalopay
+
+            checkboxtienmat.setOnClickListener {
+                isTienMat = !isTienMat
+                if (isTienMat) {
+                    isZalopay = false
+                    checkboxzalo.isChecked = false
+                }
+                checkboxtienmat.isChecked = isTienMat
+            }
+
+            checkboxzalo.setOnClickListener {
+                isZalopay = !isZalopay
+                if (isZalopay) {
+                    isTienMat = false
+                    checkboxtienmat.isChecked = false
+                }
+                checkboxzalo.isChecked = isZalopay
+            }
+
+            btnXacNhan.setOnClickListener {
+                if (isZalopay) {
+                    binding.imvPhuongthuc.setImageResource(R.drawable.ic_zalopay)
+                    binding.txtPhuongthuc.text = "Thanh toán bằng ZaloPay"
+                } else if (isTienMat) {
+                    binding.imvPhuongthuc.setImageResource(R.drawable.ic_salary)
+                    binding.txtPhuongthuc.text = "Thanh toán bằng khi nhận hàng"
+                }
+                dialog.cancel()
+            }
+
             dialog.setCancelable(true)
             dialog.setContentView(view)
             dialog.show()
         }
     }
+
     private fun initViews() {
         var fullname = ""
         var phone = ""
@@ -68,20 +126,29 @@ class ThanhToanActivity : AppCompatActivity() {
             fullname = intentFullname
             phone = intentPhone
             address = intentAddress
-        }else{
+        } else {
             val user = Paper.book().read<User>("user")
             if (user != null) {
                 fullname = user.first_name + " " + user.last_name
                 phone = user.mobiphone
 
             } else {
-                fullname = Utils.user_current?.first_name.toString() + " " + Utils.user_current?.last_name.toString()
+                fullname =
+                    Utils.user_current?.first_name.toString() + " " + Utils.user_current?.last_name.toString()
                 phone = Utils.user_current?.mobiphone.toString()
             }
         }
         binding.txtName.text = fullname
         binding.txtPhone.text = phone
         binding.txtAddress.text = address
+
+        if (isZalopay) {
+            binding.imvPhuongthuc.setImageResource(R.drawable.ic_zalopay)
+            binding.txtPhuongthuc.text = "Thanh toán bằng ZaloPay"
+        } else if (isTienMat) {
+            binding.imvPhuongthuc.setImageResource(R.drawable.ic_salary)
+            binding.txtPhuongthuc.text = "Thanh toán khi nhận hàng"
+        }
     }
 
     private fun onCLickDiaChi() {
@@ -188,16 +255,15 @@ class ThanhToanActivity : AppCompatActivity() {
                             val itemsToRemove = muaHangSet.intersect(gioHangSet)
                             Utils.manggiohang.removeAll { gioHang -> itemsToRemove.contains(gioHang.tensanphamgiohang) }
                             Utils.mangmuahang.clear()
-                            val intent = Intent(this@ThanhToanActivity, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                            Toast.makeText(
-                                this@ThanhToanActivity,
-                                "Đặt hàng thành công",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-
+                            if (isZalopay){
+                                requestZalo()
+                            }else{
+                                requestTienMat()
+                                val intent =
+                                    Intent(this@ThanhToanActivity, MainActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
                         }
                     }
 
@@ -219,6 +285,62 @@ class ThanhToanActivity : AppCompatActivity() {
                 ).show()
             }
         }
+    }
+
+    private fun requestTienMat() {
+
+    }
+
+    private fun requestZalo() {
+        val orderApi = CreateOrder()
+        val txtAmount = 10000
+
+        try {
+            val data = orderApi.createOrder(txtAmount.toString())
+            Log.d("Amount", txtAmount.toString())
+            val code = data.getString("return_code")
+            /*Toast.makeText(applicationContext, "return_code: $code", Toast.LENGTH_LONG).show()*/
+
+            if (code == "1") {
+                val token = data.getString("zp_trans_token")
+                ZaloPaySDK.getInstance().payOrder(this@ThanhToanActivity, token, "demozpdk://app", object : PayOrderListener {
+                    override fun onPaymentSucceeded(transactionId: String?, transToken: String?, appTransID: String?) {
+                        runOnUiThread {
+                            AlertDialog.Builder(this@ThanhToanActivity)
+                                .setTitle("Payment Success")
+                                .setMessage(String.format("TransactionId: %s - TransToken: %s", transactionId, transToken))
+                                .setPositiveButton("OK") { dialog, _ -> }
+                                .setNegativeButton("Cancel", null)
+                                .show()
+                        }
+                    }
+
+                    override fun onPaymentCanceled(zpTransToken: String?, appTransID: String?) {
+                        AlertDialog.Builder(this@ThanhToanActivity)
+                            .setTitle("User Cancel Payment")
+                            .setMessage(String.format("zpTransToken: %s \n", zpTransToken))
+                            .setPositiveButton("OK") { dialog, _ -> }
+                            .setNegativeButton("Cancel", null)
+                            .show()
+                    }
+
+                    override fun onPaymentError(zaloPayError: ZaloPayError?, zpTransToken: String?, appTransID: String?) {
+                        AlertDialog.Builder(this@ThanhToanActivity)
+                            .setTitle("Payment Fail")
+                            .setMessage(String.format("ZaloPayErrorCode: %s \nTransToken: %s", zaloPayError.toString(), zpTransToken))
+                            .setPositiveButton("OK") { dialog, _ -> }
+                            .setNegativeButton("Cancel", null)
+                            .show()
+                    }
+                })
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        ZaloPaySDK.getInstance().onResult(intent)
     }
 
     private fun pushNotification() {
@@ -298,4 +420,5 @@ class ThanhToanActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
     }
+
 }

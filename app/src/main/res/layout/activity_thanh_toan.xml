@@ -267,6 +267,8 @@
                     <CheckBox
                         android:layout_width="30sp"
                         android:layout_height="30sp"
+                        android:checked="true"
+                        android:clickable="false"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center"
                         android:layout_marginStart="15sp"
@@ -276,19 +278,20 @@
                         tools:ignore="ObsoleteLayoutParam" />
 
                     <ImageView
+                        android:id="@+id/imv_phuongthuc"
                         android:layout_width="40sp"
                         android:layout_height="40sp"
                         android:layout_gravity="center"
                         android:layout_marginStart="20sp"
-                        android:background="@drawable/ic_salary"
                         tools:ignore="ContentDescription" />
 
                     <TextView
+                        android:id="@+id/txt_phuongthuc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="10sp"
-                        android:text="Thanh toán khi nhận hàng"
+
                         android:textSize="16sp" />
                 </LinearLayout>
 
