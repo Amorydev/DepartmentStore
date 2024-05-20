@@ -45,12 +45,10 @@ class DiaChiActivity : AppCompatActivity() {
         val user = Paper.book().read<User>("user")
         if (user == null) {
             full_name = Utils.user_current?.first_name + " " + Utils.user_current?.last_name
-            phone = Utils.user_current?.mobiphone.toString()
             binding.nameET.setText(full_name)
             binding.mobileET.setText(phone)
         } else {
             full_name = user.first_name + " " + user.last_name
-            phone = user.mobiphone
             binding.nameET.setText(full_name)
             binding.mobileET.setText(phone)
         }

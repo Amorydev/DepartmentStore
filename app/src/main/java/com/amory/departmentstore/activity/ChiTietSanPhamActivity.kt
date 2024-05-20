@@ -13,7 +13,7 @@ import java.util.Locale
 class ChiTietSanPhamActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChiTietSanPhamBinding
     private lateinit var tensanpham: String
-    private lateinit var giasanpham: String
+    private  var giasanpham: Float = 0f
     private lateinit var hinhanhsanpham: String
     private lateinit var motasanpham: String
     private var idsanpham: Int = 0
@@ -144,7 +144,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
 
     private fun init() {
         tensanpham = intent.getStringExtra("name").toString()
-        giasanpham = intent.getStringExtra("price").toString()
+        giasanpham = intent.getFloatExtra("price",0f)
         hinhanhsanpham = intent.getStringExtra("hinhanhsanpham").toString()
         motasanpham = intent.getStringExtra("motasanpham").toString()
         idsanpham = intent.getIntExtra("idsanpham", 0)
@@ -164,7 +164,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
     }
 
     //chuyen sang dinh dang 000.000d
-    private fun formatAmount(amount: String): String {
+    private fun formatAmount(amount: Float): String {
         val number = amount.toLong()
         val formatter = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${formatter.format(number)}đ"

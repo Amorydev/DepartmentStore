@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
@@ -50,7 +51,7 @@ class DangNhapActivity : AppCompatActivity() {
         val emailPaper = Paper.book().read<String>("email")
         val passwordPaper = Paper.book().read<String>("password")
         val checked = Paper.book().read<Boolean>("checked")
-        if (checked == true){
+        if (checked == true) {
             binding.checkBoxNhodangnhap.isChecked = true
         }
         if (emailPaper != null && passwordPaper != null) {
@@ -66,15 +67,16 @@ class DangNhapActivity : AppCompatActivity() {
             binding.prgbar.visibility = View.VISIBLE
             val email = binding.emailEt.text.toString().trim()
             val password = binding.passET.text.toString().trim()
-            firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(
-                    this@DangNhapActivity
-                ) { p0 ->
-                    if (p0.isSuccessful) {
-                        firebaseUser = firebaseAuth.currentUser!!
-                        dangNhap(email, password)
-                    }
-                }
+             /*firebaseAuth.signInWithEmailAndPassword(email, password)
+                 .addOnCompleteListener(
+                     this@DangNhapActivity
+                 ) { p0 ->
+                     if (p0.isSuccessful) {
+                         firebaseUser = firebaseAuth.currentUser!!
+                         dangNhap(email, password)
+                     }
+                 }*/
+            dangNhap(email, password)
         }
 
     }
@@ -98,15 +100,15 @@ class DangNhapActivity : AppCompatActivity() {
             call.enqueue(object : Callback<UserModel> {
                 override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
                     if (response.isSuccessful) {
-                        if (response.body()?.result?.isNotEmpty()!!) {
+                        Utils.token = response.body()?.access_token.toString()
+                        if (response.body()?.user!!.role.id == 1) {
                             Toast.makeText(
                                 applicationContext,
                                 "Đăng nhập thành công",
                                 Toast.LENGTH_SHORT
                             ).show()
                             binding.prgbar.visibility = View.GONE
-                            Utils.user_current = response.body()?.result?.get(0)!!
-                            if (Utils.user_current!!.role == 2) {
+                             Utils.user_current = response.body()?.user
                                 isLogin = true
                                 if (binding.checkBoxNhodangnhap.isChecked){
                                     Paper.book().write("isLogin", isLogin)
@@ -118,20 +120,11 @@ class DangNhapActivity : AppCompatActivity() {
                                 val intent = Intent(this@DangNhapActivity, MainActivity::class.java)
                                 startActivity(intent)
                                 finish()
-                            } else {
-                                val intent =
-                                    Intent(this@DangNhapActivity, AdminActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            }
+                            }else {
+                            val intent = Intent(this@DangNhapActivity, AdminActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         }
-                    }else{
-                        binding.prgbar.visibility = View.GONE
-                        Toast.makeText(
-                            applicationContext,
-                            "Đăng nhập không thành công",
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
                 }
 
@@ -142,6 +135,7 @@ class DangNhapActivity : AppCompatActivity() {
                         "Đăng nhập không thành công",
                         Toast.LENGTH_SHORT
                     ).show()
+                    Log.d("dangnhap", t.message.toString())
                     t.printStackTrace()
                 }
             })

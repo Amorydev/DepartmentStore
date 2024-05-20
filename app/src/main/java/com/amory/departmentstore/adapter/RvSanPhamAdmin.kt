@@ -67,8 +67,8 @@ class RvSanPhamAdmin(private var ds: MutableList<SanPham>) :
         if (holder.itemViewType == Constant.VIEW_TYPE_ITEM) {
             val sanPhamViewHolder = holder as SanPhamViewHolder
             sanPhamViewHolder.tensanpham.text = ds[position].name
-            sanPhamViewHolder.giasanpham.text = formatAmount(ds[position].price)
-            Glide.with(mcontext).load(ds[position].image_url).centerCrop()
+            sanPhamViewHolder.giasanpham.text = formatAmount(ds[position].price.toString())
+            Glide.with(mcontext).load(ds[position].imageUrl).centerCrop()
                 .into(sanPhamViewHolder.hinhanhsanpham)
 
             sanPhamViewHolder.itemView.setOnLongClickListener {

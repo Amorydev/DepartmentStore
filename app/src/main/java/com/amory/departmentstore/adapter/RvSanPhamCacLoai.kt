@@ -14,6 +14,7 @@ import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.Interface.OnCLickButtonSanPham
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.Interface.OnClickSanPhamTheoLoai
+import com.amory.departmentstore.model.LoaiSanPham
 import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import java.util.Locale
@@ -27,7 +28,7 @@ class RvSanPhamCacLoai(private var ds:MutableList<SanPham>, private val onClickS
     }
     inner class LoadingViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
     //chuyen sang dinh dang 000.000d
-    private fun formatAmount(amount: String): String {
+    private fun formatAmount(amount: Float): String {
         val number = amount.toLong()
         val formatter = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${formatter.format(number)}đ"
@@ -39,7 +40,7 @@ class RvSanPhamCacLoai(private var ds:MutableList<SanPham>, private val onClickS
     }
     fun addLoadingView(){
         android.os.Handler().post {
-            ds.add(SanPham(0,"","","",0,""))
+            ds.add(SanPham(0,"",100f,"","","","", LoaiSanPham(0,"","")))
             notifyItemInserted(ds.size-1)
         }
     }
@@ -73,7 +74,7 @@ class RvSanPhamCacLoai(private var ds:MutableList<SanPham>, private val onClickS
             val sanPhamTheoLoaiViewHolder = holder as RvSanPhamCacLoai.viewHolder
             sanPhamTheoLoaiViewHolder.txtTenSanPhamCacLoai.text = ds[position].name
             sanPhamTheoLoaiViewHolder.txtGiaSanPhamCacLoai.text = formatAmount(ds[position].price)
-            Glide.with(mcontext).load(ds[position].image_url).centerCrop()
+            Glide.with(mcontext).load(ds[position].imageUrl).centerCrop()
                 .into(sanPhamTheoLoaiViewHolder.imvHinhAnhSanPhamCacLoai)
         }
         holder.itemView.setOnClickListener {

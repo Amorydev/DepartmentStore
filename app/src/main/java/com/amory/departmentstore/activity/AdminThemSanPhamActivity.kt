@@ -51,9 +51,9 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
             binding.txt.text = "Sửa sản phẩm"
             binding.edtTensanpham.setText(listSanPham!!.name)
             binding.edtmotasanpham.setText(listSanPham!!.description)
-            binding.edtGiasanpham.setText(listSanPham!!.price)
-            binding.spinner.setSelection(listSanPham!!.category_id)
-            Glide.with(this).load(listSanPham!!.image_url).into(binding.imvHinhanh)
+            binding.edtGiasanpham.setText(listSanPham!!.price.toString())
+            binding.spinner.setSelection(listSanPham!!.categoryId.id)
+            Glide.with(this).load(listSanPham!!.imageUrl).into(binding.imvHinhanh)
         } else {
             flags = true
         }
@@ -86,8 +86,8 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     val list = mutableListOf<String>()
-                    for (i in 0 until response.body()?.result?.size!!) {
-                        list.add(response.body()!!.result[i].name)
+                    for (i in 0 until response.body()?.categories?.size!!) {
+                        list.add(response.body()!!.categories[i].name)
                     }
                     val adapter = ArrayAdapter(
                         this@AdminThemSanPhamActivity,
@@ -106,10 +106,10 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                 val selectedCategoryName = list[position]
 
                                 val selectedIndex =
-                                    response.body()?.result?.indexOfFirst { it.name == selectedCategoryName }
+                                    response.body()?.categories?.indexOfFirst { it.name == selectedCategoryName }
                                 if (selectedIndex != -1) {
                                     category_id =
-                                        response.body()?.result?.get(selectedIndex!!)?.id ?: 0
+                                        response.body()?.categories?.get(selectedIndex!!)?.id ?: 0
                                 }
                             }
 
@@ -121,7 +121,7 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                         val price = binding.edtGiasanpham.text?.trim().toString().toLong()
                         var image_url = mediaPath
                         if (mediaPath.isEmpty()){
-                            image_url = listSanPham?.image_url.toString()
+                            image_url = listSanPham?.imageUrl.toString()
                         }
                         val description = binding.edtmotasanpham.text?.trim().toString()
 

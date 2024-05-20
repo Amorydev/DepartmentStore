@@ -5,21 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
-import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
-import androidx.core.widget.addTextChangedListener
-import com.amory.departmentstore.R
 import com.amory.departmentstore.databinding.ActivitySearchBinding
-import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import retrofit2.Call
 import retrofit2.Response
-import javax.security.auth.callback.Callback
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
@@ -63,8 +55,8 @@ class SearchActivity : AppCompatActivity() {
         call.enqueue(object : retrofit2.Callback<SanPhamModel> {
             override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
                 if (response.isSuccessful) {
-                    val result = response.body()?.result
-                    for (i in 0 until response.body()?.result?.size!!) {
+                    val result = response.body()?.products
+                    for (i in 0 until response.body()?.products?.size!!) {
                         list.add(result?.get(i)?.name!!)
                     }
                     binding.lvSearch.adapter = adapter
@@ -73,7 +65,7 @@ class SearchActivity : AppCompatActivity() {
                         intent.putExtra("name", result?.get(position)?.name)
                         intent.putExtra("idsanpham", result?.get(position)?.id)
                         intent.putExtra("price", result?.get(position)?.price)
-                        intent.putExtra("hinhanhsanpham", result?.get(position)?.image_url)
+                        intent.putExtra("hinhanhsanpham", result?.get(position)?.imageUrl)
                         intent.putExtra("motasanpham", result?.get(position)?.description)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)

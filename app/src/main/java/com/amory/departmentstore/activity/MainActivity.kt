@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        SlideQuangCao()
+
 
         Paper.init(this)
 
@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity() {
             goToGioHang()
             getToken()
             gotoChat()
+            SlideQuangCao()
         } else {
             Toast.makeText(this, "Vui lòng kết nối internet", Toast.LENGTH_SHORT).show()
         }
@@ -200,7 +201,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
 
-                    val list = response.body()?.result
+                    val list = response.body()?.categories
                     /*Toast.makeText(this@MainActivity, list, Toast.LENGTH_SHORT).show()*/
                     val adapter = list?.let {
                         RvLoaiSanPham(it, object : OnClickRvLoaiSanPham {
@@ -282,7 +283,7 @@ class MainActivity : AppCompatActivity() {
                 response: Response<SanPhamModel>
             ) {
                 if (response.isSuccessful) {
-                    val produce = response.body()?.result
+                    val produce = response.body()?.products
                     /*
                       Toast.makeText(this@MainActivity, produce, Toast.LENGTH_SHORT).show()
                     */
@@ -308,7 +309,7 @@ class MainActivity : AppCompatActivity() {
                                         intent.putExtra("name", list[position].name)
                                         intent.putExtra("idsanpham", list[position].id)
                                         intent.putExtra("price", list[position].price)
-                                        intent.putExtra("hinhanhsanpham", list[position].image_url)
+                                        intent.putExtra("hinhanhsanpham", list[position].imageUrl)
                                         intent.putExtra("motasanpham", list[position].description)
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(intent)
@@ -340,7 +341,7 @@ class MainActivity : AppCompatActivity() {
                                                 idsanphamgiohang = list[position].id,
                                                 tensanphamgiohang = list[position].name,
                                                 giasanphamgiohang = tongGiaTriSanPham.toString(),
-                                                hinhanhsanphamgiohang = list[position].image_url,
+                                                hinhanhsanphamgiohang = list[position].imageUrl,
                                                 soluongsanphamgiohang = soluong
                                             )
                                             Utils.manggiohang.add(gioHang)
@@ -446,9 +447,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun SlideQuangCao() {
         val imageList = ArrayList<SlideModel>()
-       /* imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/thanh-ly-giam-soc-22032024894.jpg"))
+        /*imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/thanh-ly-giam-soc-22032024894.jpg"))
         imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/san-sale-gia-soc-cung-bhx-12032024133716.jpg"))
-        imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/sua-cac-loai-3012202311948.jpg"))*/
+        imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/sua-cac-loai-3012202311948.jpg"))
+        binding.imageSlider.setImageList(imageList,ScaleTypes.FIT)*/
         val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
         val call = service.laykhuyenmai()
         binding.shimmerframe.visibility = View.VISIBLE
@@ -459,22 +461,23 @@ class MainActivity : AppCompatActivity() {
                 response: Response<KhuyenMaiModel>
             ) {
                 if (response.isSuccessful){
-                    listKhuyenMai = response.body()?.result!!
-                    for (i in 0 until  listKhuyenMai.size){
-                        val image_url = listKhuyenMai[i].image_url
+                    listKhuyenMai = response.body()?.banners!!
+                    for (element in listKhuyenMai){
+                        val image_url = element.imageUrl
                        imageList.add(SlideModel("$image_url"))
                     }
                     Handler().postDelayed({
-                        binding.shimmerframe.visibility = View.GONE
+                        binding.shimmerframe.visibility = View.INVISIBLE
                         binding.shimmerframe.stopShimmer()
                         binding.layoutContrains.visibility = View.VISIBLE
                         binding.imageSlider.setImageList(imageList,ScaleTypes.FIT)
+/*
+                        Toast.makeText(this@MainActivity,listKhuyenMai.toString(),Toast.LENGTH_LONG).show()
+*/
                         binding.imageSlider.setItemClickListener(
                             object : ItemClickListener{
                                 override fun doubleClick(position: Int) {
-
                                 }
-
                                 override fun onItemSelected(position: Int) {
                                     val intent = Intent(this@MainActivity,KhuyenMaiActivity::class.java)
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -489,6 +492,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<KhuyenMaiModel>, t: Throwable) {
                 t.printStackTrace()
+                Log.d("banners",t.message.toString())
             }
         })
     }
@@ -528,7 +532,7 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
                 if (response.isSuccessful)
                 {
-                    Utils.ID_NHAN = response.body()?.result?.get(0)?.id.toString()
+                   /* Utils.ID_NHAN = response.body()?.result?.get(0)?.id.toString()*/
                 }
             }
 

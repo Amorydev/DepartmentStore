@@ -6,14 +6,11 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.R
-import com.amory.departmentstore.adapter.RvKhuyenMai
 import com.amory.departmentstore.adapter.RvKhuyenMaiAdmin
-import com.amory.departmentstore.databinding.ActivityAdminAddKhuyenMaiBinding
 import com.amory.departmentstore.databinding.ActivityAdminKhuyeMaiBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaKhuyenMaiEvent
 import com.amory.departmentstore.model.KhuyenMai
 import com.amory.departmentstore.model.KhuyenMaiModel
-import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import io.paperdb.Paper
@@ -53,7 +50,7 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
                 response: Response<KhuyenMaiModel>
             ) {
                 if (response.isSuccessful) {
-                    val listKhuyenMai = response.body()?.result!!
+                    val listKhuyenMai = response.body()?.banners!!
                     val adapter = RvKhuyenMaiAdmin(listKhuyenMai)
                     binding.rvKhuyenmai.adapter = adapter
                     binding.rvKhuyenmai.layoutManager = LinearLayoutManager(

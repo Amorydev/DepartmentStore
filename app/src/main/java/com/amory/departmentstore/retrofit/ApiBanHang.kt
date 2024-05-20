@@ -10,26 +10,29 @@ import com.amory.departmentstore.model.VoucherModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiBanHang {
     /*Call SanPhamModel*/
-    @GET("laysanpham.php")
+    @GET("products")
     fun getData(): Call<SanPhamModel>
-    @POST("laysanphamtheoloai.php")
-    @FormUrlEncoded
+    @GET("products")
     fun getSanPhamTheoLoai(
-        @Field("loai") loai:Int
+        @Query("category_id") loai: Int
     ):Call<SanPhamModel>
-    @POST("timkiem.php")
-    @FormUrlEncoded
+
+    @GET("products")
     fun timkiem(
-        @Field("search") search:String
+        @Query("keyword") search:String
     ):Call<SanPhamModel>
     @POST("themsanphammoi.php")
     @FormUrlEncoded
@@ -61,31 +64,31 @@ interface ApiBanHang {
     fun xoasanpham(
         @Field("id") id:Int
     ):Call<SanPhamModel>
-    @POST("xoaloaisanpham.php")
-    @FormUrlEncoded
-    fun xoaloaisanpham(
-        @Field("id") id:Int
-    ):Call<SanPhamModel>
 
     /*Call LoaiSanPhamModel*/
-    @GET("layloaisanpham.php")
+    @GET("categories")
     fun getLoaisanPham():Call<LoaiSanPhamModel>
-    @POST("themloaisanpham.php")
-    @FormUrlEncoded
-    fun themloaisanphammoi(
-        @Field("name") name: String,
-        @Field("image_url") image_url:String
-    ):Call<LoaiSanPhamModel>
-    @POST("sualoaisanpham.php")
-    @FormUrlEncoded
-    fun sualoaisanpham(
-        @Field("name") name: String,
-        @Field("image_url") image_url:String,
-        @Field("id") id: Int
+    @Multipart
+    @POST("categories")
+    fun themLoaiSanPhamMoi(
+        @Part("name") name: RequestBody,
+        @Part image: MultipartBody.Part
+    ): Call<LoaiSanPhamModel>
+    @Multipart
+    @PUT("categories/{id}")
+    fun suaLoaiSanPham(
+        @Path("id") id: Int?,
+        @Part("name") name: RequestBody,
+        @Part image: MultipartBody.Part
+    ): Call<LoaiSanPhamModel>
+    @DELETE("categories/{id}")
+    fun xoaLoaiSanPham(
+        @Path("id") id: Int?
     ):Call<LoaiSanPhamModel>
 
+
     /*Call UserModel*/
-    @POST("dangki.php")
+    @POST("users/register")
     @FormUrlEncoded
     fun dangkitaikhoan(
         @Field("first_name") first_name:String,
@@ -96,7 +99,7 @@ interface ApiBanHang {
         @Field("uid") uid:String,
         @Field("token") token:String
     ):Call<UserModel>
-    @POST("dangnhap.php")
+    @POST("users/login")
     @FormUrlEncoded
     fun dangnhaptaikhoan(
         @Field("email") email:String,
@@ -139,9 +142,10 @@ interface ApiBanHang {
     ):Call<DonHangModel>
 
     /*Call KhuyenMaiModel*/
-    @POST("laykhuyenmai.php")
+    @GET("banners")
     fun laykhuyenmai(
     ):Call<KhuyenMaiModel>
+
     @POST("themkhuyenmai.php")
     @FormUrlEncoded
     fun themkhuyenmai(

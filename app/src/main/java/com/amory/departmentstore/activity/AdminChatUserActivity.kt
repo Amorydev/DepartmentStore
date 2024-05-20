@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvAdminChatUser
 import com.amory.departmentstore.databinding.ActivityAdminChatUserBinding
+import com.amory.departmentstore.model.Role
 import com.amory.departmentstore.model.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
@@ -47,10 +48,7 @@ class AdminChatUserActivity : AppCompatActivity() {
                         " ",
                         "",
                         "",
-                        "",
-                        "",
-                        "",
-                        0
+                        Role(1,"user")
                     )
                     listUser.add(user)
                 }

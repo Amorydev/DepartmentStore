@@ -110,7 +110,7 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
                 response: Response<SanPhamModel>
             ) {
                 if (response.isSuccessful) {
-                    val produce = response.body()?.result
+                    val produce = response.body()?.products
                     /*
                       Toast.makeText(this@MainActivity, produce, Toast.LENGTH_SHORT).show()
                     */

@@ -10,7 +10,7 @@ import com.amory.departmentstore.model.User
 
 class Utils {
     companion object{
-        const val BASE_URL = "http://192.168.1.27/banhang/"
+        const val BASE_URL = "http://192.168.1.24:8080/api/v1/"
         val manggiohang: MutableList<GioHang> = mutableListOf()
         val mangmuahang: MutableList<GioHang> = mutableListOf()
         var user_current: User? = null
@@ -20,6 +20,7 @@ class Utils {
         const val MESS = "message"
         const val DATE_TIME = "datetime"
         const val PATH = "chat"
+        var token: String = ""
 
         @SuppressLint("ObsoleteSdkInt")
         fun kiemTraKetNoi(context: Context): Boolean {

@@ -17,7 +17,7 @@ class RvLoaiSanPhamAdmin(val ds:List<LoaiSanPham>):RecyclerView.Adapter<RvLoaiSa
         View.OnCreateContextMenuListener {
         fun bind(data:LoaiSanPham){
             binding.tvloaisanpham.text = data.name
-            Glide.with(binding.root).load(data.image_url).centerCrop().into(binding.imvhinhanh)
+            Glide.with(binding.root).load(data.imageUrl).centerCrop().into(binding.imvhinhanh)
         }
         init {
             itemView.setOnCreateContextMenuListener(this)

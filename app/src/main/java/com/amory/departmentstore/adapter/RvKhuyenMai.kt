@@ -7,12 +7,12 @@ import com.amory.departmentstore.databinding.LayoutItemKhuyenmaiBinding
 import com.amory.departmentstore.model.KhuyenMai
 import com.bumptech.glide.Glide
 
-class RvKhuyenMai(val list:MutableList<KhuyenMai>):RecyclerView.Adapter<RvKhuyenMai.viewHolder>() {
+class RvKhuyenMai(val list: List<KhuyenMai>):RecyclerView.Adapter<RvKhuyenMai.viewHolder>() {
     inner class viewHolder(private val binding: LayoutItemKhuyenmaiBinding):RecyclerView.ViewHolder(binding.root) {
         fun bind(data:KhuyenMai){
-            binding.txtKhuyenmai.text = data.khuyenmai
-            binding.txtThongtinKhuyenmai.text = data.thongtin
-            Glide.with(binding.root).load(data.image_url).fitCenter().into(binding.imgKhuyenmai)
+            binding.txtKhuyenmai.text = data.name
+            binding.txtThongtinKhuyenmai.text = data.description
+            Glide.with(binding.root).load(data.imageUrl).fitCenter().into(binding.imgKhuyenmai)
         }
     }
 

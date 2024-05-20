@@ -1,10 +1,11 @@
 package com.amory.departmentstore.model
 
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 data class KhuyenMai(
-    val id:Int,
-    var image_url:String,
-    var khuyenmai:String,
-    var thongtin:String
+    @SerializedName("id") val id:Int,
+    @SerializedName("imageUrl") val imageUrl:String,
+    @SerializedName("name") val name:String,
+    @SerializedName("description") val description:String
 ) : Serializable

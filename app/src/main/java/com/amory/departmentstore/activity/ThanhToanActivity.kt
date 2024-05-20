@@ -130,12 +130,12 @@ class ThanhToanActivity : AppCompatActivity() {
             val user = Paper.book().read<User>("user")
             if (user != null) {
                 fullname = user.first_name + " " + user.last_name
-                phone = user.mobiphone
+                phone = "0386683237"
 
             } else {
                 fullname =
                     Utils.user_current?.first_name.toString() + " " + Utils.user_current?.last_name.toString()
-                phone = Utils.user_current?.mobiphone.toString()
+                phone = "0386683237"
             }
         }
         binding.txtName.text = fullname
@@ -249,7 +249,9 @@ class ThanhToanActivity : AppCompatActivity() {
                 call.enqueue(object : Callback<UserModel> {
                     override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
                         if (response.isSuccessful) {
+/*
                             pushNotification()
+*/
                             val gioHangSet = Utils.manggiohang.map { it.tensanphamgiohang }.toSet()
                             val muaHangSet = Utils.mangmuahang.map { it.tensanphamgiohang }.toSet()
                             val itemsToRemove = muaHangSet.intersect(gioHangSet)
@@ -343,7 +345,7 @@ class ThanhToanActivity : AppCompatActivity() {
         ZaloPaySDK.getInstance().onResult(intent)
     }
 
-    private fun pushNotification() {
+   /* private fun pushNotification() {
         val serviceToken = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
         val callToken = serviceToken.getToken(1)
         callToken.enqueue(object : Callback<UserModel> {
@@ -384,7 +386,7 @@ class ThanhToanActivity : AppCompatActivity() {
             }
         })
 
-    }
+    }*/
 
     private fun MutableList<GioHang>.getSoluong(): Int {
         var totalSoluong = 0

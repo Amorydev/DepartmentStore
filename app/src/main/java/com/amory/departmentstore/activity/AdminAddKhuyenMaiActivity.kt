@@ -9,17 +9,14 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.amory.departmentstore.R
 import com.amory.departmentstore.databinding.ActivityAdminAddKhuyenMaiBinding
 import com.amory.departmentstore.model.KhuyenMai
 import com.amory.departmentstore.model.KhuyenMaiModel
-import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -46,9 +43,9 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
         }
         if (listKhuyenMai != null) {
             binding.txt.text = "Sửa khuyến mãi"
-            binding.edtKhuyenmai.setText(listKhuyenMai?.khuyenmai)
-            binding.edtThongtin.setText(listKhuyenMai?.thongtin)
-            Glide.with(binding.root).load(listKhuyenMai?.image_url).centerCrop().into(binding.imvHinhanh)
+            binding.edtKhuyenmai.setText(listKhuyenMai?.name)
+            binding.edtThongtin.setText(listKhuyenMai?.description)
+            Glide.with(binding.root).load(listKhuyenMai?.imageUrl).centerCrop().into(binding.imvHinhanh)
         } else {
             flags = true
         }
@@ -96,7 +93,7 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
 
                 val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
                 val call = service.suakhuyenmai(khuyenmai,thongtin,
-                    listKhuyenMai?.image_url.toString(), listKhuyenMai?.id!!)
+                    listKhuyenMai?.imageUrl.toString(), listKhuyenMai?.id!!)
                 call.enqueue(object : Callback<KhuyenMaiModel>{
                     override fun onResponse(
                         call: Call<KhuyenMaiModel>,

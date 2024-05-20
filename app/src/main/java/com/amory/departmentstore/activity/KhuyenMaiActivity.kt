@@ -3,21 +3,19 @@ package com.amory.departmentstore.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvKhuyenMai
 import com.amory.departmentstore.databinding.ActivityKhuyenMaiBinding
 import com.amory.departmentstore.model.KhuyenMai
 import com.amory.departmentstore.model.KhuyenMaiModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
-import com.google.protobuf.Api
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class KhuyenMaiActivity : AppCompatActivity() {
     private lateinit var binding:ActivityKhuyenMaiBinding
-    private lateinit var listKhuyenMai:MutableList<KhuyenMai>
+    private lateinit var listKhuyenMai: List<KhuyenMai>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityKhuyenMaiBinding.inflate(layoutInflater)
@@ -42,7 +40,7 @@ class KhuyenMaiActivity : AppCompatActivity() {
                 response: Response<KhuyenMaiModel>
             ) {
                 if (response.isSuccessful){
-                    listKhuyenMai = response.body()?.result!!
+                    listKhuyenMai = response.body()?.banners!!
                     val adapter = RvKhuyenMai(listKhuyenMai)
                     binding.rvKhuyenmai.adapter = adapter
                     binding.rvKhuyenmai.layoutManager = LinearLayoutManager(this@KhuyenMaiActivity,LinearLayoutManager.VERTICAL,false)

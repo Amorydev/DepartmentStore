@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvLoaiSanPhamAdmin
@@ -15,6 +17,7 @@ import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.ApiBanHang
 import com.amory.departmentstore.retrofit.RetrofitClient
+import com.google.android.play.integrity.internal.w
 import io.paperdb.Paper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -54,7 +57,7 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
 
-                    val list = response.body()?.result
+                    val list = response.body()?.categories
                     /*Toast.makeText(this@MainActivity, list, Toast.LENGTH_SHORT).show()*/
                     val adapter = list?.let { RvLoaiSanPhamAdmin(it) }
                     binding.rvAdminLoaisanpham.adapter = adapter
@@ -98,19 +101,35 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
     }
 
     private fun XoaLoaiSanPham() {
-        val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
-        val call = service.xoaloaisanpham(loaiSanPham!!.id)
-        call.enqueue(object : Callback<SanPhamModel> {
-            override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
-                if (response.isSuccessful) {
-                    hienThiLoai()
+        val dialog = AlertDialog.Builder(this)
+        dialog.setTitle("Bạn có chắc chắn muốn xóa")
+        dialog.setPositiveButton("Có") { dialog, which ->
+            val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+            val call = service.xoaLoaiSanPham(loaiSanPham!!.id)
+            call.enqueue(object : Callback<LoaiSanPhamModel> {
+                override fun onResponse(
+                    call: Call<LoaiSanPhamModel>,
+                    response: Response<LoaiSanPhamModel>
+                ) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(
+                            this@AdminQLLoaiSanPhamActivity,
+                            "Xóa thành công",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        hienThiLoai()
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
-                t.printStackTrace()
-            }
-        })
+                override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
+                    t.printStackTrace()
+                }
+            })
+        }
+        dialog.setNegativeButton("Không") { dialog, _ ->
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun onClickNavViewAdmin() {
@@ -140,11 +159,13 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+
                 R.id.khuyenmai -> {
                     val intent = Intent(this, AdminKhuyeMaiActivity::class.java)
                     startActivity(intent)
                     true
                 }
+
                 else -> {
                     true
                 }

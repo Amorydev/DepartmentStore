@@ -6,20 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.databinding.LayoutItemKhuyenmaiBinding
-import com.amory.departmentstore.model.EventBus.SuaXoaEvent
 import com.amory.departmentstore.model.EventBus.SuaXoaKhuyenMaiEvent
 import com.amory.departmentstore.model.KhuyenMai
 import com.bumptech.glide.Glide
-import com.bumptech.glide.Glide.init
 import org.greenrobot.eventbus.EventBus
 
-class RvKhuyenMaiAdmin(val list:MutableList<KhuyenMai>): RecyclerView.Adapter<RvKhuyenMaiAdmin.viewHolder>() {
+class RvKhuyenMaiAdmin(val list: List<KhuyenMai>): RecyclerView.Adapter<RvKhuyenMaiAdmin.viewHolder>() {
     inner class viewHolder(private val binding: LayoutItemKhuyenmaiBinding): RecyclerView.ViewHolder(binding.root),
         View.OnCreateContextMenuListener {
         fun bind(data: KhuyenMai){
-            binding.txtKhuyenmai.text = data.khuyenmai
-            binding.txtThongtinKhuyenmai.text = data.thongtin
-            Glide.with(binding.root).load(data.image_url).centerCrop().into(binding.imgKhuyenmai)
+            binding.txtKhuyenmai.text = data.name
+            binding.txtThongtinKhuyenmai.text = data.description
+            Glide.with(binding.root).load(data.imageUrl).centerCrop().into(binding.imgKhuyenmai)
         }
         init {
             itemView.setOnCreateContextMenuListener(this)

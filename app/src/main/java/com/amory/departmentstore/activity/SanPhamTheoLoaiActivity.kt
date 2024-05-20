@@ -135,7 +135,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
 
 
     private fun laySanPhamGao() {
-        val loai = intent.getIntExtra("loai", 1)
+        val loai = intent.getIntExtra("loai", 0)
         val service = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
         val call = service.getSanPhamTheoLoai(loai)
         binding.shimmerframe.visibility = View.VISIBLE
@@ -145,7 +145,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
                 if (response.isSuccessful) {
-                    val produce = response.body()?.result
+                    val produce = response.body()?.products
                     /*
                       Toast.makeText(this@MainActivity, produce, Toast.LENGTH_SHORT).show()
                     */
@@ -167,7 +167,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                                         )
                                         intent.putExtra("name", list[position].name)
                                         intent.putExtra("price", list[position].price)
-                                        intent.putExtra("hinhanhsanpham", list[position].image_url)
+                                        intent.putExtra("hinhanhsanpham", list[position].imageUrl)
                                         intent.putExtra("motasanpham", list[position].description)
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(intent)
@@ -199,7 +199,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                                                 idsanphamgiohang = list[position].id,
                                                 tensanphamgiohang = list[position].name,
                                                 giasanphamgiohang = tongGiaTriSanPham.toString(),
-                                                hinhanhsanphamgiohang = list[position].image_url,
+                                                hinhanhsanphamgiohang = list[position].imageUrl,
                                                 soluongsanphamgiohang = soluong
                                             )
                                             Utils.manggiohang.add(gioHang)
