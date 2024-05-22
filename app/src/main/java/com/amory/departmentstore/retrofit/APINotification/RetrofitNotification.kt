@@ -1,4 +1,4 @@
-package com.amory.departmentstore.retrofit
+package com.amory.departmentstore.retrofit.APINotification
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

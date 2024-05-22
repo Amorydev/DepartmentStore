@@ -13,7 +13,7 @@ import com.amory.departmentstore.databinding.ActivityAdminThemLoaiSanPhamBinding
 import com.amory.departmentstore.model.LoaiSanPham
 import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

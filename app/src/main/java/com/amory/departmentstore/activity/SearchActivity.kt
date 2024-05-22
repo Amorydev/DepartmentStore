@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter
 import com.amory.departmentstore.databinding.ActivitySearchBinding
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import retrofit2.Call
 import retrofit2.Response
 
@@ -49,8 +49,10 @@ class SearchActivity : AppCompatActivity() {
 
     private fun Search(search: String) {
         list.clear()
+        val categoryId = intent.getIntExtra("categoryId",0)
+       /* Toast.makeText(this,categoryId.toString(),Toast.LENGTH_SHORT).show()*/
         val service = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
-        val call = service.timkiem(search)
+        val call = service.timkiem(categoryId, search)
         val adapter = ArrayAdapter(this@SearchActivity, android.R.layout.simple_list_item_1, list)
         call.enqueue(object : retrofit2.Callback<SanPhamModel> {
             override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {

@@ -7,17 +7,14 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TextView
-import android.widget.Toast
-import com.amory.departmentstore.R
 import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityDiaChiBinding
 import com.amory.departmentstore.model.Commune
 import com.amory.departmentstore.model.District
 import com.amory.departmentstore.model.Province
 import com.amory.departmentstore.model.User
-import com.amory.departmentstore.retrofit.APIDiaChi
-import com.amory.departmentstore.retrofit.RetrofitDiaChi
+import com.amory.departmentstore.retrofit.APIDiaChi.APIDiaChi
+import com.amory.departmentstore.retrofit.APIDiaChi.RetrofitDiaChi
 import io.paperdb.Paper
 import retrofit2.Call
 import retrofit2.Callback
@@ -46,11 +43,9 @@ class DiaChiActivity : AppCompatActivity() {
         if (user == null) {
             full_name = Utils.user_current?.first_name + " " + Utils.user_current?.last_name
             binding.nameET.setText(full_name)
-            binding.mobileET.setText(phone)
         } else {
             full_name = user.first_name + " " + user.last_name
             binding.nameET.setText(full_name)
-            binding.mobileET.setText(phone)
         }
         ShowSpinerTinh()
     }
@@ -58,6 +53,8 @@ class DiaChiActivity : AppCompatActivity() {
         binding.btnXacnhan.setOnClickListener {
             val sonha = binding.diachiET.text?.trim().toString()
             val address = "$sonha, $name_communce, $name_district, $name_province"
+            val phone = binding.mobileET.text?.trim().toString()
+            val full_name = binding.nameET.text?.trim().toString()
             /*Toast.makeText(applicationContext, address,Toast.LENGTH_SHORT).show()*/
             val intent = Intent(this,ThanhToanActivity::class.java)
             intent.putExtra("address",address)

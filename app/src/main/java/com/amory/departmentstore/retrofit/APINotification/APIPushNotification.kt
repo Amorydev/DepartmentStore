@@ -1,4 +1,4 @@
-package com.amory.departmentstore.retrofit
+package com.amory.departmentstore.retrofit.APINotification
 
 
 import com.amory.departmentstore.model.NotificationReponse

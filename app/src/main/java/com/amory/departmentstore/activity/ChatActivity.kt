@@ -2,6 +2,8 @@ package com.amory.departmentstore.activity
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +27,9 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     private lateinit var list: ArrayList<ChatMessage>
     private lateinit var adapter: RvChatAdapter
+    private lateinit var sharedPreferences: SharedPreferences
+    lateinit var ID_NHAN:String
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
@@ -34,6 +39,22 @@ class ChatActivity : AppCompatActivity() {
         getChat()
         insertUser()
         onCLickBack()
+    }
+    private fun initViews() {
+        list = ArrayList()
+        db = FirebaseFirestore.getInstance()
+        binding.rvChat.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.rvChat.setHasFixedSize(true)
+        val account = Paper.book().read<User>("user")
+        adapter = if (account != null){
+            RvChatAdapter(list, account.id.toString())
+        }else{
+            RvChatAdapter(list, Utils.user_current?.id.toString())
+        }
+        binding.rvChat.adapter = adapter
+        sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
+        ID_NHAN = sharedPreferences.getInt("adminId",0).toString()
     }
 
     private fun onCLickBack() {
@@ -72,7 +93,7 @@ class ChatActivity : AppCompatActivity() {
             val account = Paper.book().read<User>("user")
             val guiId = account?.id?.toString() ?: Utils.user_current?.id.toString()
             message[Constant.GUI_ID] = guiId
-            message[Constant.NHAN_ID] = Utils.ID_NHAN
+            message[Constant.NHAN_ID] = ID_NHAN
             message[Constant.MESS] = txt_chat
             message[Constant.DATE_TIME] = Timestamp.now()
             db.collection(Constant.PATH)
@@ -94,10 +115,10 @@ class ChatActivity : AppCompatActivity() {
         Toast.makeText(applicationContext,user_id,Toast.LENGTH_SHORT).show()
         db.collection(Constant.PATH)
             .whereEqualTo(Constant.GUI_ID, user_id)
-            .whereEqualTo(Constant.NHAN_ID, Utils.ID_NHAN)
+            .whereEqualTo(Constant.NHAN_ID, ID_NHAN)
             .addSnapshotListener(eventListener)
         db.collection(Constant.PATH)
-            .whereEqualTo(Constant.GUI_ID, Utils.ID_NHAN)
+            .whereEqualTo(Constant.GUI_ID, ID_NHAN)
             .whereEqualTo(Constant.NHAN_ID, user_id)
             .addSnapshotListener(eventListener)
     }
@@ -133,20 +154,7 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    private fun initViews() {
-        list = ArrayList()
-        db = FirebaseFirestore.getInstance()
-        binding.rvChat.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.rvChat.setHasFixedSize(true)
-        val account = Paper.book().read<User>("user")
-        adapter = if (account != null){
-            RvChatAdapter(list, account.id.toString())
-        }else{
-            RvChatAdapter(list, Utils.user_current?.id.toString())
-        }
-        binding.rvChat.adapter = adapter
-    }
+   
 
     @Deprecated("Deprecated in Java",
         ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")

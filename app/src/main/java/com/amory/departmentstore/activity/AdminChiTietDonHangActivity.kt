@@ -18,7 +18,7 @@ import com.amory.departmentstore.model.DonHangModel
 import com.amory.departmentstore.model.Donhang
 import com.amory.departmentstore.model.EventBus.DonHangEvent
 import com.amory.departmentstore.retrofit.APIBanHang.APICallDonHang
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import io.paperdb.Paper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe

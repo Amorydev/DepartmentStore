@@ -12,7 +12,7 @@ import com.amory.departmentstore.adapter.RvVouvher
 import com.amory.departmentstore.databinding.ActivityVoucherBinding
 import com.amory.departmentstore.model.VoucherModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallVouchers
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -1,20 +1,16 @@
 package com.amory.departmentstore.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.R
-import com.amory.departmentstore.databinding.LayoutChatItemGuiBinding
 import com.amory.departmentstore.model.ChatMessage
 import com.amory.departmentstore.model.Constant
 import com.google.firebase.Timestamp
 import java.time.Instant
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
@@ -62,12 +58,11 @@ class RvChatAdapter(val list: ArrayList<ChatMessage>, private val sendId: String
         }
     }
 
-    fun formatDateTime(datetime: Timestamp?): String {
+    private fun formatDateTime(datetime: Timestamp?): String {
         if (datetime != null) {
             val instant = Instant.ofEpochSecond(datetime.seconds, datetime.nanoseconds.toLong())
             val localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-            val formattedTime = localDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
-            return formattedTime
+            return localDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
         }
         return ""
     }

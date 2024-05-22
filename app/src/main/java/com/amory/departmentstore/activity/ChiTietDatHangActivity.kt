@@ -9,7 +9,7 @@ import com.amory.departmentstore.databinding.ActivityChiTietDatHangBinding
 import com.amory.departmentstore.model.DonHangModel
 import com.amory.departmentstore.model.User
 import com.amory.departmentstore.retrofit.APIBanHang.APICallDonHang
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import io.paperdb.Paper
 import retrofit2.Call
 import retrofit2.Callback

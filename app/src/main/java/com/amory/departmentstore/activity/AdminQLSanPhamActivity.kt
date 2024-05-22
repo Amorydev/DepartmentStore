@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,10 +16,12 @@ import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvSanPhamAdmin
 import com.amory.departmentstore.databinding.ActivityAdminQlsanPhamBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaEvent
+import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
+import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
 import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import io.paperdb.Paper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -36,9 +41,12 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
         setContentView(binding.root)
         onCLickDanhMuc()
         onClickNavViewAdmin()
+        showSpnLoai()
         onClickThem()
         hienThiSanPham()
     }
+
+
 
     private fun onClickThem() {
         binding.btnThem.setOnClickListener {
@@ -180,6 +188,55 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
         intent.putExtra("sua",listSanPham)
         startActivity(intent)
     }
+    private fun showSpnLoai(){
+        val serviceCategories = RetrofitClient.retrofitInstance.create(APICallCategories::class.java)
+        val callCategories = serviceCategories.getLoaisanPham()
+        callCategories.enqueue(object : Callback<LoaiSanPhamModel>{
+            override fun onResponse(
+                call: Call<LoaiSanPhamModel>,
+                response: Response<LoaiSanPhamModel>
+            ) {
+                if (response.isSuccessful){
+                    var  listCategories = mutableListOf<String>()
+                    listCategories.add("Tất cả")
+                    listCategories = response.body()?.data?.map { it.name } as MutableList<String>
+                    val adapter = ArrayAdapter(this@AdminQLSanPhamActivity,android.R.layout.simple_spinner_item,listCategories)
+                    binding.spnLoai.adapter = adapter
+                    binding.spnLoai.onItemSelectedListener =
+                        object :AdapterView.OnItemSelectedListener{
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                val selectedCategoryName = listCategories[position]
+                                val selectedIndex = response.body()?.data?.indexOfFirst { it.name == selectedCategoryName }
+                                val categoryId = selectedIndex?.let { idx ->
+                                    if (idx != -1) response.body()?.data?.get(idx)?.id ?: 0 else 0
+                                } ?: 0
+                                XuLyLocSanPham(categoryId)
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                            }
+                        }
+                }
+
+            }
+
+            override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
+    }
+
+    private fun XuLyLocSanPham(categoryId:Int) {
+        val keyEDT = binding.edtSearch.text.trim().toString()
+
+    }
+
+
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun eventSuaXoa(event: SuaXoaEvent){
         listSanPham = event.sanpham

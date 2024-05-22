@@ -13,7 +13,7 @@ import com.amory.departmentstore.databinding.ActivityAdminAddKhuyenMaiBinding
 import com.amory.departmentstore.model.Banner
 import com.amory.departmentstore.model.BannerModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallBanners
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

@@ -23,6 +23,7 @@ interface APICallProducts {
     ): Call<SanPhamModel>
     @GET("products")
     fun timkiem(
+        @Query("category_id") categoryId:Int?,
         @Query("keyword") search:String
     ): Call<SanPhamModel>
 

@@ -18,10 +18,12 @@ import com.amory.departmentstore.adapter.RvMuaNgay
 import com.amory.departmentstore.databinding.ActivityThanhToanBinding
 import com.amory.departmentstore.model.CreateOrder
 import com.amory.departmentstore.model.GioHang
+import com.amory.departmentstore.model.Order
+import com.amory.departmentstore.model.OrderRequest
 import com.amory.departmentstore.model.User
 import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallUser
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -98,7 +100,7 @@ class ThanhToanActivity : AppCompatActivity() {
                     binding.txtPhuongthuc.text = "Thanh toán bằng ZaloPay"
                 } else if (isTienMat) {
                     binding.imvPhuongthuc.setImageResource(R.drawable.ic_salary)
-                    binding.txtPhuongthuc.text = "Thanh toán bằng khi nhận hàng"
+                    binding.txtPhuongthuc.text = "Thanh toán khi nhận hàng"
                 }
                 dialog.cancel()
             }
@@ -111,7 +113,7 @@ class ThanhToanActivity : AppCompatActivity() {
 
     private fun initViews() {
         var fullname = ""
-        var phone = ""
+        var phone = "0386683237"
         var address = ""
         val intentFullname = intent.getStringExtra("fullname")
         val intentPhone = intent.getStringExtra("phone")
@@ -122,14 +124,10 @@ class ThanhToanActivity : AppCompatActivity() {
             address = intentAddress
         } else {
             val user = Paper.book().read<User>("user")
-            if (user != null) {
-                fullname = user.first_name + " " + user.last_name
-                phone = "0386683237"
-
+            fullname = if (user != null) {
+                user.first_name + " " + user.last_name
             } else {
-                fullname =
-                    Utils.user_current?.first_name.toString() + " " + Utils.user_current?.last_name.toString()
-                phone = "0386683237"
+                Utils.user_current?.first_name.toString() + " " + Utils.user_current?.last_name.toString()
             }
         }
         binding.txtName.text = fullname
@@ -216,14 +214,29 @@ class ThanhToanActivity : AppCompatActivity() {
     private fun onClickDatHang() {
         val full_name = binding.txtName.text.toString()
         val user_id: Int
-        val phone = binding.txtPhone.text.toString()
-        val total = Utils.mangmuahang.getSoluong()
+        val email: String
+        val phone = /*binding.txtPhone.text.toString()*/""
         val total_money = tongtien.toFloat()
-        val detail: String
+        val items: String
+        val note = "toi chua co note"
         val gson: Gson = GsonBuilder().setLenient().create()
-        detail = gson.toJson(Utils.mangmuahang)
+        val order:MutableList<Order> = mutableListOf()
+        for (item in Utils.mangmuahang){
+            order.add(Order(item.idsanphamgiohang,item.giasanphamgiohang.toDouble(),item.soluongsanphamgiohang,(item.giasanphamgiohang.toDouble()*item.soluongsanphamgiohang)))
+        }
+        items = gson.toJson(order)
+
+
+        Log.d("items",items)
+        var paymentMethod = ""
+        paymentMethod = if (isTienMat) {
+            "cash"
+        } else {
+            "online"
+        }
         val user = Paper.book().read<User>("user")
         user_id = user?.id ?: Utils.user_current?.id!!
+        email = user?.email ?: Utils.user_current?.email!!
 
         /*  Toast.makeText(this,user_id.toString(),Toast.LENGTH_LONG).show()*/
         binding.btnDathang.setOnClickListener {
@@ -232,28 +245,32 @@ class ThanhToanActivity : AppCompatActivity() {
                 val service = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
                 val call =
                     service.taodonhang(
-                        user_id,
-                        full_name,
-                        phone,
-                        total,
-                        total_money,
-                        address,
-                        detail
+                        OrderRequest(
+                            user_id,
+                            full_name,
+                            email,
+                            phone,
+                            address,
+                            note,
+                            total_money,
+                            paymentMethod,
+                            items
+                        )
                     )
                 call.enqueue(object : Callback<UserModel> {
                     override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
                         if (response.isSuccessful) {
-/*
-                            pushNotification()
-*/
-                            val gioHangSet = Utils.manggiohang.map { it.tensanphamgiohang }.toSet()
-                            val muaHangSet = Utils.mangmuahang.map { it.tensanphamgiohang }.toSet()
+                            /*
+                                                        pushNotification()
+                            */
+                            val gioHangSet = Utils.manggiohang.map { it.idsanphamgiohang }.toSet()
+                            val muaHangSet = Utils.mangmuahang.map { it.idsanphamgiohang }.toSet()
                             val itemsToRemove = muaHangSet.intersect(gioHangSet)
-                            Utils.manggiohang.removeAll { gioHang -> itemsToRemove.contains(gioHang.tensanphamgiohang) }
+                            Utils.manggiohang.removeAll { gioHang -> itemsToRemove.contains(gioHang.idsanphamgiohang) }
                             Utils.mangmuahang.clear()
-                            if (isZalopay){
+                            if (isZalopay) {
                                 requestZalo()
-                            }else{
+                            } else {
                                 requestTienMat()
                                 val intent =
                                     Intent(this@ThanhToanActivity, MainActivity::class.java)
@@ -299,88 +316,113 @@ class ThanhToanActivity : AppCompatActivity() {
 
             if (code == "1") {
                 val token = data.getString("zp_trans_token")
-                ZaloPaySDK.getInstance().payOrder(this@ThanhToanActivity, token, "demozpdk://app", object : PayOrderListener {
-                    override fun onPaymentSucceeded(transactionId: String?, transToken: String?, appTransID: String?) {
-                        runOnUiThread {
+                ZaloPaySDK.getInstance().payOrder(
+                    this@ThanhToanActivity,
+                    token,
+                    "demozpdk://app",
+                    object : PayOrderListener {
+                        override fun onPaymentSucceeded(
+                            transactionId: String?,
+                            transToken: String?,
+                            appTransID: String?
+                        ) {
+                            runOnUiThread {
+                                AlertDialog.Builder(this@ThanhToanActivity)
+                                    .setTitle("Payment Success")
+                                    .setMessage(
+                                        String.format(
+                                            "TransactionId: %s - TransToken: %s",
+                                            transactionId,
+                                            transToken
+                                        )
+                                    )
+                                    .setPositiveButton("OK") { dialog, _ -> }
+                                    .setNegativeButton("Cancel", null)
+                                    .show()
+                            }
+                        }
+
+                        override fun onPaymentCanceled(zpTransToken: String?, appTransID: String?) {
                             AlertDialog.Builder(this@ThanhToanActivity)
-                                .setTitle("Payment Success")
-                                .setMessage(String.format("TransactionId: %s - TransToken: %s", transactionId, transToken))
+                                .setTitle("User Cancel Payment")
+                                .setMessage(String.format("zpTransToken: %s \n", zpTransToken))
                                 .setPositiveButton("OK") { dialog, _ -> }
                                 .setNegativeButton("Cancel", null)
                                 .show()
                         }
-                    }
 
-                    override fun onPaymentCanceled(zpTransToken: String?, appTransID: String?) {
-                        AlertDialog.Builder(this@ThanhToanActivity)
-                            .setTitle("User Cancel Payment")
-                            .setMessage(String.format("zpTransToken: %s \n", zpTransToken))
-                            .setPositiveButton("OK") { dialog, _ -> }
-                            .setNegativeButton("Cancel", null)
-                            .show()
-                    }
-
-                    override fun onPaymentError(zaloPayError: ZaloPayError?, zpTransToken: String?, appTransID: String?) {
-                        AlertDialog.Builder(this@ThanhToanActivity)
-                            .setTitle("Payment Fail")
-                            .setMessage(String.format("ZaloPayErrorCode: %s \nTransToken: %s", zaloPayError.toString(), zpTransToken))
-                            .setPositiveButton("OK") { dialog, _ -> }
-                            .setNegativeButton("Cancel", null)
-                            .show()
-                    }
-                })
+                        override fun onPaymentError(
+                            zaloPayError: ZaloPayError?,
+                            zpTransToken: String?,
+                            appTransID: String?
+                        ) {
+                            AlertDialog.Builder(this@ThanhToanActivity)
+                                .setTitle("Payment Fail")
+                                .setMessage(
+                                    String.format(
+                                        "ZaloPayErrorCode: %s \nTransToken: %s",
+                                        zaloPayError.toString(),
+                                        zpTransToken
+                                    )
+                                )
+                                .setPositiveButton("OK") { dialog, _ -> }
+                                .setNegativeButton("Cancel", null)
+                                .show()
+                        }
+                    })
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         ZaloPaySDK.getInstance().onResult(intent)
     }
 
-   /* private fun pushNotification() {
-        val serviceToken = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
-        val callToken = serviceToken.getToken(1)
-        callToken.enqueue(object : Callback<UserModel> {
-            override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
-                if (response.isSuccessful) {
-                    for (i in 0 until response.body()?.result?.size!!) {
-                        val token = response.body()!!.result[i].token
-                        Toast.makeText(
-                            this@ThanhToanActivity,
-                            token,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        val data: MutableMap<String, String> = HashMap()
-                        data["title"] = "Thông báo"
-                        data["body"] = "Bạn có đơn hàng mới"
-                        val sendNoti = SendNotification(token, data)
-                        val service =
-                            RetrofitNotification.retrofitInstance.create(APIPushNotification::class.java)
-                        val call = service.sendNotification(sendNoti)
-                        call.enqueue(object : Callback<NotificationReponse> {
-                            override fun onResponse(
-                                call: Call<NotificationReponse>,
-                                response: Response<NotificationReponse>
-                            ) {
-                            }
+    /* private fun pushNotification() {
+         val serviceToken = RetrofitClient.retrofitInstance.create(ApiBanHang::class.java)
+         val callToken = serviceToken.getToken(1)
+         callToken.enqueue(object : Callback<UserModel> {
+             override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
+                 if (response.isSuccessful) {
+                     for (i in 0 until response.body()?.result?.size!!) {
+                         val token = response.body()!!.result[i].token
+                         Toast.makeText(
+                             this@ThanhToanActivity,
+                             token,
+                             Toast.LENGTH_SHORT
+                         ).show()
+                         val data: MutableMap<String, String> = HashMap()
+                         data["title"] = "Thông báo"
+                         data["body"] = "Bạn có đơn hàng mới"
+                         val sendNoti = SendNotification(token, data)
+                         val service =
+                             RetrofitNotification.retrofitInstance.create(APIPushNotification::class.java)
+                         val call = service.sendNotification(sendNoti)
+                         call.enqueue(object : Callback<NotificationReponse> {
+                             override fun onResponse(
+                                 call: Call<NotificationReponse>,
+                                 response: Response<NotificationReponse>
+                             ) {
+                             }
 
-                            override fun onFailure(call: Call<NotificationReponse>, t: Throwable) {
-                                t.printStackTrace()
-                            }
-                        })
-                    }
-                }
-            }
+                             override fun onFailure(call: Call<NotificationReponse>, t: Throwable) {
+                                 t.printStackTrace()
+                             }
+                         })
+                     }
+                 }
+             }
 
-            override fun onFailure(call: Call<UserModel>, t: Throwable) {
-                Log.d("amory_notification", t.message.toString())
-                t.printStackTrace()
-            }
-        })
+             override fun onFailure(call: Call<UserModel>, t: Throwable) {
+                 Log.d("amory_notification", t.message.toString())
+                 t.printStackTrace()
+             }
+         })
 
-    }*/
+     }*/
 
     private fun MutableList<GioHang>.getSoluong(): Int {
         var totalSoluong = 0

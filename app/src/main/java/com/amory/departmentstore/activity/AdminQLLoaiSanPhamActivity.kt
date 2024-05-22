@@ -14,7 +14,7 @@ import com.amory.departmentstore.model.EventBus.SuaXoaLoaiEvent
 import com.amory.departmentstore.model.LoaiSanPham
 import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import io.paperdb.Paper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe

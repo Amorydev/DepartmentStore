@@ -13,7 +13,7 @@ import com.amory.departmentstore.model.EventBus.SuaXoaKhuyenMaiEvent
 import com.amory.departmentstore.model.Banner
 import com.amory.departmentstore.model.BannerModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallBanners
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import io.paperdb.Paper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe

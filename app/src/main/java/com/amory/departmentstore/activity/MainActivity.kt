@@ -6,7 +6,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -31,22 +30,18 @@ import com.amory.departmentstore.model.LoaiSanPhamModel
 import com.amory.departmentstore.Interface.OnCLickButtonSanPham
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
-import com.amory.departmentstore.model.UserModel
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.amory.departmentstore.Interface.OnClickRvLoaiSanPham
 import com.amory.departmentstore.Interface.OnClickRvSanPham
 import com.amory.departmentstore.Interface.OnLoadMoreListener
-import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.retrofit.APIBanHang.APICallBanners
 import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
 import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
-import com.amory.departmentstore.retrofit.APIBanHang.APICallUser
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.messaging.FirebaseMessaging
 import io.paperdb.Paper
 import retrofit2.Call
 
@@ -76,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         if (Utils.kiemTraKetNoi(this)) {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
             listBanners = mutableListOf()
+            RetrofitClient.init(this)
             paddingRv()
             laySanPham()
             layLoaiSanPham()
@@ -323,34 +319,6 @@ class MainActivity : AppCompatActivity() {
                                         val soluong = 1
                                         var flags = false
 
-                                        if (Utils.manggiohang.size > 0) {
-                                            for (i in 0 until Utils.manggiohang.size) {
-                                                if (Utils.manggiohang[i].tensanphamgiohang == list[position].name) {
-                                                    flags = true
-                                                    Utils.manggiohang[i].soluongsanphamgiohang += soluong
-                                                    val tongGiaTriSanPham =
-                                                        list[position].price.toLong() * Utils.manggiohang[i].soluongsanphamgiohang
-                                                    Utils.manggiohang[i].giasanphamgiohang =
-                                                        tongGiaTriSanPham.toString()
-                                                    break
-                                                }
-                                            }
-                                        }
-
-                                        if (!flags) {
-                                            val tongGiaTriSanPham =
-                                                list[position].price.toLong() * soluong
-                                            val gioHang = GioHang(
-                                                idsanphamgiohang = list[position].id,
-                                                tensanphamgiohang = list[position].name,
-                                                giasanphamgiohang = tongGiaTriSanPham.toString(),
-                                                hinhanhsanphamgiohang = list[position].imageUrl,
-                                                soluongsanphamgiohang = soluong
-                                            )
-                                            Utils.manggiohang.add(gioHang)
-                                        }
-
-                                        binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(),true)
                                     }
                                 })
                             Handler().postDelayed({

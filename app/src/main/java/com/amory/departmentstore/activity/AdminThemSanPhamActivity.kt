@@ -18,7 +18,7 @@ import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
 import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -105,8 +105,7 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                 id: Long
                             ) {
                                 val selectedCategoryName = list[position]
-                                val selectedIndex =
-                                    response.body()?.data?.indexOfFirst { it.name == selectedCategoryName }
+                                val selectedIndex = response.body()?.data?.indexOfFirst { it.name == selectedCategoryName }
                                 if (selectedIndex != null && selectedIndex != -1) {
                                     categoryId = response.body()?.data?.get(selectedIndex)?.id ?: 0
                                 }

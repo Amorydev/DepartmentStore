@@ -58,6 +58,51 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout15"
+            android:layout_width="match_parent"
+            android:layout_height="70sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
+
+            <ImageView
+                android:id="@+id/imb_search"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/magnifying_glass"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/edt_search"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+            <EditText
+                android:id="@+id/edt_search"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:hint="@string/t_m_ki_m"
+                android:layout_marginStart="40dp"
+                android:inputType="textFilter"
+                android:textIsSelectable="false"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:ignore="Autofill" />
+
+            <Spinner
+                android:id="@+id/spn_loai"
+                android:layout_width="250dp"
+                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@+id/edt_search"
+                app:layout_constraintStart_toStartOf="@+id/edt_search"
+                app:layout_constraintTop_toBottomOf="@+id/edt_search" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_suasanpham"
             android:layout_width="match_parent"
@@ -66,7 +111,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout15" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView

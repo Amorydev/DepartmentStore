@@ -7,12 +7,11 @@ import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
-import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityDangKiBinding
 import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.model.RegisterModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallUser
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import retrofit2.Call

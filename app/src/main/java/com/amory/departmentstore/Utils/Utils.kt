@@ -14,7 +14,6 @@ class Utils {
         val manggiohang: MutableList<GioHang> = mutableListOf()
         val mangmuahang: MutableList<GioHang> = mutableListOf()
         var user_current: User? = null
-        lateinit var ID_NHAN:String
 
         @SuppressLint("ObsoleteSdkInt")
         fun kiemTraKetNoi(context: Context): Boolean {

@@ -35,7 +35,7 @@ class RvMuaNgay(val ds:MutableList<GioHang>):RecyclerView.Adapter<RvMuaNgay.view
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHolder {
-       val view = LayoutSanphamDuocmuaBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val view = LayoutSanphamDuocmuaBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return viewHolder(view)
     }
 

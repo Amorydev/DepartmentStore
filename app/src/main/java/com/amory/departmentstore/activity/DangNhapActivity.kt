@@ -12,10 +12,9 @@ import android.view.View
 import android.widget.Toast
 import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityDangNhapBinding
-import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallUser
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import io.paperdb.Paper
@@ -123,9 +122,10 @@ class DangNhapActivity : AppCompatActivity() {
             override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
                 binding.prgbar.visibility = View.GONE
                 if (response.isSuccessful) {
+                    Utils.user_current = response.body()?.user
                     val editor = sharedPreferences.edit()
+                    editor.remove("token")
                     editor.putString("token",response.body()?.access_token)
-
                     val userRole = response.body()?.user?.role?.id
                     val intent = if (userRole == 1) {
                         Intent(this@DangNhapActivity, MainActivity::class.java)
@@ -135,7 +135,7 @@ class DangNhapActivity : AppCompatActivity() {
                     if (userRole == 1) {
                         if (binding.checkBoxNhodangnhap.isChecked) {
                             Paper.book().write("isLogin", true)
-                            Paper.book().write("user", Utils.user_current!!)
+                            Utils.user_current?.let { Paper.book().write("user", it) }
                             Paper.book().write("email", email)
                             Paper.book().write("password", password)
                             Paper.book().write("checked", true)
@@ -147,7 +147,6 @@ class DangNhapActivity : AppCompatActivity() {
                         saveTokenAdmin()
                     }
                     editor.apply()
-                    Utils.user_current = response.body()?.user
                     Toast.makeText(applicationContext, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
                     startActivity(intent)
                     finish()

@@ -22,7 +22,7 @@ import com.amory.departmentstore.Interface.OnCLickButtonSanPham
 
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.amory.departmentstore.Interface.OnClickSanPhamTheoLoai
 import com.amory.departmentstore.Interface.OnLoadMoreListener
 import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
@@ -104,14 +104,22 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
 
     private fun onClickSearch() {
         binding.imbSearch.setOnClickListener {
-            val intent = Intent(this, SearchActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+            val categoryId = intent.getIntExtra("loai",0)
+            if (categoryId != 0) {
+                val intent = Intent(this, SearchActivity::class.java)
+                intent.putExtra("categoryId", categoryId)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
         }
         binding.edtSearch.setOnClickListener {
-            val intent = Intent(this, SearchActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+            val categoryId = intent.getIntExtra("loai",0)
+            if (categoryId != 0) {
+                val intent = Intent(this, SearchActivity::class.java)
+                intent.putExtra("categoryId", categoryId)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
         }
     }
 
@@ -178,36 +186,6 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                                         val soluong = 1
                                         var flags = false
 
-                                        if (Utils.manggiohang.size > 0) {
-                                            for (i in 0 until Utils.manggiohang.size) {
-                                                if (Utils.manggiohang[i].tensanphamgiohang == list[position].name) {
-                                                    flags = true
-                                                    Utils.manggiohang[i].soluongsanphamgiohang += soluong
-                                                    val tongGiaTriSanPham =
-                                                        list[position].price.toLong() * Utils.manggiohang[i].soluongsanphamgiohang
-                                                    Utils.manggiohang[i].giasanphamgiohang =
-                                                        tongGiaTriSanPham.toString()
-                                                    break
-                                                }
-                                            }
-                                        }
-
-                                        if (!flags) {
-                                            val tongGiaTriSanPham =
-                                                list[position].price.toLong() * soluong
-                                            val gioHang = GioHang(
-                                                idsanphamgiohang = list[position].id,
-                                                tensanphamgiohang = list[position].name,
-                                                giasanphamgiohang = tongGiaTriSanPham.toString(),
-                                                hinhanhsanphamgiohang = list[position].imageUrl,
-                                                soluongsanphamgiohang = soluong
-                                            )
-                                            Utils.manggiohang.add(gioHang)
-                                        }
-
-                                        binding.badgeCart.setNumber(
-                                            Utils.manggiohang.getSoluong(),true
-                                        )
                                     }
                                 })
                            Handler().postDelayed({

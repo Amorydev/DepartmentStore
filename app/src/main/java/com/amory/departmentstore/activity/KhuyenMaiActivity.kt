@@ -8,7 +8,7 @@ import com.amory.departmentstore.databinding.ActivityKhuyenMaiBinding
 import com.amory.departmentstore.model.Banner
 import com.amory.departmentstore.model.BannerModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallBanners
-import com.amory.departmentstore.retrofit.RetrofitClient
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

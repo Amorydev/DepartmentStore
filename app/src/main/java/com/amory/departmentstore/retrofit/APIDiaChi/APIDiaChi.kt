@@ -1,4 +1,4 @@
-package com.amory.departmentstore.retrofit
+package com.amory.departmentstore.retrofit.APIDiaChi
 
 import com.amory.departmentstore.model.Commune
 import com.amory.departmentstore.model.District
