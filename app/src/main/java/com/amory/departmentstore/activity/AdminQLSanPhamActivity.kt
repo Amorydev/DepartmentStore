@@ -29,6 +29,7 @@ import org.greenrobot.eventbus.ThreadMode
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.create
 
 class AdminQLSanPhamActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminQlsanPhamBinding
@@ -120,7 +121,6 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
                         if (produce.isNotEmpty()) {
                             list = produce
                             val adapter = RvSanPhamAdmin(list)
-                            adapter.notifyDataSetChanged()
                             binding.rvSuasanpham.adapter = adapter
                             binding.rvSuasanpham.layoutManager = GridLayoutManager(this@AdminQLSanPhamActivity,3,
                                 GridLayoutManager.VERTICAL,false)
@@ -233,7 +233,31 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
 
     private fun XuLyLocSanPham(categoryId:Int) {
         val keyEDT = binding.edtSearch.text.trim().toString()
+        binding.imbSearch.setOnClickListener {
+            val serviceSearch = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
+            val callSearch = serviceSearch.timkiem(categoryId,keyEDT)
+            callSearch.enqueue(object : Callback<SanPhamModel>{
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onResponse(
+                    call: Call<SanPhamModel>,
+                    response: Response<SanPhamModel>
+                ) {
+                    if (response.isSuccessful){
+                        list.clear()
+                        for (product in response.body()?.data!!){
+                            list.add(product)
+                        }
+                        val adapter = RvSanPhamAdmin(list)
+                        binding.rvSuasanpham.adapter = adapter
+                        adapter.notifyDataSetChanged()
+                    }
+                }
 
+                override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
+                    t.printStackTrace()
+                }
+            })
+        }
     }
 
 
@@ -255,5 +279,10 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
     )
     override fun onBackPressed() {
         super.onBackPressed()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hienThiSanPham()
     }
 }

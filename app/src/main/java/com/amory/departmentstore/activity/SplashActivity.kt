@@ -17,16 +17,16 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         Paper.init(this)
         Handler().postDelayed({
-            if (Paper.book().read<User>("user") == null){
-                val intent = Intent(this, DangNhapActivity::class.java)
-                startActivity(intent)
-                finish()
-            }else{
+            val user = Paper.book().read<User>("user")
+            if (user != null) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
+            }else{
+                val intent = Intent(this, DangNhapActivity::class.java)
+                startActivity(intent)
+                finish()
             }
-
-        },1500)
+        }, 1500)
     }
 }

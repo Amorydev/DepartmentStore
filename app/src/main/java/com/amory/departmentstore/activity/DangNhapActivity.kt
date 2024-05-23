@@ -69,33 +69,9 @@ class DangNhapActivity : AppCompatActivity() {
         binding.btnDangnhap.setOnClickListener {
             val email = binding.emailEt.text.toString().trim()
             val password = binding.passET.text.toString().trim()
-
             if (validateInput(email, password)) {
                 binding.prgbar.visibility = View.VISIBLE
-                firebaseAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this) { task ->
-                        if (task.isSuccessful) {
-                            firebaseAuth.currentUser?.let {
-                                dangNhap(email, password)
-                            }
-                        } else {
-                            binding.prgbar.visibility = View.INVISIBLE
-                            Toast.makeText(
-                                applicationContext,
-                                "Authentication thất bại.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                    .addOnFailureListener {
-                        binding.prgbar.visibility = View.INVISIBLE
-                        Log.d("Error Login", it.message.toString())
-                        Toast.makeText(
-                            applicationContext,
-                            "Error: ${it.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                dangNhap(email, password)
             }
         }
     }

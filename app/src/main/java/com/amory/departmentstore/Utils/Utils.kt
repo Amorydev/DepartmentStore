@@ -13,7 +13,7 @@ class Utils {
         const val BASE_URL = "http://192.168.1.31:8080/api/v1/"
         val manggiohang: MutableList<GioHang> = mutableListOf()
         val mangmuahang: MutableList<GioHang> = mutableListOf()
-        var user_current: User? = null
+        var user_current: User?= null
 
         @SuppressLint("ObsoleteSdkInt")
         fun kiemTraKetNoi(context: Context): Boolean {

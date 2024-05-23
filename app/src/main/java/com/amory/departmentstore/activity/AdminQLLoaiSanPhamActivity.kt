@@ -200,4 +200,9 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
     }
+
+    override fun onResume() {
+        super.onResume()
+        hienThiLoai()
+    }
 }

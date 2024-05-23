@@ -13,6 +13,9 @@ import com.amory.departmentstore.model.RegisterModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallUser
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.FirebaseUser
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +29,16 @@ class DangKiActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDangKiBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mFirebaseAuth = FirebaseAuth.getInstance()
         initViews()
+        onClickBack()
+    }
+
+    private fun onClickBack() {
+        binding.btnBackdangki.setOnClickListener {
+            onBackPressed()
+            finish()
+        }
     }
 
     private fun initViews() {
@@ -90,15 +102,7 @@ class DangKiActivity : AppCompatActivity() {
         }
 
         if (isValid) {
-            mFirebaseAuth = FirebaseAuth.getInstance()
-            mFirebaseAuth.createUserWithEmailAndPassword(email,password)
-                .addOnSuccessListener {
-                    val user:FirebaseUser? = mFirebaseAuth.currentUser
-                    if (user != null){
-                        registerUser(firstName, lastName, email, password)
-                    }
-                }
-
+            registerUser(firstName, lastName, email, password)
         } else {
             binding.progressBar.visibility = View.GONE
         }

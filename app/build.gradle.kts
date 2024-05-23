@@ -47,9 +47,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.firebase:firebase-auth:23.0.0")
     implementation("com.google.firebase:firebase-messaging:24.0.0")
-    implementation("com.google.firebase:firebase-storage:21.0.0")
     implementation("com.google.firebase:firebase-firestore:25.0.0")
-    implementation ("com.google.firebase:firebase-functions:21.0.0")
     implementation(fileTree(mapOf(
         "dir" to "D:\\ZPDK-Android",
         "include" to listOf("*.aar", "*.jar"),
