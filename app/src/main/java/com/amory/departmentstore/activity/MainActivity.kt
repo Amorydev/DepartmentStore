@@ -27,7 +27,6 @@ import com.amory.departmentstore.model.GioHang
 import com.amory.departmentstore.model.Banner
 import com.amory.departmentstore.model.BannerModel
 import com.amory.departmentstore.model.LoaiSanPhamModel
-import com.amory.departmentstore.Interface.OnCLickButtonSanPham
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
@@ -68,10 +67,12 @@ class MainActivity : AppCompatActivity() {
         /*  onTouch()*/
         /*  showSanPham()*/
         Log.d("paper",Paper.book().path)
+
         if (Utils.kiemTraKetNoi(this)) {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
             listBanners = mutableListOf()
             RetrofitClient.init(this)
+            Toast.makeText(this@MainActivity,Utils.user_current.toString(),Toast.LENGTH_SHORT).show()
             paddingRv()
             laySanPham()
             layLoaiSanPham()
@@ -242,7 +243,7 @@ class MainActivity : AppCompatActivity() {
                         binding.shimmerframe.visibility = View.GONE
                         binding.shimmerframe.stopShimmer()
                         binding.layoutContrains.visibility = View.VISIBLE
-                    },3000)
+                    },1000)
                     binding.rvloaisanpham.adapter = adapter
                     binding.rvloaisanpham.layoutManager = LinearLayoutManager(
                         this@MainActivity,
@@ -314,18 +315,12 @@ class MainActivity : AppCompatActivity() {
                                         startActivity(intent)
 
                                     }
-                                }, object : OnCLickButtonSanPham {
-                                    override fun onCLickButtonSanPham(position: Int) {
-                                        val soluong = 1
-                                        var flags = false
-
-                                    }
                                 })
                             Handler().postDelayed({
                                 binding.shimmerframe.visibility = View.GONE
                                 binding.shimmerframe.stopShimmer()
                                 binding.layoutContrains.visibility = View.VISIBLE
-                            },3000)
+                            },1000)
                             adapter.notifyDataSetChanged()
                             binding.rvSanpham.adapter = adapter
                             setRVLayoutManager()
@@ -412,7 +407,7 @@ class MainActivity : AppCompatActivity() {
             binding.rvSanpham.post {
                 adapter.notifyDataSetChanged()
             }
-        }, 3000)
+        }, 1000)
     }
 
 
@@ -423,7 +418,7 @@ class MainActivity : AppCompatActivity() {
         imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/sua-cac-loai-3012202311948.jpg"))
         binding.imageSlider.setImageList(imageList,ScaleTypes.FIT)*/
         val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
-        val call = service.laykhuyenmai()
+        val call = service.layKhuyenMai()
         binding.shimmerframe.visibility = View.VISIBLE
         binding.shimmerframe.startShimmer()
         call.enqueue(object : Callback<BannerModel>{
@@ -456,7 +451,7 @@ class MainActivity : AppCompatActivity() {
                                 }
                             }
                         )
-                    },3000)
+                    },1000)
 
                 }
             }
@@ -477,24 +472,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /*private fun getToken() {
-        val serviceToken = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
-        val callToken = serviceToken.getToken(1)
-        callToken.enqueue(object : Callback<UserModel>{
-            override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
-                if (response.isSuccessful)
-                {
-                   *//* Utils.ID_NHAN = response.body()?.result?.get(0)?.id.toString()*//*
-                }
-            }
-
-            override fun onFailure(call: Call<UserModel>, t: Throwable) {
-                t.printStackTrace()
-            }
-        })
-
-    }*/
-
 
     override fun onResume() {
         super.onResume()
@@ -505,7 +482,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
 }

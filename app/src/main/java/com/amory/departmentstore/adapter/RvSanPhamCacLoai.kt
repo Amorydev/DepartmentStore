@@ -5,13 +5,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
-import com.amory.departmentstore.Interface.OnCLickButtonSanPham
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.Interface.OnClickSanPhamTheoLoai
 import com.amory.departmentstore.model.LoaiSanPham
@@ -19,7 +17,7 @@ import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import java.util.Locale
 
-class RvSanPhamCacLoai(private var ds:MutableList<SanPham>, private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoai, private val onCLickButtonSanPham: OnCLickButtonSanPham): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RvSanPhamCacLoai(private var ds:MutableList<SanPham>, private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoai): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var mcontext:Context
     inner class viewHolder(itemView : View):RecyclerView.ViewHolder(itemView) {
         val txtTenSanPhamCacLoai = itemView.findViewById<TextView>(R.id.txt_tensanpham)!!

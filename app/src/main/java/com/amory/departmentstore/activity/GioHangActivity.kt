@@ -1,14 +1,10 @@
 package com.amory.departmentstore.activity
 
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.Utils.Utils

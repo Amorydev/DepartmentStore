@@ -6,10 +6,12 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.amory.departmentstore.R
 import com.amory.departmentstore.activity.MainActivity
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -51,4 +53,6 @@ class FirebaseMessagingReciver:FirebaseMessagingService() {
         }
         notificationManager.notify(0,builder.build())
     }
+
+
 }

@@ -44,7 +44,7 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
 
     private fun showKhuyenMai() {
         val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
-        val call = service.laykhuyenmai()
+        val call = service.layKhuyenMai()
         call.enqueue(object : Callback<BannerModel> {
             override fun onResponse(
                 call: Call<BannerModel>,

@@ -18,7 +18,6 @@ import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivitySanPhamTheoLoaiBinding
 import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.model.GioHang
-import com.amory.departmentstore.Interface.OnCLickButtonSanPham
 
 import com.amory.departmentstore.model.SanPham
 import com.amory.departmentstore.model.SanPhamModel
@@ -179,12 +178,6 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                                         intent.putExtra("motasanpham", list[position].description)
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(intent)
-
-                                    }
-                                }, object : OnCLickButtonSanPham {
-                                    override fun onCLickButtonSanPham(position: Int) {
-                                        val soluong = 1
-                                        var flags = false
 
                                     }
                                 })

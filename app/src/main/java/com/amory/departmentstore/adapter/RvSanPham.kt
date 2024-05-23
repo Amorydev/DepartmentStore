@@ -11,16 +11,14 @@ import java.text.NumberFormat
 import java.util.Locale
 import android.os.Handler
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
-import com.amory.departmentstore.Interface.OnCLickButtonSanPham
 import com.amory.departmentstore.Interface.OnClickRvSanPham
 import com.amory.departmentstore.model.LoaiSanPham
 
-class RvSanPham(private var ds: MutableList<SanPham>, private val onClickRvSanPham: OnClickRvSanPham, private val onCLickButtonSanPham: OnCLickButtonSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class RvSanPham(private var ds: MutableList<SanPham>, private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private lateinit var mcontext: Context
     inner class SanPhamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val tensanpham: TextView = itemView.findViewById(R.id.txt_tensanpham)

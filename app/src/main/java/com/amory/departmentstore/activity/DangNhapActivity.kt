@@ -12,10 +12,12 @@ import android.view.View
 import android.widget.Toast
 import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityDangNhapBinding
-import com.amory.departmentstore.model.UserModel
+import com.amory.departmentstore.model.LoginModel
+import com.amory.departmentstore.model.User
 import com.amory.departmentstore.retrofit.APIBanHang.APICallUser
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import io.paperdb.Paper
 import retrofit2.Call
@@ -31,6 +33,7 @@ class DangNhapActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDangNhapBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        RetrofitClient.init(this)
         init()
         onCLickDangKi()
         onClickDangNhap()
@@ -57,8 +60,8 @@ class DangNhapActivity : AppCompatActivity() {
             binding.passET.setText(passwordPaper)
         }
         firebaseAuth = FirebaseAuth.getInstance()
-        sharedPreferences = this.getSharedPreferences("SAVE_TOKEN",Context.MODE_PRIVATE)
-        RetrofitClient.init(this)
+        sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
+
     }
 
     private fun onClickDangNhap() {
@@ -103,14 +106,18 @@ class DangNhapActivity : AppCompatActivity() {
                 Toast.makeText(this, "Vui lòng nhập email.", Toast.LENGTH_SHORT).show()
                 false
             }
+
             TextUtils.isEmpty(password) -> {
                 Toast.makeText(this, "Vui lòng nhập password.", Toast.LENGTH_SHORT).show()
                 false
             }
+
             !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                Toast.makeText(this, "Vui lòng nhập đúng định dạng email.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Vui lòng nhập đúng định dạng email.", Toast.LENGTH_SHORT)
+                    .show()
                 false
             }
+
             else -> true
         }
     }
@@ -118,81 +125,108 @@ class DangNhapActivity : AppCompatActivity() {
     private fun dangNhap(email: String, password: String) {
         val service = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
         val call = service.dangnhaptaikhoan(email, password)
-        call.enqueue(object : Callback<UserModel> {
-            override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
+        call.enqueue(object : Callback<LoginModel> {
+            override fun onResponse(call: Call<LoginModel>, response: Response<LoginModel>) {
                 binding.prgbar.visibility = View.GONE
                 if (response.isSuccessful) {
-                    Utils.user_current = response.body()?.user
+                    /* Toast.makeText(this@DangNhapActivity,Utils.user_current.toString(),Toast.LENGTH_SHORT).show()*/
                     val editor = sharedPreferences.edit()
-                    editor.remove("token")
-                    editor.putString("token",response.body()?.access_token)
-                    val userRole = response.body()?.user?.role?.id
-                    val intent = if (userRole == 1) {
-                        Intent(this@DangNhapActivity, MainActivity::class.java)
-                    } else {
-                        Intent(this@DangNhapActivity, AdminActivity::class.java)
-                    }
-                    if (userRole == 1) {
-                        if (binding.checkBoxNhodangnhap.isChecked) {
-                            Paper.book().write("isLogin", true)
-                            Utils.user_current?.let { Paper.book().write("user", it) }
-                            Paper.book().write("email", email)
-                            Paper.book().write("password", password)
-                            Paper.book().write("checked", true)
-                        }
-                        saveTokenUser()
-                    }else{
-                        val adminId = response.body()?.user?.id!!.toInt()
-                        editor.putInt("adminId", adminId)
-                        saveTokenAdmin()
-                    }
+                    editor.putString("token", response.body()?.access_token)
+                    editor.putString("refreshToken", response.body()?.refresh_token)
                     editor.apply()
-                    Toast.makeText(applicationContext, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
-                    startActivity(intent)
-                    finish()
+                    val callUser = service.getUser()
+                    callUser.enqueue(object : Callback<User> {
+                        override fun onResponse(
+                            call: Call<User>,
+                            response: Response<User>
+                        ) {
+                            if (response.isSuccessful) {
+                                val userRole = response.body()?.role?.id
+                                Toast.makeText(this@DangNhapActivity,userRole.toString(),Toast.LENGTH_SHORT).show()
+                                val intent = if (userRole == 1) {
+                                    Intent(this@DangNhapActivity, MainActivity::class.java)
+                                } else {
+                                    Intent(this@DangNhapActivity, AdminActivity::class.java)
+                                }
 
+                                if (userRole == 1) {
+                                    if (binding.checkBoxNhodangnhap.isChecked) {
+                                        Paper.book().write("isLogin", true)
+                                        Paper.book().write("user", response.body()!!)
+                                        Paper.book().write("email", email)
+                                        Paper.book().write("password", password)
+                                        Paper.book().write("checked", true)
+                                    }
+                                } else {
+                                    val adminId = response.body()?.id
+                                    saveTokenAdmin(adminId)
+                                }
+                                Utils.user_current = response.body()!!
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Đăng nhập thành công",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                startActivity(intent)
+                                finish()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<User>, t: Throwable) {
+                            t.printStackTrace()
+                            Log.d("LoiCallMe", t.message.toString())
+                        }
+                    })
                 } else {
-                    Toast.makeText(applicationContext, "Đăng nhập không thành công", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        applicationContext,
+                        "Đăng nhập không thành công",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
-            override fun onFailure(call: Call<UserModel>, t: Throwable) {
+            override fun onFailure(call: Call<LoginModel>, t: Throwable) {
                 binding.prgbar.visibility = View.GONE
-                Toast.makeText(applicationContext, "Đăng nhập không thành công", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Đăng nhập không thành công", Toast.LENGTH_SHORT)
+                    .show()
                 Log.d("dangnhap", t.message.toString())
             }
         })
     }
 
-    private fun saveTokenAdmin() {
+    private fun saveTokenAdmin(adminId: Int?) {
         FirebaseMessaging.getInstance().token
-            .addOnSuccessListener {
-                if (!TextUtils.isEmpty(it)){
-                    val editor = sharedPreferences.edit()
-                    editor.putString("FMTokenAdmin",it.toString())
-                    editor.apply()
+            .addOnSuccessListener { token ->
+                if (!TextUtils.isEmpty(token)) {
+                    sendToFirebase(token, adminId!!)
                 }
             }
     }
 
-    private fun saveTokenUser() {
-        FirebaseMessaging.getInstance().token
+    private fun sendToFirebase(token: String, userId: Int) {
+        val db = FirebaseFirestore.getInstance()
+        val useToken = hashMapOf(
+            "token" to token,
+            "userId" to userId
+        )
+        db.collection("tokens")
+            .add(useToken)
             .addOnSuccessListener {
-                if (!TextUtils.isEmpty(it)){
-                    val editor = sharedPreferences.edit()
-                    editor.putString("FMTokenUser",it.toString())
-                    editor.apply()
-                }
+                Log.d("Token", "Thanh cong")
+            }
+            .addOnFailureListener {
+                Log.d("Error token", it.message.toString())
             }
     }
 
     override fun onResume() {
         super.onResume()
-        Utils.user_current?.let {
-            if (it.email.isNotEmpty() && it.password.isNotEmpty()) {
-                binding.emailEt.setText(it.email)
-                binding.passET.setText(it.password)
-            }
+        val emailPaper = Paper.book().read<String>("email")
+        val passwordPaper = Paper.book().read<String>("password")
+        if (emailPaper!!.isNotEmpty() && passwordPaper!!.isNotEmpty()) {
+            binding.emailEt.setText(emailPaper)
+            binding.passET.setText(passwordPaper)
         }
     }
 }

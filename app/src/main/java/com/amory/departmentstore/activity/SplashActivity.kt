@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import com.amory.departmentstore.R
+import com.amory.departmentstore.model.User
+import com.amory.departmentstore.retrofit.AuthInterceptor
 import io.paperdb.Paper
 
 @SuppressLint("CustomSplashScreen")
@@ -15,7 +17,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         Paper.init(this)
         Handler().postDelayed({
-            if (Paper.book().read<String>("user") == null){
+            if (Paper.book().read<User>("user") == null){
                 val intent = Intent(this, DangNhapActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -25,6 +27,6 @@ class SplashActivity : AppCompatActivity() {
                 finish()
             }
 
-        },2000)
+        },1500)
     }
 }

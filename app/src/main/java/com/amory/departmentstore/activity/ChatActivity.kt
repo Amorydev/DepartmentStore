@@ -67,12 +67,12 @@ class ChatActivity : AppCompatActivity() {
         val user:HashMap<String,Any> = hashMapOf()
         val account = Paper.book().read<User>("user")
         if (account != null){
-            name = account.first_name + " "+account.last_name
+            name = account.firstName + " "+account.lastName
             user["id"] = account.id.toString()
             user["username"] = name
             db.collection("user").document(account.id.toString()).set(user)
         }else{
-            name = Utils.user_current?.first_name+ " " + Utils.user_current?.last_name
+            name = Utils.user_current?.firstName+ " " + Utils.user_current?.lastName
             user["id"] = Utils.user_current?.id.toString()
             user["username"] = name
             db.collection("user").document(Utils.user_current?.id.toString()).set(user)

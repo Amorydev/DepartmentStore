@@ -3,10 +3,12 @@ package com.amory.departmentstore.model
 import com.google.gson.annotations.SerializedName
 
 data class User(
-    var id: Int,
-    var first_name: String,
-    var last_name: String,
-    var email: String,
-    var password: String,
-    val role:Role
+
+    @SerializedName("id") val id: Int,
+    @SerializedName("firstName") val firstName: String,
+    @SerializedName("lastName") val lastName: String,
+    @SerializedName("email") val email: String,
+    @SerializedName("password") val password: String,
+    @SerializedName("role") val role: Role,
+
 )

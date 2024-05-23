@@ -41,10 +41,10 @@ class DiaChiActivity : AppCompatActivity() {
     private fun initViews() {
         val user = Paper.book().read<User>("user")
         if (user == null) {
-            full_name = Utils.user_current?.first_name + " " + Utils.user_current?.last_name
+            full_name = Utils.user_current?.firstName + " " + Utils.user_current?.lastName
             binding.nameET.setText(full_name)
         } else {
-            full_name = user.first_name + " " + user.last_name
+            full_name = user.firstName + " " + user.lastName
             binding.nameET.setText(full_name)
         }
         ShowSpinerTinh()
