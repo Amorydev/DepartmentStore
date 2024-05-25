@@ -4,15 +4,15 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Donhang
-import com.amory.departmentstore.model.EventBus.DonHangEvent
+import com.amory.departmentstore.model.Order
+import com.amory.departmentstore.model.OrderRequest
 import org.greenrobot.eventbus.EventBus
 
-class RvCHiTietDonHangAdmin(private val ds: MutableList<Donhang>?) : RecyclerView.Adapter<RvCHiTietDonHangAdmin.ViewHolder>() {
+class RvCHiTietDonHangAdmin(private val parents: MutableList<OrderRequest>?) : RecyclerView.Adapter<RvCHiTietDonHangAdmin.ViewHolder>() {
 
     private val viewPool = RecyclerView.RecycledViewPool()
 
@@ -22,55 +22,23 @@ class RvCHiTietDonHangAdmin(private val ds: MutableList<Donhang>?) : RecyclerVie
     }
 
     override fun getItemCount(): Int {
-        return ds!!.size
+        return parents!!.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val parent = ds!![position]
+        val parent = parents!![position]
         holder.bind(parent)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val recyclerView: RecyclerView = itemView.findViewById(R.id.rv_parent_items)
-        private val txt: TextView = itemView.findViewById(R.id.txt_sodonhang)
-        private val trangthai: TextView = itemView.findViewById(R.id.txt_trangthai)
-
         @SuppressLint("SetTextI18n")
-        fun bind(parent: Donhang) {
-            txt.text = "Đơn hàng ${parent.id}"
-            trangthai.text = trangThaiDonHang(parent.status)
+        fun bind(parent: OrderRequest) {
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                adapter = RvItems(parent.item)
+                adapter = RvItems(parent.cartItems)
                 setRecycledViewPool(viewPool)
             }
-
-            trangthai.setOnLongClickListener {
-                EventBus.getDefault().postSticky(DonHangEvent(parent))
-                true
-            }
         }
-    }
-    private fun trangThaiDonHang(status:Int): String {
-        var result = ""
-        when(status){
-            0 -> {
-                result = "Đơn hàng đang được xử lí"
-            }
-            1 -> {
-                result = "Đơn hàng đã bàn giao cho đơn vị vận chuyển"
-            }
-            2 -> {
-                result = "Đơn hàng đang được giao"
-            }
-            3 -> {
-                result = "Đơn hàng giao thành công"
-            }
-            4 -> {
-                result = "Đơn hàng đã hủy"
-            }
-
-        }
-        return result
     }
 }

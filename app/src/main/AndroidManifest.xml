@@ -25,7 +25,8 @@
         <activity
             android:name=".activity.ThanhToanActivity"
             android:exported="false"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            tools:ignore="AppLinkUrlError">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -84,7 +85,7 @@
             android:name=".activity.AdminQLLoaiSanPhamActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ChiTietDatHangActivity"
+            android:name=".activity.ChiTietDonHangActivity"
             android:exported="false" />
         <activity
             android:name=".activity.SearchActivity"

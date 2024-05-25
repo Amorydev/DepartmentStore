@@ -74,7 +74,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                 }
 
                 R.id.details_order -> {
-                    val intent = Intent(this, ChiTietDatHangActivity::class.java)
+                    val intent = Intent(this, ChiTietDonHangActivity::class.java)
                     startActivity(intent)
                     true
                 }

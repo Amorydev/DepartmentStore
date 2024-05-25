@@ -25,6 +25,7 @@ import com.amory.departmentstore.retrofit.APIBanHang.APICallUser
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.model.NotificationReponse
+import com.amory.departmentstore.model.OrderModel
 import com.amory.departmentstore.model.SendNotification
 import com.amory.departmentstore.retrofit.APINotification.APIPushNotification
 import com.amory.departmentstore.retrofit.APINotification.RetrofitNotification
@@ -32,6 +33,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import io.paperdb.Paper
 import retrofit2.Call
 import retrofit2.Callback
@@ -222,93 +225,80 @@ class ThanhToanActivity : AppCompatActivity() {
 
     private fun onClickDatHang() {
         val fullName = binding.txtName.text.toString()
-        val userId: Int
-        val email: String
         val phone = binding.txtPhone.text.toString()
         val totalMoney = tongtien.toFloat()
-        val items: String
-        val note = binding.noteET.text.trim().toString()
-        val address = binding.txtAddress.text.toString()
-        val gson: Gson = GsonBuilder().setLenient().create()
-        val order: MutableList<Order> = mutableListOf()
+        val status = "pending"
+
+        val orderDetails: MutableList<Order> = mutableListOf()
         for (item in Utils.mangmuahang) {
-            order.add(
-                Order(
-                    item.idsanphamgiohang,
-                    item.giasanphamgiohang.toDouble(),
-                    item.soluongsanphamgiohang,
-                    (item.giasanphamgiohang.toDouble() * item.soluongsanphamgiohang)
-                )
-            )
+            orderDetails.add(Order(
+                item.idsanphamgiohang,
+                item.giasanphamgiohang.toDouble(),
+                item.soluongsanphamgiohang,
+                item.giasanphamgiohang.toDouble() * item.soluongsanphamgiohang
+            ))
         }
-        items = gson.toJson(order)
+        Log.d("items",orderDetails.toString())
 
-
-        Log.d("items", items)
-        var paymentMethod = ""
-        paymentMethod = if (isTienMat) {
+        val paymentMethod = if (isTienMat) {
             "cash"
         } else {
             "online"
         }
+
         val user = Paper.book().read<User>("user")
-        userId = user?.id ?: Utils.user_current?.id!!
-        email = user?.email ?: Utils.user_current?.email!!
+        val userId = user?.id ?: Utils.user_current?.id ?: -1
+        val email = user?.email ?: Utils.user_current?.email.orEmpty()
 
-        /*  Toast.makeText(this,userId.toString(),Toast.LENGTH_LONG).show()*/
+        if (userId == -1 || email.isEmpty()) {
+            Toast.makeText(this, "Thieeus thong tin User", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         binding.btnDathang.setOnClickListener {
-            if (!TextUtils.isEmpty(address)) {
-                val serviceOrder = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
-                val call = serviceOrder.taodonhang(
-                    OrderRequest(
-                        userId,
-                        fullName,
-                        email,
-                        phone,
-                        address,
-                        note,
-                        totalMoney,
-                        paymentMethod,
-                        items
-                    )
-                )
-                call.enqueue(object : Callback<UserModel> {
-                    override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
-                        if (response.isSuccessful) {
-                            pushNotification()
-                            val gioHangSet = Utils.manggiohang.map { it.idsanphamgiohang }.toSet()
-                            val muaHangSet = Utils.mangmuahang.map { it.idsanphamgiohang }.toSet()
-                            val itemsToRemove = muaHangSet.intersect(gioHangSet)
-                            Utils.manggiohang.removeAll { gioHang -> itemsToRemove.contains(gioHang.idsanphamgiohang) }
-                            Utils.mangmuahang.clear()
-                            if (isZalopay) {
-                                requestZalo()
-                            } else {
-                                val intent =
-                                    Intent(this@ThanhToanActivity, MainActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            }
-                        }
-                    }
+            val note = binding.noteET.text.trim().toString()
+            val address = binding.txtAddress.text.toString()
 
-                    override fun onFailure(call: Call<UserModel>, t: Throwable) {
-                        Toast.makeText(
-                            this@ThanhToanActivity,
-                            "Khong Thanh cong ",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Log.d("loi", t.message.toString())
-                        t.printStackTrace()
-                    }
-                })
-            } else {
-                Toast.makeText(
-                    this@ThanhToanActivity,
-                    "Vui lòng nhập địa chỉ",
-                    Toast.LENGTH_SHORT
-                ).show()
+            if (address.isEmpty()) {
+                Toast.makeText(this, "Vui lòng nhập địa chỉ", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            val orderRequest = OrderRequest(
+                userId, fullName, email, phone, address, note, status, totalMoney, paymentMethod, orderDetails
+            )
+
+            val serviceOrder = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
+            val call = serviceOrder.taodonhang(orderRequest)
+            call.enqueue(object : Callback<OrderModel> {
+                override fun onResponse(call: Call<OrderModel>, response: Response<OrderModel>) {
+                    if (response.isSuccessful) {
+                        val gioHangSet = Utils.manggiohang.map { it.idsanphamgiohang }.toSet()
+                        val muaHangSet = Utils.mangmuahang.map { it.idsanphamgiohang }.toSet()
+                        val itemsToRemove = muaHangSet.intersect(gioHangSet)
+                        Utils.manggiohang.removeAll { gioHang -> itemsToRemove.contains(gioHang.idsanphamgiohang) }
+                        Utils.mangmuahang.clear()
+
+                        if (isZalopay) {
+                            requestZalo()
+                        } else {
+                            Toast.makeText(this@ThanhToanActivity, "Đặt hàng thành công", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this@ThanhToanActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                    } else {
+                        Toast.makeText(this@ThanhToanActivity, "Đặt hàng thất bại", Toast.LENGTH_SHORT).show()
+                        Log.d("response error", response.errorBody()?.string().orEmpty())
+                    }
+                }
+
+                override fun onFailure(call: Call<OrderModel>, t: Throwable) {
+                    Toast.makeText(this@ThanhToanActivity, "Không thành công", Toast.LENGTH_SHORT).show()
+                    Log.d("error", t.message.toString())
+                    t.printStackTrace()
+                }
+            })
         }
     }
 
@@ -414,7 +404,7 @@ class ThanhToanActivity : AppCompatActivity() {
     }
 
     private fun getIdAdmin(): Int {
-        var adminId = 0
+        var adminId = 5
         val serviceUser = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
         val callIdAdmin = serviceUser.getUser()
         callIdAdmin.enqueue(object : Callback<User> {
@@ -454,11 +444,6 @@ class ThanhToanActivity : AppCompatActivity() {
         }
     }
 
-    private fun tienHang(): Long {
-        var tienhang = intent.getLongExtra("tienhang", 0)
-        tienhang += 30000
-        return tienhang
-    }
 
     private fun formatAmount(amount: String): String {
         val number = amount.toLong()

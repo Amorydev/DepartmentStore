@@ -1,10 +1,12 @@
 package com.amory.departmentstore.retrofit.APIBanHang
 
 import com.amory.departmentstore.model.LoginModel
+import com.amory.departmentstore.model.OrderModel
 import com.amory.departmentstore.model.OrderRequest
 import com.amory.departmentstore.model.RegisterModel
 import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.model.RefreshToken
+import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.model.User
 import retrofit2.Call
 import retrofit2.http.Body
@@ -18,44 +20,29 @@ interface APICallUser {
     @POST("users/register")
     @FormUrlEncoded
     fun dangkitaikhoan(
-        @Field("firstName") first_name:String,
-        @Field("lastName") last_name:String,
-        @Field("email") email:String,
-        @Field("password") password:String,
-        @Field("roleId") role_id:Int
+        @Field("firstName") first_name: String,
+        @Field("lastName") last_name: String,
+        @Field("email") email: String,
+        @Field("password") password: String,
+        @Field("roleId") role_id: Int
     ): Call<RegisterModel>
+
     @POST("users/login")
     @FormUrlEncoded
     fun dangnhaptaikhoan(
-        @Field("email") email:String,
-        @Field("password") password:String
+        @Field("email") email: String,
+        @Field("password") password: String
     ): Call<LoginModel>
+
     @GET("users/me")
-    fun getUser():Call<User>
+    fun getUser(): Call<User>
 
-
-    /*@POST("orders")
-    @FormUrlEncoded
-    fun taodonhang(
-        @Field("user_id") user_id: Int?,
-        @Field("full_name") fullName:String,
-        @Field("email") email:String,
-        @Field("phone") phone:String,
-        @Field("address") address:String,
-        @Field("note") note:String,
-        @Field("total_money") total_money: Float,
-        @Field("payment_method") payment_method: String,
-        @Field("items") items: String
-    ): Call<UserModel>*/
     @POST("orders")
-    fun taodonhang(@Body orderRequest: OrderRequest): Call<UserModel>
-
-    /*@Field("detail") detail:String*/
-
+    fun taodonhang(@Body orderRequest: OrderRequest): Call<OrderModel>
 
     @POST("users/refreshToken")
     @FormUrlEncoded
     fun refreshToken(
         @Body refreshToken: String
-    ):Call<RefreshToken>
+    ): Call<RefreshToken>
 }

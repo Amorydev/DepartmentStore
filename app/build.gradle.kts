@@ -93,4 +93,7 @@ dependencies {
     //okhttp
     implementation ("com.squareup.okhttp3:okhttp:4.9.1")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.1")
+    //ViewPager 2
+    implementation ("androidx.viewpager2:viewpager2:1.1.0")
+    implementation ("com.fasterxml.jackson.core:jackson-databind:2.13.3")
 }

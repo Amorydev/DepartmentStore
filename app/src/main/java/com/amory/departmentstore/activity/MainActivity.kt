@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 
 import android.widget.Toast
@@ -33,6 +35,7 @@ import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.amory.departmentstore.Interface.OnClickRvLoaiSanPham
 import com.amory.departmentstore.Interface.OnClickRvSanPham
 import com.amory.departmentstore.Interface.OnLoadMoreListener
+import com.amory.departmentstore.model.User
 import com.amory.departmentstore.retrofit.APIBanHang.APICallBanners
 import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
 import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
@@ -54,7 +57,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var scrollListener: RvLoadMoreScroll
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private var isLoadMore = false
-    private lateinit var listBanners:MutableList<Banner>
+    private lateinit var listBanners: MutableList<Banner>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,23 +69,23 @@ class MainActivity : AppCompatActivity() {
 
         /*  onTouch()*/
         /*  showSanPham()*/
-        Log.d("paper",Paper.book().path)
+        Log.d("paper", Paper.book().path)
 
         if (Utils.kiemTraKetNoi(this)) {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
             listBanners = mutableListOf()
             RetrofitClient.init(this)
-           /* Toast.makeText(this@MainActivity,Utils.user_current.toString(),Toast.LENGTH_SHORT).show()*/
+            /* Toast.makeText(this@MainActivity,Utils.user_current.toString(),Toast.LENGTH_SHORT).show()*/
             paddingRv()
             laySanPham()
             layLoaiSanPham()
             onClickDanhMuc()
-            onCLickNav()
             OnclickNavHeader()
             onClickSearch()
+            SlideQuangCao()
             goToGioHang()
             gotoChat()
-            SlideQuangCao()
+            onCLickNav()
         } else {
             Toast.makeText(this, "Vui lòng kết nối internet", Toast.LENGTH_SHORT).show()
         }
@@ -92,9 +95,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun gotoChat() {
         binding.btnChat.setOnClickListener {
-            val intent = Intent(this, ChatActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+            val user = Paper.book().read<User>("user")
+            if (user != null || Utils.user_current != null) {
+                val intent = Intent(this, ChatActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            } else {
+                val intent = Intent(this, DangNhapActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 
@@ -120,12 +130,34 @@ class MainActivity : AppCompatActivity() {
     private fun OnclickNavHeader() {
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         val headerView: View = navigationView.getHeaderView(0)
-        if (Paper.book().read<String>("user") != null) {
-            val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
+        val btnDangKy = headerView.findViewById<Button>(R.id.btnDangky)
+        val btnDangNhap = headerView.findViewById<Button>(R.id.btnDangnhap)
+        val imageProfile = headerView.findViewById<ImageView>(R.id.profile_image)
+        val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
+        val user = Paper.book().read<User>("user")
+        if (user != null) {
             txt_nav.text = Paper.book().read<String>("email")
+            btnDangNhap.visibility = View.INVISIBLE
+            btnDangKy.visibility = View.INVISIBLE
         } else {
-            val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
             txt_nav.text = Utils.user_current?.email
+            btnDangNhap.visibility = View.INVISIBLE
+            btnDangKy.visibility = View.INVISIBLE
+        }
+
+        if (user == null && Utils.user_current == null) {
+            btnDangNhap.visibility = View.VISIBLE
+            btnDangKy.visibility = View.VISIBLE
+            imageProfile.visibility = View.INVISIBLE
+            txt_nav.visibility = View.INVISIBLE
+        }
+        btnDangKy.setOnClickListener {
+            val intent = Intent(this, DangKiActivity::class.java)
+            startActivity(intent)
+        }
+        btnDangNhap.setOnClickListener {
+            val intent = Intent(this, DangNhapActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -133,40 +165,62 @@ class MainActivity : AppCompatActivity() {
     private fun onCLickNav() {
         binding.navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-
                 R.id.cart -> {
-                    val intent = Intent(this, GioHangActivity::class.java)
-                    startActivity(intent)
+                    val user = Paper.book().read<User>("user")
+                    if (user != null || Utils.user_current != null) {
+                        val intent = Intent(this, GioHangActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        val intent = Intent(this, DangNhapActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                     true
                 }
 
                 R.id.details_order -> {
-                    val intent = Intent(this, ChiTietDatHangActivity::class.java)
-                    startActivity(intent)
+                    val user = Paper.book().read<User>("user")
+                    if (user != null || Utils.user_current != null) {
+                        val intent = Intent(this, ChiTietDonHangActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        val intent = Intent(this, DangNhapActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                     true
                 }
 
                 R.id.logout -> {
-                    Paper.book().delete("user")
-                    FirebaseAuth.getInstance().signOut()
-                    val intent = Intent(this, DangNhapActivity::class.java)
-                    startActivity(intent)
+                    val user = Paper.book().read<User>("user")
+                    if (user != null || Utils.user_current != null) {
+                        Paper.book().delete("user")
+                        FirebaseAuth.getInstance().signOut()
+                        val intent = Intent(this, DangNhapActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        menuItem.isVisible = false
+                    }
                     true
                 }
-                R.id.contact ->{
+
+                R.id.contact -> {
                     val intent = Intent(this, LienHeActivity::class.java)
                     startActivity(intent)
                     true
                 }
-                R.id.product ->{
+
+                R.id.product -> {
                     binding.layoutDrawer.closeDrawer(binding.navView)
                     true
                 }
-                R.id.discount ->{
+
+                R.id.discount -> {
                     val intent = Intent(this, KhuyenMaiActivity::class.java)
                     startActivity(intent)
                     true
                 }
+
                 else -> {
                     true
                 }
@@ -183,8 +237,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun goToGioHang() {
         binding.imvGiohang.setOnClickListener {
-            val intent = Intent(this, GioHangActivity::class.java)
-            startActivity(intent)
+            val user = Paper.book().read<User>("user")
+            if (user != null || Utils.user_current != null) {
+                val intent = Intent(this, GioHangActivity::class.java)
+                startActivity(intent)
+            } else {
+                val intent = Intent(this, DangNhapActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 
@@ -243,7 +304,7 @@ class MainActivity : AppCompatActivity() {
                         binding.shimmerframe.visibility = View.GONE
                         binding.shimmerframe.stopShimmer()
                         binding.layoutContrains.visibility = View.VISIBLE
-                    },1000)
+                    }, 1000)
                     binding.rvloaisanpham.adapter = adapter
                     binding.rvloaisanpham.layoutManager = LinearLayoutManager(
                         this@MainActivity,
@@ -320,7 +381,7 @@ class MainActivity : AppCompatActivity() {
                                 binding.shimmerframe.visibility = View.GONE
                                 binding.shimmerframe.stopShimmer()
                                 binding.layoutContrains.visibility = View.VISIBLE
-                            },1000)
+                            }, 1000)
                             adapter.notifyDataSetChanged()
                             binding.rvSanpham.adapter = adapter
                             setRVLayoutManager()
@@ -346,8 +407,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
         if (Utils.manggiohang.getSoluong() != 0) {
-            binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(),true)
-        }else{
+            binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(), true)
+        } else {
             binding.badgeCart.setNumber(0)
         }
     }
@@ -421,44 +482,46 @@ class MainActivity : AppCompatActivity() {
         val call = service.layKhuyenMai()
         binding.shimmerframe.visibility = View.VISIBLE
         binding.shimmerframe.startShimmer()
-        call.enqueue(object : Callback<BannerModel>{
+        call.enqueue(object : Callback<BannerModel> {
             override fun onResponse(
                 call: Call<BannerModel>,
                 response: Response<BannerModel>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     listBanners = response.body()?.data!!
-                    for (element in listBanners){
+                    for (element in listBanners) {
                         val image_url = element.imageUrl
-                       imageList.add(SlideModel("$image_url"))
+                        imageList.add(SlideModel("$image_url"))
                     }
                     Handler().postDelayed({
                         binding.shimmerframe.visibility = View.INVISIBLE
                         binding.shimmerframe.stopShimmer()
                         binding.layoutContrains.visibility = View.VISIBLE
-                        binding.imageSlider.setImageList(imageList,ScaleTypes.FIT)
-/*
-                        Toast.makeText(this@MainActivity,listKhuyenMai.toString(),Toast.LENGTH_LONG).show()
-*/
+                        binding.imageSlider.setImageList(imageList, ScaleTypes.FIT)
+                        /*
+                                                Toast.makeText(this@MainActivity,listKhuyenMai.toString(),Toast.LENGTH_LONG).show()
+                        */
                         binding.imageSlider.setItemClickListener(
-                            object : ItemClickListener{
+                            object : ItemClickListener {
                                 override fun doubleClick(position: Int) {
                                 }
+
                                 override fun onItemSelected(position: Int) {
-                                    val intent = Intent(this@MainActivity,KhuyenMaiActivity::class.java)
+                                    val intent =
+                                        Intent(this@MainActivity, KhuyenMaiActivity::class.java)
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                     startActivity(intent)
                                 }
                             }
                         )
-                    },1000)
+                    }, 1000)
 
                 }
             }
 
             override fun onFailure(call: Call<BannerModel>, t: Throwable) {
                 t.printStackTrace()
-                Log.d("banners",t.message.toString())
+                Log.d("banners", t.message.toString())
             }
         })
     }
@@ -476,8 +539,8 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (Utils.manggiohang.getSoluong() != 0) {
-            binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(),true)
-        }else{
+            binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(), true)
+        } else {
             binding.badgeCart.setNumber(0)
         }
     }

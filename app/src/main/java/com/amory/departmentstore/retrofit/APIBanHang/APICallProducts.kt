@@ -17,6 +17,10 @@ interface APICallProducts {
     /*Call SanPhamModel*/
     @GET("products")
     fun getData(): Call<SanPhamModel>
+    @GET("products/{id}")
+    fun getProductsById(
+        @Path("id") id: Int?
+    ): Call<SanPhamModel>
     @GET("products")
     fun getSanPhamTheoLoai(
         @Query("category_id") loai: Int

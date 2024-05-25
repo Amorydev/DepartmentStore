@@ -35,11 +35,13 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminChiTietDonHangBinding.inflate(layoutInflater)
         setContentView(binding.root)
+/*
         layChiTietDonHang()
+*/
         onCLickDanhMuc()
         onClickNavViewAdmin()
     }
-    private fun layChiTietDonHang() {
+   /* private fun layChiTietDonHang() {
         val service = RetrofitClient.retrofitInstance.create(APICallDonHang::class.java)
         val call = service.xemdonhang(0)
         call.enqueue(object : Callback<DonHangModel> {
@@ -59,7 +61,7 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
                 t.printStackTrace()
             }
         })
-    }
+    }*/
     private fun onClickNavViewAdmin() {
         binding.navViewAdmin.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -145,11 +147,13 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
         dialog.show()
 
         btn_xacnhan.setOnClickListener {
+/*
             capNhatTrangThaiDonHang()
+*/
         }
     }
 
-    private fun capNhatTrangThaiDonHang() {
+    /*private fun capNhatTrangThaiDonHang() {
         val service = RetrofitClient.retrofitInstance.create(APICallDonHang::class.java)
         val call = service.updatetinhtrang(donhang.id,status)
         call.enqueue(object : Callback<DonHangModel>{
@@ -163,7 +167,7 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
                 t.printStackTrace()
             }
         })
-    }
+    }*/
 
     override fun onStart() {
         super.onStart()
