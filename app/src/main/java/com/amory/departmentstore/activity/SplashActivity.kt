@@ -21,10 +21,10 @@ class SplashActivity : AppCompatActivity() {
             val user = Paper.book().read<User>("user")
             if (user != null ) {
                 Utils.user_current = user
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
             }
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }, 1500)
     }
 }

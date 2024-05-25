@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.amory.departmentstore.Interface.OnClickHuyDonHang
 import com.amory.departmentstore.adapter.RvChiTietDonHang
 import com.amory.departmentstore.databinding.FragmentShippedBinding
 import com.amory.departmentstore.model.OrderModel
 import com.amory.departmentstore.model.OrderRequest
+import com.amory.departmentstore.model.OrderRespone
 import com.amory.departmentstore.retrofit.APIBanHang.APICallDonHang
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import retrofit2.Call
@@ -50,7 +52,7 @@ class ShippedFragment : Fragment() {
             override fun onResponse(call: Call<OrderModel>, response: Response<OrderModel>) {
                 if (response.isSuccessful) {
                     val list = response.body()?.data
-                    val listOrderPending: MutableList<OrderRequest> = mutableListOf()
+                    val listOrderPending: MutableList<OrderRespone> = mutableListOf()
                     list?.forEach { order ->
                         if (order.status == "shipped") {
                             listOrderPending.add(order)
@@ -64,7 +66,8 @@ class ShippedFragment : Fragment() {
                         binding.txtNoOrder.visibility = View.INVISIBLE
                         binding.imvNoOrder.visibility = View.INVISIBLE
                         binding.rvShipped.visibility = View.VISIBLE
-                        val adapter = RvChiTietDonHang(listOrderPending)
+                        val txtTinhTrang = "Giao hàng thành công"
+                        val adapter = RvChiTietDonHang(listOrderPending,txtTinhTrang)
                         binding.rvShipped.adapter = adapter
                     }
                 }

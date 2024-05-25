@@ -10,6 +10,7 @@ import com.amory.departmentstore.adapter.RvChiTietDonHang
 import com.amory.departmentstore.databinding.FragmentProcessingBinding
 import com.amory.departmentstore.model.OrderModel
 import com.amory.departmentstore.model.OrderRequest
+import com.amory.departmentstore.model.OrderRespone
 import com.amory.departmentstore.retrofit.APIBanHang.APICallDonHang
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import retrofit2.Call
@@ -51,7 +52,7 @@ class ProcessingFragment : Fragment() {
             override fun onResponse(call: Call<OrderModel>, response: Response<OrderModel>) {
                 if (response.isSuccessful) {
                     val list = response.body()?.data
-                    val listOrderPending: MutableList<OrderRequest> = mutableListOf()
+                    val listOrderPending: MutableList<OrderRespone> = mutableListOf()
                     list?.forEach { order ->
                         if (order.status == "processing") {
                             listOrderPending.add(order)
@@ -65,7 +66,8 @@ class ProcessingFragment : Fragment() {
                         binding.txtNoOrder.visibility = View.INVISIBLE
                         binding.imvNoOrder.visibility = View.INVISIBLE
                         binding.rvProcessing.visibility = View.VISIBLE
-                        val adapter = RvChiTietDonHang(listOrderPending)
+                        val txtTinhTrang = "Đơn hàng đang được xử lý"
+                        val adapter = RvChiTietDonHang(listOrderPending,txtTinhTrang)
                         binding.rvProcessing.adapter = adapter
                     }
                 }

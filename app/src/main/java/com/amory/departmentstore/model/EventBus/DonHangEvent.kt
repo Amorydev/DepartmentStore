@@ -1,6 +1,6 @@
 package com.amory.departmentstore.model.EventBus
 
-import com.amory.departmentstore.model.Donhang
+import com.amory.departmentstore.model.OrderRespone
 
-class DonHangEvent(val donhang: Donhang) {
+class DonHangEvent(val donhang: OrderRespone) {
 }

@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -192,15 +193,26 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.logout -> {
-                    val user = Paper.book().read<User>("user")
-                    if (user != null || Utils.user_current != null) {
-                        Paper.book().delete("user")
-                        FirebaseAuth.getInstance().signOut()
-                        val intent = Intent(this, DangNhapActivity::class.java)
-                        startActivity(intent)
-                    } else {
-                        menuItem.isVisible = false
+                    val alertDialog = AlertDialog.Builder(this)
+                    alertDialog.setTitle("Đăng xuất")
+                    alertDialog.setMessage("Bạn chắc chắn muốn đăng xuất")
+                    alertDialog.setNegativeButton("Không"){
+                            dialog, which ->
+                        dialog.dismiss()
                     }
+                    alertDialog.setPositiveButton("Có"){
+                            dialog, which ->
+                        val user = Paper.book().read<User>("user")
+                        if (user != null || Utils.user_current != null) {
+                            Paper.book().delete("user")
+                            FirebaseAuth.getInstance().signOut()
+                            val intent = Intent(this, DangNhapActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            menuItem.isVisible = false
+                        }
+                    }
+                    alertDialog.show()
                     true
                 }
 
