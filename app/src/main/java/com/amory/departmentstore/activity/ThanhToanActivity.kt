@@ -1,12 +1,18 @@
 package com.amory.departmentstore.activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.StrictMode
 import android.text.TextUtils
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Toast
@@ -45,13 +51,20 @@ import vn.zalopay.sdk.ZaloPayError
 import vn.zalopay.sdk.ZaloPaySDK
 import vn.zalopay.sdk.listeners.PayOrderListener
 import java.text.NumberFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class ThanhToanActivity : AppCompatActivity() {
     private lateinit var binding: ActivityThanhToanBinding
+    private lateinit var customProgressDialog: Dialog
     private var tongtien: Long = 0
     private var isTienMat: Boolean = true
     private var isZalopay: Boolean = false
+    private val REQUEST_CODE_ADDRESS = 1
+    private var address = ""
+    private var fullName = ""
+    private var phone = ""
     private lateinit var firestore: FirebaseFirestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +76,7 @@ class ThanhToanActivity : AppCompatActivity() {
 
         // ZaloPay SDK Init
         ZaloPaySDK.init(2553, Environment.SANDBOX)
+        firestore = FirebaseFirestore.getInstance()
 
         initViews()
         tinhTongThanhToan()
@@ -122,28 +136,10 @@ class ThanhToanActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        var fullname = ""
-        var phone = "0386683237"
-        var address = ""
-        val intentFullname = intent.getStringExtra("fullname")
-        val intentPhone = intent.getStringExtra("phone")
-        val intentAddress = intent.getStringExtra("address")
-        if (intentFullname != null && intentPhone != null && intentAddress != null) {
-            fullname = intentFullname
-            phone = intentPhone
-            address = intentAddress
-        } else {
-            val user = Paper.book().read<User>("user")
-            fullname = if (user != null) {
-                user.firstName + " " + user.lastName
-            } else {
-                Utils.user_current?.firstName.toString() + " " + Utils.user_current?.lastName.toString()
-            }
-        }
-        binding.txtName.text = fullname
+        binding.txtName.text = fullName
         binding.txtPhone.text = phone
         binding.txtAddress.text = address
-
+        Toast.makeText(this, fullName,Toast.LENGTH_SHORT).show()
         if (isZalopay) {
             binding.imvPhuongthuc.setImageResource(R.drawable.ic_zalopay)
             binding.txtPhuongthuc.text = "Thanh toán bằng ZaloPay"
@@ -151,23 +147,22 @@ class ThanhToanActivity : AppCompatActivity() {
             binding.imvPhuongthuc.setImageResource(R.drawable.ic_salary)
             binding.txtPhuongthuc.text = "Thanh toán khi nhận hàng"
         }
-
-        firestore = FirebaseFirestore.getInstance()
     }
 
     private fun onCLickDiaChi() {
         binding.constraintLayout10.setOnClickListener {
             val intent = Intent(this, DiaChiActivity::class.java)
-            startActivity(intent)
-            finish()
+            startActivityForResult(intent, REQUEST_CODE_ADDRESS)
         }
     }
+
+
+
 
     private fun onClickVoucher() {
         binding.voucher.setOnClickListener {
             val intent = Intent(this, VoucherActivity::class.java)
             startActivity(intent)
-            finish()
         }
     }
 
@@ -224,21 +219,23 @@ class ThanhToanActivity : AppCompatActivity() {
     }
 
     private fun onClickDatHang() {
-        val fullName = binding.txtName.text.toString()
-        val phone = binding.txtPhone.text.toString()
+        /*val fullName = binding.txtName.text.toString()
+        val phone = binding.txtPhone.text.toString()*/
         val totalMoney = tongtien.toFloat()
         val status = "pending"
 
         val orderDetails: MutableList<Order> = mutableListOf()
         for (item in Utils.mangmuahang) {
-            orderDetails.add(Order(
-                item.idsanphamgiohang,
-                item.giasanphamgiohang.toDouble(),
-                item.soluongsanphamgiohang,
-                item.giasanphamgiohang.toDouble() * item.soluongsanphamgiohang
-            ))
+            orderDetails.add(
+                Order(
+                    item.idsanphamgiohang,
+                    item.giasanphamgiohang.toDouble(),
+                    item.soluongsanphamgiohang,
+                    item.giasanphamgiohang.toDouble() * item.soluongsanphamgiohang
+                )
+            )
         }
-        Log.d("items",orderDetails.toString())
+        Log.d("items", orderDetails.toString())
 
         val paymentMethod = if (isTienMat) {
             "cash"
@@ -255,9 +252,15 @@ class ThanhToanActivity : AppCompatActivity() {
             return
         }
 
+        Toast.makeText(this,email,Toast.LENGTH_SHORT).show()
+
         binding.btnDathang.setOnClickListener {
+            Toast.makeText(this, fullName, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, phone, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, address, Toast.LENGTH_SHORT).show()
             val note = binding.noteET.text.trim().toString()
             val address = binding.txtAddress.text.toString()
+            Toast.makeText(this,address,Toast.LENGTH_SHORT).show()
 
             if (address.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập địa chỉ", Toast.LENGTH_SHORT).show()
@@ -265,7 +268,16 @@ class ThanhToanActivity : AppCompatActivity() {
             }
 
             val orderRequest = OrderRequest(
-                userId, fullName, email, phone, address, note, status, totalMoney, paymentMethod, orderDetails
+                userId,
+                fullName,
+                email,
+                phone,
+                address,
+                note,
+                status,
+                totalMoney,
+                paymentMethod,
+                orderDetails
             )
 
             val serviceOrder = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
@@ -283,23 +295,44 @@ class ThanhToanActivity : AppCompatActivity() {
                             requestZalo()
                         } else {
                             Toast.makeText(this@ThanhToanActivity, "Đặt hàng thành công", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this@ThanhToanActivity, MainActivity::class.java)
+                            /*val intent = Intent(this@ThanhToanActivity, MainActivity::class.java)
                             startActivity(intent)
-                            finish()
+                            finish()*/
+                            showCustomProgressBar()
                         }
                     } else {
-                        Toast.makeText(this@ThanhToanActivity, "Đặt hàng thất bại", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@ThanhToanActivity,
+                            "Đặt hàng thất bại",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         Log.d("response error", response.errorBody()?.string().orEmpty())
                     }
                 }
 
                 override fun onFailure(call: Call<OrderModel>, t: Throwable) {
-                    Toast.makeText(this@ThanhToanActivity, "Không thành công", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ThanhToanActivity, "Không thành công", Toast.LENGTH_SHORT)
+                        .show()
                     Log.d("error", t.message.toString())
                     t.printStackTrace()
                 }
             })
         }
+    }
+
+    private fun showCustomProgressBar() {
+        customProgressDialog = Dialog(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.layout_progressbar, null)
+        customProgressDialog.setContentView(view)
+        customProgressDialog.setCancelable(false)
+        customProgressDialog.show()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            customProgressDialog.dismiss()
+            val intent = Intent(this@ThanhToanActivity, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }, 3000)
     }
 
 
@@ -457,6 +490,20 @@ class ThanhToanActivity : AppCompatActivity() {
     )
     override fun onBackPressed() {
         super.onBackPressed()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initViews()
+    }
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_ADDRESS && resultCode == Activity.RESULT_OK) {
+            address = data?.getStringExtra("address").toString()
+            fullName = data?.getStringExtra("fullname").toString()
+            phone = data?.getStringExtra("phone").toString()
+        }
     }
 
 }

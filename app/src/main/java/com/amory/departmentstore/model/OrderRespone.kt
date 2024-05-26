@@ -1,6 +1,7 @@
 package com.amory.departmentstore.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class OrderRespone(
     @SerializedName("id") val id: Int?,
@@ -13,5 +14,7 @@ data class OrderRespone(
     @SerializedName("status") val status: String,
     @SerializedName("total_money") val totalMoney: Float,
     @SerializedName("payment_method") val paymentMethod: String,
+    @SerializedName("created_at") val createdAt: String,
+    @SerializedName("updated_at") val updatedAt: String,
     @SerializedName("cart_items") val cartItems: List<Order>
-)
+): Serializable

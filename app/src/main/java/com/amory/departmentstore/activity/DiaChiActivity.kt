@@ -1,21 +1,39 @@
 package com.amory.departmentstore.activity
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import com.amory.departmentstore.R
 import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityDiaChiBinding
 import com.amory.departmentstore.model.Commune
 import com.amory.departmentstore.model.District
+import com.amory.departmentstore.model.OrderRespone
 import com.amory.departmentstore.model.Province
+import com.amory.departmentstore.model.SanPham
+import com.amory.departmentstore.model.UpdateDiaChiOrder
+import com.amory.departmentstore.model.UpdateOrderModel
 import com.amory.departmentstore.model.User
+import com.amory.departmentstore.retrofit.APIBanHang.APICallDonHang
+import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.amory.departmentstore.retrofit.APIDiaChi.APIDiaChi
 import com.amory.departmentstore.retrofit.APIDiaChi.RetrofitDiaChi
+import com.google.android.play.integrity.internal.b
+import com.google.android.play.integrity.internal.o
 import io.paperdb.Paper
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,22 +41,71 @@ import java.util.ArrayList
 
 class DiaChiActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDiaChiBinding
+    private lateinit var customProgressDialog: Dialog
     private var name_province = ""
     private var name_district = ""
     private var name_communce = ""
     private var full_name = ""
-    private var phone = ""
+    var capnhat = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDiaChiBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initViews()
+
+        capnhat = intent.getBooleanExtra("order_info", false)
+        if (capnhat){
+            showCustomProgressBar()
+            val order_fullName = intent.getStringExtra("order_fullname")
+            val order_phone = intent.getStringExtra("order_phone")
+            val order_address = intent.getStringExtra("order_address")
+            binding.nameET.setText(order_fullName)
+            binding.mobileET.setText(order_phone)
+            val part = order_address?.split(",")
+            binding.diachiET.setText(part?.get(0))
+        }else{
+            showCustomProgressBar()
+            initViews()
+        }
+        ShowSpinerTinh()
         onClickXacNhan()
+        onclickBack()
+    }
+    private fun SuaDiaChi(order_id: Int) {
+        val sonha = binding.diachiET.text?.trim().toString()
+        val diaChi = "$sonha, $name_communce, $name_district, $name_province"
+        val phone = binding.mobileET.text?.trim().toString()
+        val fullName = binding.nameET.text?.trim().toString()
+
+        val service = RetrofitClient.retrofitInstance.create(APICallDonHang::class.java)
+        val call = service.suaDiaChi(order_id, diaChi, fullName, phone)
+        call.enqueue(object : Callback<UpdateOrderModel> {
+            override fun onResponse(call: Call<UpdateOrderModel>, response: Response<UpdateOrderModel>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@DiaChiActivity, "Cập nhật thành công", Toast.LENGTH_SHORT).show()
+                    Log.d("SuaDiaChi", "Response: ${response.body()}")
+                } else {
+                    Toast.makeText(this@DiaChiActivity, "Cập nhật không thành công", Toast.LENGTH_SHORT).show()
+                    Log.e("SuaDiaChi", "Error response: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateOrderModel>, t: Throwable) {
+                t.printStackTrace()
+                Log.d("SuaDiaChi", "Error: ${t.message}")
+            }
+        })
     }
 
 
+    private fun onclickBack() {
+        binding.imvBack.setOnClickListener {
+            onBackPressed()
+        }
+    }
+
 
     private fun initViews() {
+        binding.constraintLayoutDiaChi.visibility = View.INVISIBLE
         val user = Paper.book().read<User>("user")
         if (user == null) {
             full_name = Utils.user_current?.firstName + " " + Utils.user_current?.lastName
@@ -47,23 +114,41 @@ class DiaChiActivity : AppCompatActivity() {
             full_name = user.firstName + " " + user.lastName
             binding.nameET.setText(full_name)
         }
-        ShowSpinerTinh()
+
     }
     private fun onClickXacNhan() {
         binding.btnXacnhan.setOnClickListener {
-            val sonha = binding.diachiET.text?.trim().toString()
-            val address = "$sonha, $name_communce, $name_district, $name_province"
-            val phone = binding.mobileET.text?.trim().toString()
-            val full_name = binding.nameET.text?.trim().toString()
-            /*Toast.makeText(applicationContext, address,Toast.LENGTH_SHORT).show()*/
-            val intent = Intent(this,ThanhToanActivity::class.java)
-            intent.putExtra("address",address)
-            intent.putExtra("fullname",full_name)
-            intent.putExtra("phone",phone)
-            startActivity(intent)
-            finish()
-
+            if (capnhat){
+                val order_id = intent.getIntExtra("order_id",0)
+                SuaDiaChi(order_id)
+            }else{
+                val sonha = binding.diachiET.text?.trim().toString()
+                val address = "$sonha, $name_communce, $name_district, $name_province"
+                val phone = binding.mobileET.text?.trim().toString()
+                val fullName = binding.nameET.text?.trim().toString()
+                val intent = Intent(applicationContext, ThanhToanActivity::class.java)
+                intent.putExtra("address", address)
+                intent.putExtra("fullname", fullName)
+                intent.putExtra("phone", phone)
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
         }
+    }
+
+
+    @SuppressLint("InflateParams")
+    private fun showCustomProgressBar() {
+        customProgressDialog = Dialog(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.layout_progressbar, null)
+        customProgressDialog.setContentView(view)
+        customProgressDialog.setCancelable(false)
+        customProgressDialog.show()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            customProgressDialog.dismiss()
+            binding.constraintLayoutDiaChi.visibility = View.VISIBLE
+        }, 3000)
     }
     private fun ShowSpinerTinh() {
         val service = RetrofitDiaChi.retrofitInstance.create(APIDiaChi::class.java)

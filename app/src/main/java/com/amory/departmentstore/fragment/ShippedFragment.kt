@@ -1,5 +1,6 @@
 package com.amory.departmentstore.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.Interface.OnClickHuyDonHang
+import com.amory.departmentstore.activity.ThongTinDonHangActivity
 import com.amory.departmentstore.adapter.RvChiTietDonHang
 import com.amory.departmentstore.databinding.FragmentShippedBinding
 import com.amory.departmentstore.model.OrderModel

@@ -96,4 +96,6 @@ dependencies {
     //ViewPager 2
     implementation ("androidx.viewpager2:viewpager2:1.1.0")
     implementation ("com.fasterxml.jackson.core:jackson-databind:2.13.3")
+    //SpinKit(Custom progressBar)
+    implementation ("com.github.ybq:Android-SpinKit:1.4.0")
 }

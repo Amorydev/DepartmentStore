@@ -53,7 +53,7 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
             binding.edtTensanpham.setText(sanPham.name)
             binding.edtmotasanpham.setText(sanPham.description)
             binding.edtGiasanpham.setText(sanPham.price.toString())
-            sanPham.categoryId?.let { category ->
+            sanPham.categoryId.let { category ->
                 binding.spinner.setSelection(category.id)
             }
             Glide.with(this).load(sanPham.imageUrl).into(binding.imvHinhanh)
