@@ -23,9 +23,8 @@ class RvSanPham(private var ds: MutableList<SanPham>, private val onClickRvSanPh
     inner class SanPhamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val tensanpham: TextView = itemView.findViewById(R.id.txt_tensanpham)
         val giasanpham: TextView = itemView.findViewById(R.id.txtgiasanpham)
+        val soluong: TextView = itemView.findViewById(R.id.txt_soluongdaban)
         val hinhanhsanpham: ImageView = itemView.findViewById(R.id.img_sanpham)
-
-
     }
     inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     //chuyen sang dinh dang 000.000d
@@ -43,7 +42,7 @@ class RvSanPham(private var ds: MutableList<SanPham>, private val onClickRvSanPh
     fun addLoadingView() {
         //Thêm loading
         Handler().post {
-            ds.add(SanPham(0, "", 1000.0f,"","","","", LoaiSanPham(0,"","")))
+            ds.add(SanPham(0, "", 1000.0f,"","","","",0, LoaiSanPham(0,"","")))
             notifyItemInserted(ds.size - 1)
         }
     }
@@ -77,6 +76,7 @@ class RvSanPham(private var ds: MutableList<SanPham>, private val onClickRvSanPh
         return if (ds[position].name.isEmpty()) Constant.VIEW_TYPE_LOADING else Constant.VIEW_TYPE_ITEM
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder.itemViewType == Constant.VIEW_TYPE_ITEM) {
             val sanPhamViewHolder = holder as SanPhamViewHolder
@@ -84,6 +84,7 @@ class RvSanPham(private var ds: MutableList<SanPham>, private val onClickRvSanPh
             sanPhamViewHolder.giasanpham.text = formatAmount(ds[position].price)
             Glide.with(mcontext).load(ds[position].imageUrl).centerCrop()
                 .into(sanPhamViewHolder.hinhanhsanpham)
+            sanPhamViewHolder.soluong.text = "Đã bán ${ds[position].soldQuantity.toString()}"
         }
         holder.itemView.setOnClickListener {
             onClickRvSanPham.onClickSanPham(position)

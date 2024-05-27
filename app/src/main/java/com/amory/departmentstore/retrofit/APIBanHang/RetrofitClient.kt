@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
     private var BASE_URL = Utils.BASE_URL
@@ -16,6 +17,9 @@ object RetrofitClient {
 
     private val okBuilder: OkHttpClient.Builder by lazy {
         OkHttpClient.Builder().addInterceptor(authInterceptor)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
     }
 
     private val gson: Gson by lazy {

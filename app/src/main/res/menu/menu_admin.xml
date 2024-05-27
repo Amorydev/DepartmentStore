@@ -8,6 +8,8 @@
         android:title="Quản lý các đơn hàng" />
     <item android:id="@+id/khuyenmai"
         android:title="Quản lý khuyến mãi"/>
+    <item android:id="@+id/thongke"
+        android:title="Quản lý doanh số" />
     <item android:id="@+id/dangxuat"
         android:title="Đăng xuất" />
 </menu>

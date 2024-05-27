@@ -11,6 +11,7 @@ import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import com.amory.departmentstore.Utils.Utils
+import com.amory.departmentstore.activity.resetPasswordActivities.VerifyEmailActivity
 import com.amory.departmentstore.databinding.ActivityDangNhapBinding
 import com.amory.departmentstore.model.LoginModel
 import com.amory.departmentstore.model.User
@@ -37,6 +38,7 @@ class DangNhapActivity : AppCompatActivity() {
         init()
         onCLickDangKi()
         onClickDangNhap()
+        onClickQuenMatKhau()
     }
 
     private fun onCLickDangKi() {
@@ -110,6 +112,7 @@ class DangNhapActivity : AppCompatActivity() {
                     editor.putString("token", response.body()?.access_token)
                     editor.putString("refreshToken", response.body()?.refresh_token)
                     editor.apply()
+
                     val callUser = service.getUser()
                     callUser.enqueue(object : Callback<User> {
                         override fun onResponse(
@@ -194,6 +197,13 @@ class DangNhapActivity : AppCompatActivity() {
             .addOnFailureListener {
                 Log.d("Error token", it.message.toString())
             }
+    }
+    private fun onClickQuenMatKhau() {
+        binding.txtQuenmatkhau.setOnClickListener {
+            val intent = Intent(this,VerifyEmailActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {

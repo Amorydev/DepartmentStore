@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.NumberFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class ThongTinDonHangActivity : AppCompatActivity() {
@@ -122,8 +125,15 @@ class ThongTinDonHangActivity : AppCompatActivity() {
             }
             binding.txtTongtien.text = formatAmount(it.totalMoney)
 
-           /* binding.txtTime.text = it.updatedAt*/
+            binding.txtTime.text = formatDateTime(it.updatedAt)
+            Log.d("time",formatDateTime(it.updatedAt))
         }
+    }
+    private fun formatDateTime(input: String): String {
+        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+        val outputFormatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy")
+        val dateTime = LocalDateTime.parse(input, inputFormatter)
+        return dateTime.format(outputFormatter)
     }
     private fun formatAmount(amount: Float): String {
         val number = amount.toLong()

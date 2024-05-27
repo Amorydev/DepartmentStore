@@ -8,6 +8,7 @@ import android.os.Handler
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.R
@@ -24,6 +25,7 @@ import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.amory.departmentstore.Interface.OnClickSanPhamTheoLoai
 import com.amory.departmentstore.Interface.OnLoadMoreListener
+import com.amory.departmentstore.model.User
 import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -65,24 +67,75 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
 
 
     private fun onCLickNav() {
+        val userCurrent = Paper.book().read<User>("user")
+        val menu = binding.navView.menu
+        if (userCurrent == null || Utils.user_current == null){
+            menu.findItem(R.id.logout).isVisible = false
+            menu.findItem(R.id.changePassword).isVisible = false
+        }
         binding.navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.cart -> {
-                    val intent = Intent(this, GioHangActivity::class.java)
-                    startActivity(intent)
+                    val user = Paper.book().read<User>("user")
+                    if (user != null || Utils.user_current != null) {
+                        val intent = Intent(this, GioHangActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        val intent = Intent(this, DangNhapActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                     true
                 }
 
                 R.id.details_order -> {
-                    val intent = Intent(this, ChiTietDonHangActivity::class.java)
-                    startActivity(intent)
+                    val user = Paper.book().read<User>("user")
+                    if (user != null || Utils.user_current != null) {
+                        val intent = Intent(this, ChiTietDonHangActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        val intent = Intent(this, DangNhapActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                     true
                 }
 
                 R.id.logout -> {
-                    Paper.book().delete("user")
-                    FirebaseAuth.getInstance().signOut()
-                    val intent = Intent(this, DangNhapActivity::class.java)
+                    val alertDialog = AlertDialog.Builder(this)
+                    alertDialog.setTitle("Đăng xuất")
+                    alertDialog.setMessage("Bạn chắc chắn muốn đăng xuất")
+                    alertDialog.setNegativeButton("Không") { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    alertDialog.setPositiveButton("Có") { dialog, which ->
+                        Paper.book().delete("user")
+                        FirebaseAuth.getInstance().signOut()
+                        val intent = Intent(this, DangNhapActivity::class.java)
+                        startActivity(intent)
+                    }
+                    alertDialog.show()
+                    true
+                }
+
+                R.id.contact -> {
+                    val intent = Intent(this, LienHeActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+
+                R.id.product -> {
+                    binding.layoutDrawer.closeDrawer(binding.navView)
+                    true
+                }
+
+                R.id.discount -> {
+                    val intent = Intent(this, KhuyenMaiActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.changePassword ->{
+                    val intent = Intent(this, ChangePasswordActivity::class.java)
                     startActivity(intent)
                     true
                 }
@@ -258,7 +311,6 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                 !current.contains(it)
             }
             val newList = remainingItems.take(12)
-            laySanPhamGao()
             current.addAll(newList)
             adapter.addData(newList)
             scrollListener.setLoaded()

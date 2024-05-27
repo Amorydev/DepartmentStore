@@ -38,7 +38,7 @@ class RvSanPhamCacLoai(private var ds:MutableList<SanPham>, private val onClickS
     }
     fun addLoadingView(){
         android.os.Handler().post {
-            ds.add(SanPham(0,"",100f,"","","","", LoaiSanPham(0,"","")))
+            ds.add(SanPham(0,"",100f,"","","","",0, LoaiSanPham(0,"","")))
             notifyItemInserted(ds.size-1)
         }
     }

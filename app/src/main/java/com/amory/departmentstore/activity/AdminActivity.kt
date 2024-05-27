@@ -58,6 +58,12 @@ class AdminActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+                R.id.thongke ->{
+
+                    val intent = Intent(this, DoanhSoActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> {
                     true
                 }

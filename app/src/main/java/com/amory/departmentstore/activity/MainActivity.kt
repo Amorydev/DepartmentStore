@@ -2,7 +2,9 @@ package com.amory.departmentstore.activity
 
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -59,12 +61,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private var isLoadMore = false
     private lateinit var listBanners: MutableList<Banner>
+    /*private lateinit var sharedPreferences: SharedPreferences*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         Paper.init(this)
 
@@ -76,6 +78,12 @@ class MainActivity : AppCompatActivity() {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
             listBanners = mutableListOf()
             RetrofitClient.init(this)
+            /*sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.remove("token")
+
+            editor.apply()
+            Toast.makeText(this@MainActivity,token.toString(),Toast.LENGTH_SHORT).show()*/
             /* Toast.makeText(this@MainActivity,Utils.user_current.toString(),Toast.LENGTH_SHORT).show()*/
             paddingRv()
             laySanPham()
@@ -164,6 +172,12 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun onCLickNav() {
+        val userCurrent = Paper.book().read<User>("user")
+        val menu = binding.navView.menu
+        if (userCurrent == null || Utils.user_current == null){
+            menu.findItem(R.id.logout).isVisible = false
+            menu.findItem(R.id.changePassword).isVisible = false
+        }
         binding.navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.cart -> {
@@ -196,21 +210,14 @@ class MainActivity : AppCompatActivity() {
                     val alertDialog = AlertDialog.Builder(this)
                     alertDialog.setTitle("Đăng xuất")
                     alertDialog.setMessage("Bạn chắc chắn muốn đăng xuất")
-                    alertDialog.setNegativeButton("Không"){
-                            dialog, which ->
+                    alertDialog.setNegativeButton("Không") { dialog, which ->
                         dialog.dismiss()
                     }
-                    alertDialog.setPositiveButton("Có"){
-                            dialog, which ->
-                        val user = Paper.book().read<User>("user")
-                        if (user != null || Utils.user_current != null) {
-                            Paper.book().delete("user")
-                            FirebaseAuth.getInstance().signOut()
-                            val intent = Intent(this, DangNhapActivity::class.java)
-                            startActivity(intent)
-                        } else {
-                            menuItem.isVisible = false
-                        }
+                    alertDialog.setPositiveButton("Có") { dialog, which ->
+                        Paper.book().delete("user")
+                        FirebaseAuth.getInstance().signOut()
+                        val intent = Intent(this, DangNhapActivity::class.java)
+                        startActivity(intent)
                     }
                     alertDialog.show()
                     true
@@ -229,6 +236,11 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.discount -> {
                     val intent = Intent(this, KhuyenMaiActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.changePassword ->{
+                    val intent = Intent(this, ChangePasswordActivity::class.java)
                     startActivity(intent)
                     true
                 }
@@ -555,6 +567,11 @@ class MainActivity : AppCompatActivity() {
         } else {
             binding.badgeCart.setNumber(0)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        RetrofitClient.init(this)
     }
 
 }

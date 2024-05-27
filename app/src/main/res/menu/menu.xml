@@ -21,6 +21,10 @@
         android:icon="@drawable/ic_phone"
         android:title="Liên hệ" />
     <item
+        android:id="@+id/changePassword"
+        android:icon="@drawable/ic_padlock"
+        android:title="Đổi mật khẩu" />
+    <item
         android:id="@+id/logout"
         android:icon="@drawable/ic_logout"
         android:title="Đăng xuất" />

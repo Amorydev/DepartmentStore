@@ -252,15 +252,14 @@ class ThanhToanActivity : AppCompatActivity() {
             return
         }
 
-        Toast.makeText(this,email,Toast.LENGTH_SHORT).show()
 
         binding.btnDathang.setOnClickListener {
-            Toast.makeText(this, fullName, Toast.LENGTH_SHORT).show()
+           /* Toast.makeText(this, fullName, Toast.LENGTH_SHORT).show()
             Toast.makeText(this, phone, Toast.LENGTH_SHORT).show()
-            Toast.makeText(this, address, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, address, Toast.LENGTH_SHORT).show()*/
             val note = binding.noteET.text.trim().toString()
             val address = binding.txtAddress.text.toString()
-            Toast.makeText(this,address,Toast.LENGTH_SHORT).show()
+            /*Toast.makeText(this,address,Toast.LENGTH_SHORT).show()*/
 
             if (address.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập địa chỉ", Toast.LENGTH_SHORT).show()

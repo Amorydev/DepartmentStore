@@ -23,6 +23,21 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.DoanhSoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.resetPasswordActivities.UpdatePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.resetPasswordActivities.VerifyOTPActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.resetPasswordActivities.VerifyEmailActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ThongTinDonHangActivity"
             android:exported="false" />
         <activity
