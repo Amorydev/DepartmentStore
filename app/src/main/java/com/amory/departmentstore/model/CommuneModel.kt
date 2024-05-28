@@ -1,8 +1,7 @@
 package com.amory.departmentstore.model
 
-
-data class UserModel(
+data class CommuneModel(
     val status:String,
     val message:String,
-    val data:MutableList<UserResponse>
+    val results:MutableList<Commune>
 )

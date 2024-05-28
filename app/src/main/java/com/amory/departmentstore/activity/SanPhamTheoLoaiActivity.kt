@@ -28,6 +28,7 @@ import com.amory.departmentstore.Interface.OnLoadMoreListener
 import com.amory.departmentstore.model.User
 import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
 import com.google.android.material.navigation.NavigationView
+import com.google.android.play.integrity.internal.ad
 import com.google.firebase.auth.FirebaseAuth
 import io.paperdb.Paper
 import retrofit2.Call
@@ -217,7 +218,6 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                         if (list.isNotEmpty()) {
 
                             adapter = RvSanPhamCacLoai(
-                                list.toMutableList(),
                                 object : OnClickSanPhamTheoLoai {
                                     override fun onClickSanPhamTheoLoai(position: Int) {
                                         /* Toast.makeText(this@GaoActivity,list[position].name,Toast.LENGTH_SHORT).show()*/
@@ -234,6 +234,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
 
                                     }
                                 })
+                            adapter.updateList(list.toMutableList())
                            Handler().postDelayed({
                                binding.rvsanphamtheoloaiGao.adapter = adapter
                                adapter.notifyDataSetChanged()

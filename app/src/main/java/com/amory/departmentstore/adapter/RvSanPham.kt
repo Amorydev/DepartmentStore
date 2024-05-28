@@ -13,13 +13,16 @@ import android.os.Handler
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.Interface.OnClickRvSanPham
 import com.amory.departmentstore.model.LoaiSanPham
 
-class RvSanPham(private var ds: MutableList<SanPham>, private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class RvSanPham(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private lateinit var mcontext: Context
+    private var ds: MutableList<SanPham> = mutableListOf()
+
     inner class SanPhamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val tensanpham: TextView = itemView.findViewById(R.id.txt_tensanpham)
         val giasanpham: TextView = itemView.findViewById(R.id.txtgiasanpham)
@@ -53,6 +56,13 @@ class RvSanPham(private var ds: MutableList<SanPham>, private val onClickRvSanPh
             ds.removeAt(ds.size - 1)
             notifyItemRemoved(ds.size-1)
         }
+    }
+    fun updateList(newList: List<SanPham>) {
+        val diffCallback = RvSanPhamDiffCallback(ds, newList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        ds.clear()
+        ds.addAll(newList)
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

@@ -7,6 +7,7 @@ import com.amory.departmentstore.model.RegisterModel
 import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.model.RefreshToken
 import com.amory.departmentstore.model.SanPhamModel
+import com.amory.departmentstore.model.UpdateOrderModel
 import com.amory.departmentstore.model.UpdatePasswordModel
 import com.amory.departmentstore.model.User
 import okhttp3.RequestBody
@@ -16,6 +17,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -73,4 +75,10 @@ interface APICallUser {
         @Part ("password") password:RequestBody,
         @Part ("newPassword") newPassword:RequestBody
     ):Call<UpdatePasswordModel>
+    @GET("users/get-all-user")
+    fun getAllUser():Call<UserModel>
+    @PATCH("users/disable/{id}")
+    fun blockUser(
+        @Path("id") id:Int
+    ):Call<UpdateOrderModel>
 }

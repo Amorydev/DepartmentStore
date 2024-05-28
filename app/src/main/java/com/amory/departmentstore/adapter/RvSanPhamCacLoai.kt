@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
@@ -17,8 +18,10 @@ import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import java.util.Locale
 
-class RvSanPhamCacLoai(private var ds:MutableList<SanPham>, private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoai): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RvSanPhamCacLoai(private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoai): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var mcontext:Context
+    private var ds: MutableList<SanPham> = mutableListOf()
+
     inner class viewHolder(itemView : View):RecyclerView.ViewHolder(itemView) {
         val txtTenSanPhamCacLoai = itemView.findViewById<TextView>(R.id.txt_tensanpham)!!
         val txtGiaSanPhamCacLoai = itemView.findViewById<TextView>(R.id.txtgiasanpham)!!
@@ -47,6 +50,13 @@ class RvSanPhamCacLoai(private var ds:MutableList<SanPham>, private val onClickS
             ds.removeAt(ds.size-1)
             notifyItemRemoved(ds.size-1)
         }
+    }
+    fun updateList(newList: List<SanPham>) {
+        val diffCallback = RvSanPhamTheoLoaiDiffCallBack(ds, newList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        ds.clear()
+        ds.addAll(newList)
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

@@ -64,6 +64,12 @@ class AdminActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+                R.id.quanlyuser ->{
+
+                    val intent = Intent(this, QuanLyUserActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> {
                     true
                 }

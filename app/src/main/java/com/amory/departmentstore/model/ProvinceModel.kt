@@ -1,8 +1,7 @@
 package com.amory.departmentstore.model
 
-
-data class UserModel(
+class ProvinceModel(
     val status:String,
     val message:String,
-    val data:MutableList<UserResponse>
+    val results:MutableList<Province>
 )

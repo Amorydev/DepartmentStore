@@ -397,8 +397,7 @@ class MainActivity : AppCompatActivity() {
 
                         if (list.isNotEmpty()) {
 
-                            adapter =
-                                RvSanPham(list as MutableList<SanPham>, object : OnClickRvSanPham {
+                            adapter = RvSanPham( object : OnClickRvSanPham {
                                     override fun onClickSanPham(position: Int) {
                                         /*Toast.makeText(
                                             applicationContext,
@@ -419,6 +418,7 @@ class MainActivity : AppCompatActivity() {
 
                                     }
                                 })
+                            adapter.updateList(list as MutableList<SanPham>)
                             Handler().postDelayed({
                                 binding.shimmerframe.visibility = View.GONE
                                 binding.shimmerframe.stopShimmer()

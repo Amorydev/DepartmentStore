@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.resetPasswordActivities.VerifyOTPActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="44dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="10sp"
+            android:background="@drawable/back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginTop="10sp"
+            android:text="Nhập mã xác minh"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/btn_back"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Mã xác thực đã được gửi đến Email"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
+
+    <TextView
+        android:id="@+id/textView28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="amory.dev@gmail.com"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView25" />
+
+    <EditText
+        android:id="@+id/otpEditText1"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/edit_text_bg"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:hint="0"
+        android:inputType="number"
+        android:maxLength="1"
+        app:layout_constraintEnd_toStartOf="@+id/otpEditText2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView28" />
+
+    <EditText
+        android:id="@+id/otpEditText2"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/edit_text_bg"
+        android:gravity="center"
+        android:hint="0"
+        android:inputType="number"
+        android:maxLength="1"
+        app:layout_constraintBottom_toBottomOf="@+id/otpEditText1"
+        app:layout_constraintEnd_toStartOf="@+id/otpEditText3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/otpEditText1"
+        app:layout_constraintTop_toTopOf="@+id/otpEditText1" />
+
+    <EditText
+        android:id="@+id/otpEditText3"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/edit_text_bg"
+        android:gravity="center"
+        android:hint="0"
+        android:inputType="number"
+        android:maxLength="1"
+        app:layout_constraintBottom_toBottomOf="@+id/otpEditText2"
+        app:layout_constraintEnd_toStartOf="@+id/otpEditText4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/otpEditText2"
+        app:layout_constraintTop_toTopOf="@+id/otpEditText2" />
+
+    <EditText
+        android:id="@+id/otpEditText4"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/edit_text_bg"
+        android:gravity="center"
+        android:hint="0"
+        android:inputType="number"
+        android:maxLength="1"
+        app:layout_constraintBottom_toBottomOf="@+id/otpEditText3"
+        app:layout_constraintEnd_toStartOf="@+id/otpEditText5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/otpEditText3"
+        app:layout_constraintTop_toTopOf="@+id/otpEditText3" />
+
+    <EditText
+        android:id="@+id/otpEditText5"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/edit_text_bg"
+        android:gravity="center"
+        android:hint="0"
+        android:inputType="number"
+        android:maxLength="1"
+        app:layout_constraintBottom_toBottomOf="@+id/otpEditText4"
+        app:layout_constraintEnd_toStartOf="@+id/otpEditText6"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/otpEditText4"
+        app:layout_constraintTop_toTopOf="@+id/otpEditText4" />
+
+    <EditText
+        android:id="@+id/otpEditText6"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/edit_text_bg"
+        android:gravity="center"
+        android:hint="0"
+        android:inputType="number"
+        android:maxLength="1"
+        app:layout_constraintBottom_toBottomOf="@+id/otpEditText5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/otpEditText5"
+        app:layout_constraintTop_toTopOf="@+id/otpEditText5" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnNext"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:text="Tiếp theo"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/otpEditText1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Mã xác thực của bánj có hiệu lực trong vòng 60s"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnNext" />
+</androidx.constraintlayout.widget.ConstraintLayout>

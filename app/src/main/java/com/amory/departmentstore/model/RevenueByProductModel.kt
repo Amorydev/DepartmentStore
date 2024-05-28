@@ -1,8 +1,7 @@
 package com.amory.departmentstore.model
 
-
-data class UserModel(
+data class RevenueByProductModel(
     val status:String,
     val message:String,
-    val data:MutableList<UserResponse>
+    val data:MutableList<RevenueByProductResponse>
 )
