@@ -146,7 +146,7 @@ class DangKiActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<RegisterModel>, t: Throwable) {
                 binding.progressBar.visibility = View.GONE
-                Log.d("Error Register", t.message.toString())
+                /*Log.d("Error Register", t.message.toString())*/
                 Toast.makeText(this@DangKiActivity, "Đăng kí không thành công", Toast.LENGTH_SHORT)
                     .show()
             }

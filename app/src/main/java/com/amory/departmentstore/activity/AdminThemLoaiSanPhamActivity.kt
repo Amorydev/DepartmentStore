@@ -44,12 +44,12 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
             loaiSanPham = intent.getSerializableExtra("sua") as? LoaiSanPham
         }
         if (loaiSanPham != null) {
-            flags = false
+            flags = true
             binding.txt.text = "Sửa loại sản phẩm"
             binding.edtTensanpham.setText(loaiSanPham!!.name)
             Glide.with(this).load(loaiSanPham!!.imageUrl).into(binding.imvHinhanh)
         } else {
-            flags = true
+            flags = false
         }
     }
 
@@ -68,8 +68,8 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                 null
             }
 
-            if (flags) {
-                if (imagePart!=null) {
+            if (!flags) {
+                if (imagePart != null) {
                     val call = service.themLoaiSanPhamMoi(nameRequestBody, imagePart)
                     call.enqueue(object : Callback<LoaiSanPhamModel> {
                         override fun onResponse(
@@ -99,37 +99,42 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                             ).show()
                         }
                     })
-                }
-                if (imagePart?.equals("") != true){
-                    val call = service.themLoaiSanPhamMoi(nameRequestBody)
-                    call.enqueue(object : Callback<LoaiSanPhamModel> {
-                        override fun onResponse(
-                            call: Call<LoaiSanPhamModel>,
-                            response: Response<LoaiSanPhamModel>
-                        ) {
-                            Log.d("Response", response.toString())
-                            if (response.isSuccessful) {
-                                Toast.makeText(applicationContext, "Thành công", Toast.LENGTH_SHORT)
-                                    .show()
-                                val intent = Intent(
-                                    this@AdminThemLoaiSanPhamActivity,
-                                    AdminQLLoaiSanPhamActivity::class.java
-                                )
-                                startActivity(intent)
-                                finish()
+                }else {
+                    if (imagePart?.equals("") != true) {
+                        val call = service.themLoaiSanPhamMoi(nameRequestBody)
+                        call.enqueue(object : Callback<LoaiSanPhamModel> {
+                            override fun onResponse(
+                                call: Call<LoaiSanPhamModel>,
+                                response: Response<LoaiSanPhamModel>
+                            ) {
+                                Log.d("Response", response.toString())
+                                if (response.isSuccessful) {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Thành công",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                    val intent = Intent(
+                                        this@AdminThemLoaiSanPhamActivity,
+                                        AdminQLLoaiSanPhamActivity::class.java
+                                    )
+                                    startActivity(intent)
+                                    finish()
+                                }
                             }
-                        }
 
-                        override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
-                            t.printStackTrace()
-                            Log.d("loi", t.message.toString())
-                            Toast.makeText(
-                                applicationContext,
-                                "Không thành công",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    })
+                            override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
+                                t.printStackTrace()
+                                Log.d("loi", t.message.toString())
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Không thành công",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        })
+                    }
                 }
             } else {
 
@@ -163,36 +168,37 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                             Log.d("loisua", t.message.toString())
                         }
                     })
-                }
-                if (imagePart?.equals("") != true){
-                    val call = service.suaLoaiSanPham(id, nameRequestBody)
-                    call.enqueue(object : Callback<LoaiSanPhamModel> {
-                        override fun onResponse(
-                            call: Call<LoaiSanPhamModel>,
-                            response: Response<LoaiSanPhamModel>
-                        ) {
-                            Log.d("Response", response.toString())
-                            if (response.isSuccessful) {
-                                Toast.makeText(
-                                    this@AdminThemLoaiSanPhamActivity,
-                                    "Sửa thành công",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                val intent = Intent(
-                                    this@AdminThemLoaiSanPhamActivity,
-                                    AdminQLLoaiSanPhamActivity::class.java
-                                )
-                                startActivity(intent)
-                                finish()
-                                loaiSanPham = null
+                } else {
+                    if (imagePart?.equals("") != true) {
+                        val call = service.suaLoaiSanPham(id, nameRequestBody)
+                        call.enqueue(object : Callback<LoaiSanPhamModel> {
+                            override fun onResponse(
+                                call: Call<LoaiSanPhamModel>,
+                                response: Response<LoaiSanPhamModel>
+                            ) {
+                                Log.d("Response", response.toString())
+                                if (response.isSuccessful) {
+                                    Toast.makeText(
+                                        this@AdminThemLoaiSanPhamActivity,
+                                        "Sửa thành công",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    val intent = Intent(
+                                        this@AdminThemLoaiSanPhamActivity,
+                                        AdminQLLoaiSanPhamActivity::class.java
+                                    )
+                                    startActivity(intent)
+                                    finish()
+                                    loaiSanPham = null
+                                }
                             }
-                        }
 
-                        override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
-                            t.printStackTrace()
-                            Log.d("loisua", t.message.toString())
-                        }
-                    })
+                            override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
+                                t.printStackTrace()
+                                Log.d("loisua", t.message.toString())
+                            }
+                        })
+                    }
                 }
             }
         }
@@ -240,11 +246,4 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
         }
     }
 
-    @Deprecated(
-        "Deprecated in Java",
-        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
-    )
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
 }

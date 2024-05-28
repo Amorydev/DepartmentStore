@@ -52,7 +52,7 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
     private fun onClickThem() {
         binding.btnThem.setOnClickListener {
             val intent = Intent(this,AdminThemSanPhamActivity::class.java)
-            intent.putExtra("sua",listSanPham)
+            /*intent.putExtra("sua",listSanPham)*/
             startActivity(intent)
         }
     }

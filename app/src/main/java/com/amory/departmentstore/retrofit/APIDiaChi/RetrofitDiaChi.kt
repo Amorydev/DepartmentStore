@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitDiaChi {
     private lateinit var retrofit: Retrofit
-    private var BASE_URL = "https://vietnam-administrative-division-json-server-swart.vercel.app/"
+    private var BASE_URL = "https://api.mysupership.vn/v1/partner/areas/"
 
     val retrofitInstance: Retrofit
         get() {

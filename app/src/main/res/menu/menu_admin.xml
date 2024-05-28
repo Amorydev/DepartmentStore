@@ -10,6 +10,8 @@
         android:title="Quản lý khuyến mãi"/>
     <item android:id="@+id/thongke"
         android:title="Quản lý doanh số" />
+    <item android:id="@+id/quanlyuser"
+        android:title="Quản lý danh sách user" />
     <item android:id="@+id/dangxuat"
         android:title="Đăng xuất" />
 </menu>

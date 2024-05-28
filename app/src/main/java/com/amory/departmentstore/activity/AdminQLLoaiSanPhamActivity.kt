@@ -39,7 +39,7 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
     private fun onClickThem() {
         binding.btnThem.setOnClickListener {
             val intent = Intent(this, AdminThemLoaiSanPhamActivity::class.java)
-            intent.putExtra("sua", loaiSanPham)
+           /* intent.putExtra("sua", loaiSanPham)*/
             startActivity(intent)
         }
     }
@@ -193,16 +193,4 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
         EventBus.getDefault().unregister(this)
     }
 
-    @Deprecated(
-        "Deprecated in Java",
-        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
-    )
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        hienThiLoai()
-    }
 }

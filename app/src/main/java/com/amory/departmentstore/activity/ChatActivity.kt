@@ -54,7 +54,7 @@ class ChatActivity : AppCompatActivity() {
         }
         binding.rvChat.adapter = adapter
         sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
-        ID_NHAN = sharedPreferences.getInt("adminId",0).toString()
+        ID_NHAN = sharedPreferences.getInt("adminId",5).toString()
     }
 
     private fun onCLickBack() {
@@ -99,10 +99,10 @@ class ChatActivity : AppCompatActivity() {
             db.collection(Constant.PATH)
                 .add(message)
                 .addOnSuccessListener { documentReference ->
-                    Log.d(TAG, " ${documentReference.id}")
+                    /*Log.d(TAG, " ${documentReference.id}")*/
                 }
                 .addOnFailureListener { e ->
-                    Log.w(TAG, "Error", e)
+                    /*Log.w(TAG, "Error", e)*/
                 }
         }
         binding.txtChat.setText("")
@@ -112,7 +112,7 @@ class ChatActivity : AppCompatActivity() {
     private fun getChat() {
         val account = Paper.book().read<User>("user")
         val user_id: String = account?.id?.toString() ?: Utils.user_current?.id.toString()
-        Toast.makeText(applicationContext,user_id,Toast.LENGTH_SHORT).show()
+        /*Toast.makeText(applicationContext,user_id,Toast.LENGTH_SHORT).show()*/
         db.collection(Constant.PATH)
             .whereEqualTo(Constant.GUI_ID, user_id)
             .whereEqualTo(Constant.NHAN_ID, ID_NHAN)
@@ -150,7 +150,7 @@ class ChatActivity : AppCompatActivity() {
                 binding.rvChat.smoothScrollToPosition(list.size - 1)
             }
         } else {
-            Log.d("list", "data: null")
+           /* Log.d("list", "data: null")*/
         }
     }
 

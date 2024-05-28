@@ -1,7 +1,8 @@
 package com.amory.departmentstore.model
 
 data class Commune(
-    val idDistrict:String,
-    val idCommune:String,
-    val name:String
+    val code:String,
+    val name:String,
+    val district:String,
+    val province:String
 )

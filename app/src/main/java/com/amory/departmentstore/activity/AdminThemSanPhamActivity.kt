@@ -181,45 +181,53 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                         Log.d("add loi", t.message.toString())
                                     }
                                 })
-                            }
-                            if (imagePart?.equals("") != true) {
-                                val serviceProducts = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
-                                val call2 = serviceProducts.themsanphammoi(
-                                    nameRequestBody,
-                                    priceRequestBody,
-                                    descRequestBody,
-                                    categoryIdRequestBody
-                                )
-                                call2.enqueue(object : Callback<SanPhamModel> {
-                                    override fun onResponse(
-                                        call: Call<SanPhamModel>,
-                                        response: Response<SanPhamModel>
-                                    ) {
-                                        if (response.isSuccessful) {
-                                            Toast.makeText(
-                                                applicationContext,
-                                                "Thành công",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                            val intent = Intent(
-                                                this@AdminThemSanPhamActivity,
-                                                AdminQLSanPhamActivity::class.java
-                                            )
-                                            startActivity(intent)
-                                            finish()
+                            }else {
+                                if (imagePart?.equals("") != true) {
+                                    val serviceProducts =
+                                        RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
+                                    val call2 = serviceProducts.themsanphammoi(
+                                        nameRequestBody,
+                                        priceRequestBody,
+                                        descRequestBody,
+                                        categoryIdRequestBody
+                                    )
+                                    call2.enqueue(object : Callback<SanPhamModel> {
+                                        override fun onResponse(
+                                            call: Call<SanPhamModel>,
+                                            response: Response<SanPhamModel>
+                                        ) {
+                                            if (response.isSuccessful) {
+                                                Toast.makeText(
+                                                    applicationContext,
+                                                    "Thành công",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                                val intent = Intent(
+                                                    this@AdminThemSanPhamActivity,
+                                                    AdminQLSanPhamActivity::class.java
+                                                )
+                                                startActivity(intent)
+                                                finish()
+                                            }
                                         }
-                                    }
 
-                                    override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
-                                        t.printStackTrace()
-                                        Log.d("add loi", t.message.toString())
-                                    }
-                                })
+                                        override fun onFailure(
+                                            call: Call<SanPhamModel>,
+                                            t: Throwable
+                                        ) {
+                                            t.printStackTrace()
+                                            Log.d("add loi", t.message.toString())
+                                        }
+                                    })
+                                }
                             }
-                        }else{
-                            val nameRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), name)
-                            val priceRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), price)
-                            val descRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), description)
+                        }else {
+                            val nameRequestBody =
+                                RequestBody.create("text/plain".toMediaTypeOrNull(), name)
+                            val priceRequestBody =
+                                RequestBody.create("text/plain".toMediaTypeOrNull(), price)
+                            val descRequestBody =
+                                RequestBody.create("text/plain".toMediaTypeOrNull(), description)
                             val categoryIdRequestBody = RequestBody.create(
                                 "text/plain".toMediaTypeOrNull(),
                                 categoryId.toString()
@@ -238,9 +246,17 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                 null
                             }
 
-                            if (imagePart!=null) {
-                                val serviceProducts = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
-                                val call3 = serviceProducts.suasanpham(listSanPham?.id,nameRequestBody,priceRequestBody,imagePart,descRequestBody,categoryIdRequestBody)
+                            if (imagePart != null) {
+                                val serviceProducts =
+                                    RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
+                                val call3 = serviceProducts.suasanpham(
+                                    listSanPham?.id,
+                                    nameRequestBody,
+                                    priceRequestBody,
+                                    imagePart,
+                                    descRequestBody,
+                                    categoryIdRequestBody
+                                )
                                 call3.enqueue(object : Callback<SanPhamModel> {
                                     override fun onResponse(
                                         call: Call<SanPhamModel>,
@@ -252,7 +268,10 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                                 "thành công",
                                                 Toast.LENGTH_SHORT
                                             ).show()
-                                            val intent = Intent(this@AdminThemSanPhamActivity,AdminQLSanPhamActivity::class.java)
+                                            val intent = Intent(
+                                                this@AdminThemSanPhamActivity,
+                                                AdminQLSanPhamActivity::class.java
+                                            )
                                             startActivity(intent)
                                             finish()
                                         }
@@ -262,32 +281,46 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                         t.printStackTrace()
                                     }
                                 })
-                            }
-                            if (imagePart?.equals("") != true) {
-                                val serviceProducts = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
-                                val call3 = serviceProducts.suasanpham(listSanPham?.id,nameRequestBody,priceRequestBody,descRequestBody,categoryIdRequestBody)
-                                call3.enqueue(object : Callback<SanPhamModel> {
-                                    override fun onResponse(
-                                        call: Call<SanPhamModel>,
-                                        response: Response<SanPhamModel>
-                                    ) {
-                                        if (response.isSuccessful) {
-                                            Toast.makeText(
-                                                applicationContext,
-                                                "thành công",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                            val intent = Intent(this@AdminThemSanPhamActivity,AdminQLSanPhamActivity::class.java)
-                                            startActivity(intent)
-                                            finish()
+                            } else {
+                                if (imagePart?.equals("") != true) {
+                                    val serviceProducts =
+                                        RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
+                                    val call3 = serviceProducts.suasanpham(
+                                        listSanPham?.id,
+                                        nameRequestBody,
+                                        priceRequestBody,
+                                        descRequestBody,
+                                        categoryIdRequestBody
+                                    )
+                                    call3.enqueue(object : Callback<SanPhamModel> {
+                                        override fun onResponse(
+                                            call: Call<SanPhamModel>,
+                                            response: Response<SanPhamModel>
+                                        ) {
+                                            if (response.isSuccessful) {
+                                                Toast.makeText(
+                                                    applicationContext,
+                                                    "thành công",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                                val intent = Intent(
+                                                    this@AdminThemSanPhamActivity,
+                                                    AdminQLSanPhamActivity::class.java
+                                                )
+                                                startActivity(intent)
+                                                finish()
+                                            }
                                         }
-                                    }
 
-                                    override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
-                                        t.printStackTrace()
-                                        Log.d("Error Products",t.message.toString())
-                                    }
-                                })
+                                        override fun onFailure(
+                                            call: Call<SanPhamModel>,
+                                            t: Throwable
+                                        ) {
+                                            t.printStackTrace()
+                                            Log.d("Error Products", t.message.toString())
+                                        }
+                                    })
+                                }
                             }
                         }
                     }

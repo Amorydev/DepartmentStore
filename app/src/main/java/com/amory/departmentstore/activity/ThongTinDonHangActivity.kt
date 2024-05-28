@@ -127,6 +127,7 @@ class ThongTinDonHangActivity : AppCompatActivity() {
 
             binding.txtTime.text = formatDateTime(it.updatedAt)
             Log.d("time",formatDateTime(it.updatedAt))
+            binding.txtMadonhang.text = it.id.toString()
         }
     }
     private fun formatDateTime(input: String): String {

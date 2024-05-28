@@ -139,7 +139,7 @@ class ThanhToanActivity : AppCompatActivity() {
         binding.txtName.text = fullName
         binding.txtPhone.text = phone
         binding.txtAddress.text = address
-        Toast.makeText(this, fullName,Toast.LENGTH_SHORT).show()
+        /*Toast.makeText(this, fullName,Toast.LENGTH_SHORT).show()*/
         if (isZalopay) {
             binding.imvPhuongthuc.setImageResource(R.drawable.ic_zalopay)
             binding.txtPhuongthuc.text = "Thanh toán bằng ZaloPay"
@@ -235,7 +235,7 @@ class ThanhToanActivity : AppCompatActivity() {
                 )
             )
         }
-        Log.d("items", orderDetails.toString())
+        /*Log.d("items", orderDetails.toString())*/
 
         val paymentMethod = if (isTienMat) {
             "cash"
@@ -292,6 +292,7 @@ class ThanhToanActivity : AppCompatActivity() {
 
                         if (isZalopay) {
                             requestZalo()
+                            showCustomProgressBar()
                         } else {
                             Toast.makeText(this@ThanhToanActivity, "Đặt hàng thành công", Toast.LENGTH_SHORT).show()
                             /*val intent = Intent(this@ThanhToanActivity, MainActivity::class.java)
@@ -305,14 +306,14 @@ class ThanhToanActivity : AppCompatActivity() {
                             "Đặt hàng thất bại",
                             Toast.LENGTH_SHORT
                         ).show()
-                        Log.d("response error", response.errorBody()?.string().orEmpty())
+                        /*Log.d("response error", response.errorBody()?.string().orEmpty())*/
                     }
                 }
 
                 override fun onFailure(call: Call<OrderModel>, t: Throwable) {
                     Toast.makeText(this@ThanhToanActivity, "Không thành công", Toast.LENGTH_SHORT)
                         .show()
-                    Log.d("error", t.message.toString())
+                   /* Log.d("error", t.message.toString())*/
                     t.printStackTrace()
                 }
             })
@@ -331,7 +332,8 @@ class ThanhToanActivity : AppCompatActivity() {
             val intent = Intent(this@ThanhToanActivity, MainActivity::class.java)
             startActivity(intent)
             finish()
-        }, 3000)
+            pushNotification()
+        }, 2000)
     }
 
 
@@ -341,7 +343,7 @@ class ThanhToanActivity : AppCompatActivity() {
 
         try {
             val data = orderApi.createOrder(txtAmount.toString())
-            Log.d("Amount", txtAmount.toString())
+           /* Log.d("Amount", txtAmount.toString())*/
             val code = data.getString("return_code")
             /*Toast.makeText(applicationContext, "return_code: $code", Toast.LENGTH_LONG).show()*/
 
@@ -413,13 +415,12 @@ class ThanhToanActivity : AppCompatActivity() {
     }
 
     private fun pushNotification() {
-        getToken("${getIdAdmin()}") { token ->
+        getToken("5") { token ->
             val data: MutableMap<String, String> = HashMap()
             data["title"] = "Thông báo"
             data["body"] = "Bạn có đơn hàng mới"
             val sendNoti = SendNotification(token.toString(), data)
-            val service =
-                RetrofitNotification.retrofitInstance.create(APIPushNotification::class.java)
+            val service = RetrofitNotification.retrofitInstance.create(APIPushNotification::class.java)
             val call = service.sendNotification(sendNoti)
             call.enqueue(object : Callback<NotificationReponse> {
                 override fun onResponse(

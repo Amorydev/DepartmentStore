@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
         /*  onTouch()*/
         /*  showSanPham()*/
-        Log.d("paper", Paper.book().path)
+        /*Log.d("paper", Paper.book().path)*/
 
         if (Utils.kiemTraKetNoi(this)) {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
@@ -112,6 +112,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 val intent = Intent(this, DangNhapActivity::class.java)
                 startActivity(intent)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 finish()
             }
         }
@@ -162,11 +163,15 @@ class MainActivity : AppCompatActivity() {
         }
         btnDangKy.setOnClickListener {
             val intent = Intent(this, DangKiActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
+            finish()
         }
         btnDangNhap.setOnClickListener {
             val intent = Intent(this, DangNhapActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
+            finish()
         }
     }
 
@@ -184,9 +189,11 @@ class MainActivity : AppCompatActivity() {
                     val user = Paper.book().read<User>("user")
                     if (user != null || Utils.user_current != null) {
                         val intent = Intent(this, GioHangActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     } else {
                         val intent = Intent(this, DangNhapActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()
                     }
@@ -197,9 +204,11 @@ class MainActivity : AppCompatActivity() {
                     val user = Paper.book().read<User>("user")
                     if (user != null || Utils.user_current != null) {
                         val intent = Intent(this, ChiTietDonHangActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     } else {
                         val intent = Intent(this, DangNhapActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()
                     }
@@ -217,7 +226,9 @@ class MainActivity : AppCompatActivity() {
                         Paper.book().delete("user")
                         FirebaseAuth.getInstance().signOut()
                         val intent = Intent(this, DangNhapActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
+                        finish()
                     }
                     alertDialog.show()
                     true
@@ -225,6 +236,7 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.contact -> {
                     val intent = Intent(this, LienHeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     true
                 }
@@ -236,11 +248,13 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.discount -> {
                     val intent = Intent(this, KhuyenMaiActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     true
                 }
                 R.id.changePassword ->{
                     val intent = Intent(this, ChangePasswordActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     true
                 }
@@ -264,9 +278,11 @@ class MainActivity : AppCompatActivity() {
             val user = Paper.book().read<User>("user")
             if (user != null || Utils.user_current != null) {
                 val intent = Intent(this, GioHangActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             } else {
                 val intent = Intent(this, DangNhapActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
                 finish()
             }
@@ -307,6 +323,7 @@ class MainActivity : AppCompatActivity() {
                                         )
                                         intent.putExtra("loai", list[position].id)
                                         intent.putExtra("tenloaisanpham", list[position].name)
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(intent)
                                     }
 
@@ -317,6 +334,7 @@ class MainActivity : AppCompatActivity() {
                                         )
                                         intent.putExtra("loai", list[position].id)
                                         intent.putExtra("tenloaisanpham", list[position].name)
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(intent)
                                     }
 
@@ -357,7 +375,7 @@ class MainActivity : AppCompatActivity() {
         call.enqueue(object : Callback<SanPhamModel> {
             override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
                 t.printStackTrace()
-                Log.e("Amory", "Error occurred: ${t.message}", t)
+                /*Log.e("Amory", "Error occurred: ${t.message}", t)*/
                 Toast.makeText(this@MainActivity, "Lấy sản phẩm thất bại", Toast.LENGTH_SHORT)
                     .show()
             }
@@ -545,7 +563,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<BannerModel>, t: Throwable) {
                 t.printStackTrace()
-                Log.d("banners", t.message.toString())
+                /*Log.d("banners", t.message.toString())*/
             }
         })
     }
@@ -571,6 +589,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        laySanPham()
+        layLoaiSanPham()
         RetrofitClient.init(this)
     }
 

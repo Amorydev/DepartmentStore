@@ -1,6 +1,6 @@
 package com.amory.departmentstore.model
 
 data class Province(
-    val idProvince:String,
+    val code:String,
     val name:String
 )

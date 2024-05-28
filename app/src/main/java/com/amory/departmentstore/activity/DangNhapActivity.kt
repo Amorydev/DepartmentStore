@@ -44,6 +44,7 @@ class DangNhapActivity : AppCompatActivity() {
     private fun onCLickDangKi() {
         binding.txtDangkingay.setOnClickListener {
             val intent = Intent(this, DangKiActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
             finish()
         }
@@ -121,7 +122,7 @@ class DangNhapActivity : AppCompatActivity() {
                         ) {
                             if (response.isSuccessful) {
                                 val userRole = response.body()?.role?.id
-                                Toast.makeText(this@DangNhapActivity,userRole.toString(),Toast.LENGTH_SHORT).show()
+                                /*Toast.makeText(this@DangNhapActivity,userRole.toString(),Toast.LENGTH_SHORT).show()*/
                                 val intent = if (userRole == 1) {
                                     Intent(this@DangNhapActivity, MainActivity::class.java)
                                 } else {
@@ -146,6 +147,7 @@ class DangNhapActivity : AppCompatActivity() {
                                     "Đăng nhập thành công",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                                 startActivity(intent)
                                 finish()
                             }
@@ -153,7 +155,7 @@ class DangNhapActivity : AppCompatActivity() {
 
                         override fun onFailure(call: Call<User>, t: Throwable) {
                             t.printStackTrace()
-                            Log.d("LoiCallMe", t.message.toString())
+                          /*  Log.d("LoiCallMe", t.message.toString())*/
                         }
                     })
                 } else {
@@ -169,7 +171,7 @@ class DangNhapActivity : AppCompatActivity() {
                 binding.prgbar.visibility = View.GONE
                 Toast.makeText(applicationContext, "Đăng nhập không thành công", Toast.LENGTH_SHORT)
                     .show()
-                Log.d("dangnhap", t.message.toString())
+               /* Log.d("dangnhap", t.message.toString())*/
             }
         })
     }
@@ -192,10 +194,10 @@ class DangNhapActivity : AppCompatActivity() {
         db.collection("tokens")
             .add(useToken)
             .addOnSuccessListener {
-                Log.d("Token", "Thanh cong")
+               /* Log.d("Token", "Thanh cong")*/
             }
             .addOnFailureListener {
-                Log.d("Error token", it.message.toString())
+                /*Log.d("Error token", it.message.toString())*/
             }
     }
     private fun onClickQuenMatKhau() {
