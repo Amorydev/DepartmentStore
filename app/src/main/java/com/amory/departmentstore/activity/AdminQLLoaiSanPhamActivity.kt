@@ -132,38 +132,48 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
 
     private fun onClickNavViewAdmin() {
         binding.navViewAdmin.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.quanlyloaisanpham -> {
+            when(menuItem.itemId){
+                R.id.quanlyloaisanpham ->{
                     val intent = Intent(this, AdminQLLoaiSanPhamActivity::class.java)
                     startActivity(intent)
                     true
                 }
-
-                R.id.quanlysanpham -> {
+                R.id.quanlysanpham ->{
                     val intent = Intent(this, AdminQLSanPhamActivity::class.java)
                     startActivity(intent)
                     true
                 }
-
-                R.id.dangxuat -> {
+                R.id.dangxuat ->
+                {
                     Paper.book().delete("user")
                     val intent = Intent(this, DangNhapActivity::class.java)
                     startActivity(intent)
                     true
                 }
-
-                R.id.xemdonhang -> {
+                R.id.xemdonhang ->
+                {
                     val intent = Intent(this, AdminChiTietDonHangActivity::class.java)
                     startActivity(intent)
                     true
                 }
-
-                R.id.khuyenmai -> {
+                R.id.khuyenmai ->
+                {
                     val intent = Intent(this, AdminKhuyeMaiActivity::class.java)
                     startActivity(intent)
                     true
                 }
+                R.id.thongke ->{
 
+                    val intent = Intent(this, DoanhSoActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.quanlyuser ->{
+
+                    val intent = Intent(this, QuanLyUserActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> {
                     true
                 }
@@ -171,7 +181,6 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
 
         }
     }
-
     private fun onCLickDanhMuc() {
         binding.imbDanhmucAdmin.setOnClickListener {
             binding.layoutDrawerAdmin.openDrawer(binding.navViewAdmin)

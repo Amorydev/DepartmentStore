@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.amory.departmentstore.Interface.OnClickAllowedUser
 import com.amory.departmentstore.Interface.OnClickBlockUser
 import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvQuanLyUser
@@ -30,6 +31,8 @@ class QuanLyUserActivity : AppCompatActivity() {
         binding = ActivityQuanLyUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
         showRvUser()
+        onCLickDanhMuc()
+        onClickNavViewAdmin()
     }
 
     private fun showRvUser() {
@@ -44,6 +47,11 @@ class QuanLyUserActivity : AppCompatActivity() {
                             val id = list[position].id
                             showBlockUser(id)
                         }
+                    }, object : OnClickAllowedUser{
+                        override fun onClickAllowedUser(position: Int) {
+                            val id = list[position].id
+                            showAllowedUser(id)
+                        }
                     })
                     binding.rvUser.adapter = adapter
                     binding.rvUser.layoutManager = LinearLayoutManager(this@QuanLyUserActivity,LinearLayoutManager.VERTICAL,false)
@@ -51,6 +59,39 @@ class QuanLyUserActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<UserModel>, t: Throwable) {
+
+            }
+        })
+    }
+
+    private fun showAllowedUser(id: Int) {
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.setTitle("Khóa tài khoản")
+        alertDialog.setMessage("Bạn chắc chắn muốn mở khóa tài khoản này không?")
+        alertDialog.setNegativeButton("Không") { dialog, which ->
+            dialog.dismiss()
+        }
+        alertDialog.setPositiveButton("Có") { dialog, which ->
+            allowedUser(id)
+        }
+        alertDialog.show()
+    }
+
+    private fun allowedUser(id: Int) {
+        val service = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
+        val call = service.allowedUser(id)
+        call.enqueue(object : Callback<UpdateOrderModel>{
+            override fun onResponse(
+                call: Call<UpdateOrderModel>,
+                response: Response<UpdateOrderModel>
+            ) {
+                if (response.isSuccessful){
+                    Toast.makeText(this@QuanLyUserActivity,"Mở khóa tài khoản thành công",Toast.LENGTH_SHORT).show()
+                    showRvUser()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateOrderModel>, t: Throwable) {
 
             }
         })
@@ -87,5 +128,68 @@ class QuanLyUserActivity : AppCompatActivity() {
 
             }
         })
+    }
+    private fun onClickNavViewAdmin() {
+        binding.navViewAdmin.setNavigationItemSelectedListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.quanlyloaisanpham ->{
+                    val intent = Intent(this, AdminQLLoaiSanPhamActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.quanlysanpham ->{
+                    val intent = Intent(this, AdminQLSanPhamActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.dangxuat ->
+                {
+                    Paper.book().delete("user")
+                    val intent = Intent(this, DangNhapActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.xemdonhang ->
+                {
+                    val intent = Intent(this, AdminChiTietDonHangActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.khuyenmai ->
+                {
+                    val intent = Intent(this, AdminKhuyeMaiActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.thongke ->{
+
+                    val intent = Intent(this, DoanhSoActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.quanlyuser ->{
+
+                    val intent = Intent(this, QuanLyUserActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> {
+                    true
+                }
+            }
+
+        }
+    }
+    @Deprecated("Deprecated in Java",
+        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
+    )
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
+    private fun onCLickDanhMuc() {
+        binding.imbDanhmucAdmin.setOnClickListener {
+            binding.layoutDrawerAdmin.openDrawer(binding.navViewAdmin)
+        }
     }
 }

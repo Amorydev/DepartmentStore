@@ -1,8 +1,10 @@
 package com.amory.departmentstore.activity.resetPasswordActivities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -23,6 +25,7 @@ class VerifyOTPActivity : AppCompatActivity() {
         binding = ActivityVerifyOtpactivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         onClickback()
+        startCountdownTimer()
         XuLyET()
         VerifyOTP()
     }
@@ -113,5 +116,18 @@ class VerifyOTPActivity : AppCompatActivity() {
                 override fun afterTextChanged(s: Editable?) {}
             })
         }
+    }
+    private fun startCountdownTimer() {
+        object : CountDownTimer(60000, 1000) {
+            @SuppressLint("SetTextI18n")
+            override fun onTick(millisUntilFinished: Long) {
+                binding.txtTime.text = "Mã xác thực của bạn có hiệu lực trong vòng ${millisUntilFinished / 1000}s"
+            }
+
+            @SuppressLint("SetTextI18n")
+            override fun onFinish() {
+                binding.txtTime.text = "Mã xác thực đã hết hiệu lực."
+            }
+        }.start()
     }
 }

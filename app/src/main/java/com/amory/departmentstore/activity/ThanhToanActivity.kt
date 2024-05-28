@@ -136,9 +136,17 @@ class ThanhToanActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        binding.txtName.text = fullName
-        binding.txtPhone.text = phone
-        binding.txtAddress.text = address
+        if (fullName.isEmpty() && address.isEmpty() && phone.isEmpty()){
+            binding.txtValid.visibility = View.VISIBLE
+            binding.txtName.visibility = View.VISIBLE
+            binding.txtPhone.visibility = View.VISIBLE
+            binding.txtAddress.visibility = View.VISIBLE
+        }else {
+            binding.txtValid.visibility = View.INVISIBLE
+            binding.txtName.text = fullName
+            binding.txtPhone.text = phone
+            binding.txtAddress.text = address
+        }
         /*Toast.makeText(this, fullName,Toast.LENGTH_SHORT).show()*/
         if (isZalopay) {
             binding.imvPhuongthuc.setImageResource(R.drawable.ic_zalopay)

@@ -16,9 +16,7 @@ import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvCHiTietDonHangAdmin
 import com.amory.departmentstore.databinding.ActivityAdminChiTietDonHangBinding
 import com.amory.departmentstore.model.EventBus.DonHangEvent
-import com.amory.departmentstore.model.OrderModel
 import com.amory.departmentstore.model.OrderModelAdmin
-import com.amory.departmentstore.model.OrderRequest
 import com.amory.departmentstore.model.OrderRespone
 import com.amory.departmentstore.model.UpdateOrderModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallDonHang
@@ -37,6 +35,7 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminChiTietDonHangBinding
     private lateinit var donhang: OrderRespone
     private var status:String ?= null
+    private var _status:String ?= null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminChiTietDonHangBinding.inflate(layoutInflater)
@@ -44,7 +43,9 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
         layChiTietDonHang()
         onCLickDanhMuc()
         onClickNavViewAdmin()
+        onClickTimKiem()
     }
+
     private fun layChiTietDonHang() {
         val service = RetrofitClient.retrofitInstance.create(APICallDonHang::class.java)
         val call = service.getOrderAdmin()
@@ -52,21 +53,59 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
             override fun onResponse(call: Call<OrderModelAdmin>, response: Response<OrderModelAdmin>) {
                 if (response.isSuccessful) {
                     val result = response.body()?.data
-                    /*Toast.makeText(this@AdminChiTietDonHangActivity,result.toString(),Toast.LENGTH_SHORT).show()*/
-                    binding.rvDonhang.apply {
-                        layoutManager = LinearLayoutManager(this@AdminChiTietDonHangActivity,
-                            LinearLayoutManager.VERTICAL,false)
-                        adapter = RvCHiTietDonHangAdmin(result)
-                        setHasFixedSize(true)
-                    }
+                    setupRecyclerView(result)
+                } else {
+                    Toast.makeText(this@AdminChiTietDonHangActivity, "Failed to fetch order details", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<OrderModelAdmin>, t: Throwable) {
                 t.printStackTrace()
+                Toast.makeText(this@AdminChiTietDonHangActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
+    private fun onClickTimKiem() {
+        binding.btnSearch.setOnClickListener {
+            val searchET = binding.edtSearch.text?.trim().toString()
+            if (searchET.isNotEmpty()) {
+                val service = RetrofitClient.retrofitInstance.create(APICallDonHang::class.java)
+                try {
+                    val searchId = searchET.toInt()
+                    val call = service.timKiemTheoId(searchId)
+                    call.enqueue(object : Callback<OrderModelAdmin> {
+                        override fun onResponse(call: Call<OrderModelAdmin>, response: Response<OrderModelAdmin>) {
+                            if (response.isSuccessful) {
+                                val list = response.body()?.data
+                                setupRecyclerView(list)
+                            } else {
+                                Toast.makeText(this@AdminChiTietDonHangActivity, "Failed to search order", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<OrderModelAdmin>, t: Throwable) {
+                            t.printStackTrace()
+                            Toast.makeText(this@AdminChiTietDonHangActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(this@AdminChiTietDonHangActivity, "Invalid search input", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this@AdminChiTietDonHangActivity, "Search field is empty", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setupRecyclerView(data: MutableList<OrderRespone>?) {
+        binding.rvDonhang.apply {
+            layoutManager = LinearLayoutManager(this@AdminChiTietDonHangActivity, LinearLayoutManager.VERTICAL, false)
+            adapter = RvCHiTietDonHangAdmin(data)
+            setHasFixedSize(true)
+        }
+    }
+
     private fun onClickNavViewAdmin() {
         binding.navViewAdmin.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -133,11 +172,11 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
         val btn_xacnhan = view.findViewById<Button>(R.id.btn_xacnhan)
 
         val list: MutableList<String> = mutableListOf()
-        list.add("Pending")
-        list.add("Processing")
-        list.add("Shipped")
-        list.add("Delivered")
-        list.add("Cancelled")
+        list.add("Chờ xác nhận")//Pending
+        list.add("Đang xử lý")//Processing
+        list.add("Đang giao hàng")//Shipped
+        list.add("Giao thành công")//Delivered
+        list.add("Đã hủy")//Cancelled
 
         val adapter = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,list)
         spinner.adapter = adapter
@@ -163,7 +202,18 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
         dialog.show()
 
         btn_xacnhan.setOnClickListener {
-            if (status == donhang.status) {
+            _status = if(status.equals("Chờ xác nhận")) {
+                "Pending"
+            }else if(status.equals("Đang xử lý")){
+                "Processing"
+            }else if(status.equals("Đang giao hàng")){
+                "Shipped"
+            }else if(status.equals("Giao thành công")){
+                "Delivered"
+            }else{
+                "Cancelled"
+            }
+            if (_status == donhang.status) {
                 val sameStatusAlert = AlertDialog.Builder(this)
                 sameStatusAlert.setTitle("Thông báo")
                 sameStatusAlert.setMessage("Không thể chọn tình trạng trùng với tình trạng hiện tại.")
@@ -189,7 +239,7 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
     }
 
     private fun capNhatTrangThaiDonHang() {
-        val statusRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), status!!)
+        val statusRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), _status!!)
         val service = RetrofitClient.retrofitInstance.create(APICallDonHang::class.java)
         val call = service.suaTinhTrang(donhang.id,statusRequestBody)
         call.enqueue(object : Callback<UpdateOrderModel>{

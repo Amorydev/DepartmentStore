@@ -81,4 +81,8 @@ interface APICallUser {
     fun blockUser(
         @Path("id") id:Int
     ):Call<UpdateOrderModel>
+    @PATCH("users/enable/{id}")
+    fun allowedUser(
+        @Path("id") id:Int
+    ):Call<UpdateOrderModel>
 }

@@ -22,6 +22,10 @@ interface APICallDonHang {
     fun getOrder():Call<OrderModel>
     @GET("orders")
     fun getOrderAdmin():Call<OrderModelAdmin>
+    @GET("orders/user/{id}")
+    fun timKiemTheoId(
+        @Path("id") userId:Int?
+    ):Call<OrderModelAdmin>
     @PATCH("orders/{id}")
     @Multipart
     fun suaTinhTrang(

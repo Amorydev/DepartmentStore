@@ -108,7 +108,7 @@ class DoanhThuTheoDanhMucFragment : Fragment() {
                 data = pieData
                 description.isEnabled = false
                 legend.isEnabled = false
-                isRotationEnabled = true
+                isRotationEnabled = false
                 setDrawEntryLabels(false)
                 setEntryLabelColor(Color.BLACK)
                 animateY(1400, Easing.EaseInOutQuad)

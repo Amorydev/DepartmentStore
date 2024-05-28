@@ -3,11 +3,12 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.amory.departmentstore.Interface.OnClickAllowedUser
 import com.amory.departmentstore.Interface.OnClickBlockUser
 import com.amory.departmentstore.databinding.ItemUsersBinding
 import com.amory.departmentstore.model.UserResponse
 
-class RvQuanLyUser(val dsUser:MutableList<UserResponse>,private val onClickBlockUser: OnClickBlockUser):RecyclerView.Adapter<RvQuanLyUser.viewHolder>() {
+class RvQuanLyUser(val dsUser:MutableList<UserResponse>,private val onClickBlockUser: OnClickBlockUser,private val onClickAllowedUser: OnClickAllowedUser):RecyclerView.Adapter<RvQuanLyUser.viewHolder>() {
     inner class viewHolder(private val binding: ItemUsersBinding):RecyclerView.ViewHolder(binding.root)
     {
         @SuppressLint("SetTextI18n")
@@ -19,6 +20,9 @@ class RvQuanLyUser(val dsUser:MutableList<UserResponse>,private val onClickBlock
 
             binding.imvBlock.setOnClickListener {
                 onClickBlockUser.onClickBlockUser(adapterPosition)
+            }
+            binding.imvAllow.setOnClickListener {
+                onClickAllowedUser.onClickAllowedUser(adapterPosition)
             }
         }
     }

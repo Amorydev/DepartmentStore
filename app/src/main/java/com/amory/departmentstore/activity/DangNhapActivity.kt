@@ -62,6 +62,7 @@ class DangNhapActivity : AppCompatActivity() {
             binding.emailEt.setText(emailPaper)
             binding.passET.setText(passwordPaper)
         }
+        binding.txtSaimatkhau.visibility = View.INVISIBLE
         firebaseAuth = FirebaseAuth.getInstance()
         sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
 
@@ -172,6 +173,7 @@ class DangNhapActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "Đăng nhập không thành công", Toast.LENGTH_SHORT)
                     .show()
                /* Log.d("dangnhap", t.message.toString())*/
+                binding.txtSaimatkhau.visibility = View.VISIBLE
             }
         })
     }

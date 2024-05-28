@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Trạng thái hoạt động:"
+            android:text="Trạng thái:"
             android:textSize="18sp"
             android:layout_marginBottom="20dp"
             android:textStyle="bold"
@@ -108,6 +108,17 @@
             android:background="@drawable/ic_block_user"
             app:layout_constraintBottom_toBottomOf="@+id/txt_trangthai"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imv_allow"
+            app:layout_constraintTop_toTopOf="@+id/txt_trangthai"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/imv_allow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="60dp"
+            android:background="@drawable/ic_allowed"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_trangthai"
             app:layout_constraintStart_toEndOf="@+id/txt_trangthai"
             app:layout_constraintTop_toTopOf="@+id/txt_trangthai"
             tools:ignore="ContentDescription" />
