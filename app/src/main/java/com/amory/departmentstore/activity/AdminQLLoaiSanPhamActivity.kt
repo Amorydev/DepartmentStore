@@ -145,9 +145,21 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
                 }
                 R.id.dangxuat ->
                 {
-                    Paper.book().delete("user")
-                    val intent = Intent(this, DangNhapActivity::class.java)
-                    startActivity(intent)
+                    val alertDialog = AlertDialog.Builder(this)
+                    alertDialog.setTitle("Đăng xuất")
+                    alertDialog.setMessage("Bạn chắc chắn muốn đăng xuất")
+                    alertDialog.setNegativeButton("Không"){
+                            dialog, which ->
+                        dialog.dismiss()
+                    }
+                    alertDialog.setPositiveButton("Có"){
+                            dialog, which ->
+                        Paper.book().delete("user")
+                        val intent = Intent(this, DangNhapActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        startActivity(intent)
+                        finish()
+                    }
                     true
                 }
                 R.id.xemdonhang ->

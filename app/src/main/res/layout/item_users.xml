@@ -105,10 +105,10 @@
             android:id="@+id/imv_block"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/ic_block_user"
             app:layout_constraintBottom_toBottomOf="@+id/txt_trangthai"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imv_allow"
             app:layout_constraintTop_toTopOf="@+id/txt_trangthai"
             tools:ignore="ContentDescription" />
 
@@ -116,10 +116,10 @@
             android:id="@+id/imv_allow"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginStart="60dp"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/ic_allowed"
             app:layout_constraintBottom_toBottomOf="@+id/txt_trangthai"
-            app:layout_constraintStart_toEndOf="@+id/txt_trangthai"
+            app:layout_constraintEnd_toStartOf="@+id/imv_block"
             app:layout_constraintTop_toTopOf="@+id/txt_trangthai"
             tools:ignore="ContentDescription" />
     </androidx.constraintlayout.widget.ConstraintLayout>

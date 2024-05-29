@@ -33,6 +33,7 @@ class VerifyEmailActivity : AppCompatActivity() {
     }
 
     private fun sendOTPEmail() {
+        binding.txtEmailsai.visibility = View.INVISIBLE
         binding.btnNext.setOnClickListener {
             val email = binding.emailEt.text?.trim().toString()
             if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -52,6 +53,7 @@ class VerifyEmailActivity : AppCompatActivity() {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)
                         } else {
+                            customProgressDialog.dismiss()
                             Log.d("Error", response.body().toString())
                             Toast.makeText(
                                 this@VerifyEmailActivity,
@@ -64,9 +66,7 @@ class VerifyEmailActivity : AppCompatActivity() {
                     override fun onFailure(call: Call<UpdatePasswordModel>, t: Throwable) {
                         customProgressDialog.dismiss()
                         t.printStackTrace()
-                        Toast.makeText(this@VerifyEmailActivity, "Gửi thất bại", Toast.LENGTH_SHORT)
-                            .show()
-                        Log.d("sendOTP", t.message.toString())
+                        binding.txtEmailsai.visibility = View.VISIBLE
                     }
                 })
             }else{

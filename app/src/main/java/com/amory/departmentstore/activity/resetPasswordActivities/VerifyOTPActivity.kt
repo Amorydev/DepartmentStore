@@ -9,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.amory.departmentstore.R
 import com.amory.departmentstore.databinding.ActivityVerifyOtpactivityBinding
 import com.amory.departmentstore.model.UpdatePasswordModel
@@ -31,6 +32,7 @@ class VerifyOTPActivity : AppCompatActivity() {
     }
 
     private fun VerifyOTP() {
+        var otp: Int = 0
         binding.btnNext.setOnClickListener {
             val otpEditText1 = binding.otpEditText1.text?.trim().toString()
             val otpEditText2 = binding.otpEditText2.text?.trim().toString()
@@ -38,8 +40,10 @@ class VerifyOTPActivity : AppCompatActivity() {
             val otpEditText4 = binding.otpEditText4.text?.trim().toString()
             val otpEditText5 = binding.otpEditText5.text?.trim().toString()
             val otpEditText6 = binding.otpEditText6.text?.trim().toString()
-            val otp =
+
+            otp =
                 (otpEditText1 + otpEditText2 + otpEditText3 + otpEditText4 + otpEditText5 + otpEditText6).toInt()
+
             val email = intent.getStringExtra("email").toString()
             val service = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
             val call = service.verifyOtp(otp, email)
@@ -49,9 +53,11 @@ class VerifyOTPActivity : AppCompatActivity() {
                     response: Response<UpdatePasswordModel>
                 ) {
                     if (response.isSuccessful) {
-                        val intent = Intent(this@VerifyOTPActivity, UpdatePasswordActivity::class.java)
+
+                        val intent =
+                            Intent(this@VerifyOTPActivity, UpdatePasswordActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        intent.putExtra("email",email)
+                        intent.putExtra("email", email)
                         startActivity(intent)
                     } else {
                         Toast.makeText(
@@ -65,11 +71,23 @@ class VerifyOTPActivity : AppCompatActivity() {
 
                 override fun onFailure(call: Call<UpdatePasswordModel>, t: Throwable) {
                     t.printStackTrace()
-                    Toast.makeText(this@VerifyOTPActivity, "thất bại", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@VerifyOTPActivity,
+                        "OTP không hợp lệ!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     Log.d("OTP", t.message.toString())
                 }
             })
         }
+        if (isValidOtp(otp.toString())){
+            binding.btnNext.setBackgroundColor(ContextCompat.getColor(this, R.color.main))
+        }
+    }
+
+    fun isValidOtp(otp: String): Boolean {
+        val otpPattern = Regex("^[0-9]{6}$")
+        return otpPattern.matches(otp)
     }
 
     private fun onClickback() {
@@ -117,11 +135,13 @@ class VerifyOTPActivity : AppCompatActivity() {
             })
         }
     }
+
     private fun startCountdownTimer() {
         object : CountDownTimer(60000, 1000) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
-                binding.txtTime.text = "Mã xác thực của bạn có hiệu lực trong vòng ${millisUntilFinished / 1000}s"
+                binding.txtTime.text =
+                    "Mã xác thực của bạn có hiệu lực trong vòng ${millisUntilFinished / 1000}s"
             }
 
             @SuppressLint("SetTextI18n")

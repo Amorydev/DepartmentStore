@@ -3,6 +3,7 @@ package com.amory.departmentstore.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.amory.departmentstore.R
 import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.databinding.ActivityChiTietSanPhamBinding
 import com.amory.departmentstore.model.GioHang
@@ -52,6 +53,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
                 Utils.mangmuahang.add(gioHang)
                 val intent = Intent(this, ThanhToanActivity::class.java)
                 startActivity(intent)
+               /* overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right)*/
             } else {
                 val intent = Intent(this, DangNhapActivity::class.java)
                 startActivity(intent)
@@ -197,4 +199,15 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
             binding.badgeCart.setNumber(0)
         }
     }
+
+   /* override fun finish() {
+        super.finish()
+        this.overridePendingTransition(R.anim.slide_out_left,R.anim.slide_in_right)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        super.onBackPressed()
+        *//*this.overridePendingTransition(R.anim.slide_out_left,R.anim.slide_in_right)*//*
+    }*/
 }

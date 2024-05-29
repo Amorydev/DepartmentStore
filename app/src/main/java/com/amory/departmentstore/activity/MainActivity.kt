@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private var isLoadMore = false
     private lateinit var listBanners: MutableList<Banner>
-    /*private lateinit var sharedPreferences: SharedPreferences*/
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,12 +78,7 @@ class MainActivity : AppCompatActivity() {
             /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
             listBanners = mutableListOf()
             RetrofitClient.init(this)
-            /*sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.remove("token")
-
-            editor.apply()
-            Toast.makeText(this@MainActivity,token.toString(),Toast.LENGTH_SHORT).show()*/
+            sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
             /* Toast.makeText(this@MainActivity,Utils.user_current.toString(),Toast.LENGTH_SHORT).show()*/
             paddingRv()
             laySanPham()
@@ -225,6 +220,9 @@ class MainActivity : AppCompatActivity() {
                     alertDialog.setPositiveButton("Có") { dialog, which ->
                         Paper.book().delete("user")
                         FirebaseAuth.getInstance().signOut()
+                        val editor = sharedPreferences.edit()
+                        editor.remove("token")
+                        editor.apply()
                         val intent = Intent(this, DangNhapActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
@@ -326,7 +324,6 @@ class MainActivity : AppCompatActivity() {
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(intent)
                                     }
-
                                     else -> {
                                         val intent = Intent(
                                             this@MainActivity,
@@ -403,19 +400,7 @@ class MainActivity : AppCompatActivity() {
                                             applicationContext,
                                             "Mua " + list[position].category_id, Toast.LENGTH_SHORT
                                         ).show()*/
-                                        val intent = Intent(
-                                            this@MainActivity,
-                                            ChiTietSanPhamActivity::class.java
-                                        )
-
-                                        intent.putExtra("name", list[position].name)
-                                        intent.putExtra("idsanpham", list[position].id)
-                                        intent.putExtra("price", list[position].price)
-                                        intent.putExtra("hinhanhsanpham", list[position].imageUrl)
-                                        intent.putExtra("motasanpham", list[position].description)
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                        startActivity(intent)
-
+                                       startChiTietSanPham(list[position])
                                     }
                                 })
                             adapter.updateList(list as MutableList<SanPham>)
@@ -453,6 +438,19 @@ class MainActivity : AppCompatActivity() {
         } else {
             binding.badgeCart.setNumber(0)
         }
+    }
+
+    private fun startChiTietSanPham(sanPham: SanPham) {
+        val intent = Intent(
+            this@MainActivity, ChiTietSanPhamActivity::class.java
+        )
+        intent.putExtra("name", sanPham.name)
+        intent.putExtra("idsanpham", sanPham.id)
+        intent.putExtra("price", sanPham.price)
+        intent.putExtra("hinhanhsanpham", sanPham.imageUrl)
+        intent.putExtra("motasanpham", sanPham.description)
+        startActivity(intent)
+        /*overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right)*/
     }
 
     private fun MutableList<GioHang>.getSoluong(): Int {
@@ -589,8 +587,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        laySanPham()
-        layLoaiSanPham()
         RetrofitClient.init(this)
     }
 

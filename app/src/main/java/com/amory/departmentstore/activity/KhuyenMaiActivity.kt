@@ -2,6 +2,7 @@ package com.amory.departmentstore.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.adapter.RvKhuyenMai
 import com.amory.departmentstore.databinding.ActivityKhuyenMaiBinding
@@ -50,6 +51,7 @@ class KhuyenMaiActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<BannerModel>, t: Throwable) {
                 t.printStackTrace()
+                Log.d("Error Banner",t.message.toString())
             }
         })
     }

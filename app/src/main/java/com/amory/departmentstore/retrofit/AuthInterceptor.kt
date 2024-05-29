@@ -18,7 +18,7 @@ class AuthInterceptor(context: Context):Interceptor {
         var request = chain.request()
         val builder = request.newBuilder()
         builder.addHeader("Authorization", "Bearer $token")
-        Log.d("tokenne", token.toString())
+        /*Log.d("tokenne", token.toString())*/
         var response = chain.proceed(builder.build())
 
         if (response.isSuccessful) {

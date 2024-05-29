@@ -138,9 +138,10 @@ class ThanhToanActivity : AppCompatActivity() {
     private fun initViews() {
         if (fullName.isEmpty() && address.isEmpty() && phone.isEmpty()){
             binding.txtValid.visibility = View.VISIBLE
-            binding.txtName.visibility = View.VISIBLE
-            binding.txtPhone.visibility = View.VISIBLE
-            binding.txtAddress.visibility = View.VISIBLE
+            binding.view2.visibility = View.INVISIBLE
+            binding.txtName.visibility = View.INVISIBLE
+            binding.txtPhone.visibility = View.INVISIBLE
+            binding.txtAddress.visibility = View.INVISIBLE
         }else {
             binding.txtValid.visibility = View.INVISIBLE
             binding.txtName.text = fullName

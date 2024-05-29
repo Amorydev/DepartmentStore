@@ -128,7 +128,8 @@
             android:exported="false" />
         <activity
             android:name=".activity.ChiTietSanPhamActivity"
-            android:exported="false" />
+            android:exported="false"
+            />
         <activity
             android:name=".activity.MainActivity"
             android:exported="false" />
