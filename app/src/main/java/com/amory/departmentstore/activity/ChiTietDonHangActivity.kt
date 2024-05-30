@@ -65,13 +65,22 @@ class ChiTietDonHangActivity : AppCompatActivity() {
             customProgressDialog.dismiss()
 
             val showFragment = intent.getIntExtra("showFragment", -1)
-            if (showFragment != -1) {
-                onShowViewPager()
-                binding.viewPager.post {
-                    binding.viewPager.setCurrentItem(showFragment, false)
+            when (showFragment) {
+                4 -> {
+                    onShowViewPager()
+                    binding.viewPager.post {
+                        binding.viewPager.setCurrentItem(showFragment, false)
+                    }
                 }
-            } else {
-                onShowViewPager()
+                0 -> {
+                    onShowViewPager()
+                    binding.viewPager.post {
+                        binding.viewPager.setCurrentItem(showFragment, false)
+                    }
+                }
+                else -> {
+                    onShowViewPager()
+                }
             }
         }, 3000)
     }

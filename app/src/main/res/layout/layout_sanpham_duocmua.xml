@@ -26,7 +26,7 @@
 
             <ImageView
                 android:id="@+id/imv_hinhanhsanphammuangay"
-                android:layout_width="115dp"
+                android:layout_width="110dp"
                 android:layout_height="90dp"
                 android:layout_gravity="center"
                 android:background="@drawable/image_test"

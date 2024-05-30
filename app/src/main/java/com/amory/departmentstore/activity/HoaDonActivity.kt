@@ -27,12 +27,17 @@ class HoaDonActivity : AppCompatActivity() {
     }
 
     private fun onClickBack() {
-        binding.imvBack.setOnClickListener {
+        binding.btnTrangChu.setOnClickListener {
+            clearPurchaseItems()
             val intent = Intent(this, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
             finish()
+        }
+        binding.btnDonMua.setOnClickListener {
             clearPurchaseItems()
+            val intent = Intent(this,ChiTietDonHangActivity::class.java)
+            intent.putExtra("showFragment",0)
+            startActivity(intent)
         }
     }
 
@@ -43,7 +48,6 @@ class HoaDonActivity : AppCompatActivity() {
         val hoadonGia = intent.getDoubleExtra("hoadon_gia", 0.0)
         val hoadonTongtien = intent.getDoubleExtra("hoadon_tongtien", 0.0)
         val hoadonGiamgia = intent.getDoubleExtra("hoadon_giamgia", 0.0)
-
         setupRecyclerView()
         bindInvoiceDetails(hoadonName, hoadonPhone, hoadonAddress, hoadonGia, hoadonGiamgia, hoadonTongtien)
     }
@@ -71,7 +75,6 @@ class HoaDonActivity : AppCompatActivity() {
         val itemsToRemove = muaHangSet.intersect(gioHangSet)
         Utils.manggiohang.removeAll { gioHang -> itemsToRemove.contains(gioHang.idsanphamgiohang) }
         Utils.mangmuahang.clear()
-        adapter.notifyDataSetChanged()
     }
 
     private fun formatAmount(amount: Double): String {
@@ -80,13 +83,5 @@ class HoaDonActivity : AppCompatActivity() {
         return "${format.format(number)}đ"
     }
 
-    override fun finish() {
-        super.finish()
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        startActivity(intent)
-        finish()
-        clearPurchaseItems()
-    }
 
 }

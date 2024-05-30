@@ -289,39 +289,46 @@ class ThanhToanActivity : AppCompatActivity() {
                 paymentMethod,
                 orderDetails
             )
+            if (isZalopay) {
+                requestZalo(orderRequest)
+            } else {
+                val serviceOrder = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
+                val call = serviceOrder.taodonhang(orderRequest)
+                call.enqueue(object : Callback<OrderModel> {
+                    override fun onResponse(
+                        call: Call<OrderModel>,
+                        response: Response<OrderModel>
+                    ) {
+                        if (response.isSuccessful) {
 
-            val serviceOrder = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
-            val call = serviceOrder.taodonhang(orderRequest)
-            call.enqueue(object : Callback<OrderModel> {
-                override fun onResponse(call: Call<OrderModel>, response: Response<OrderModel>) {
-                    if (response.isSuccessful) {
-                        if (isZalopay) {
-                            requestZalo()
-                        } else {
                             showCustomProgressBar()
+                        } else {
+                            Toast.makeText(
+                                this@ThanhToanActivity,
+                                "Đặt hàng thất bại",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            /*Log.d("response error", response.errorBody()?.string().orEmpty())*/
                         }
-                    } else {
+                    }
+
+                    override fun onFailure(call: Call<OrderModel>, t: Throwable) {
                         Toast.makeText(
                             this@ThanhToanActivity,
-                            "Đặt hàng thất bại",
+                            "Không thành công",
                             Toast.LENGTH_SHORT
-                        ).show()
-                        /*Log.d("response error", response.errorBody()?.string().orEmpty())*/
+                        )
+                            .show()
+                        /* Log.d("error", t.message.toString())*/
+                        t.printStackTrace()
                     }
-                }
-
-                override fun onFailure(call: Call<OrderModel>, t: Throwable) {
-                    Toast.makeText(this@ThanhToanActivity, "Không thành công", Toast.LENGTH_SHORT)
-                        .show()
-                    /* Log.d("error", t.message.toString())*/
-                    t.printStackTrace()
-                }
-            })
+                })
+            }
         }
     }
 
     private fun showCustomProgressBar() {
-        customProgressDialog = BottomSheetDialog(this)
+        customProgressDialog = Dialog(this)
         val view = LayoutInflater.from(this).inflate(R.layout.layout_progressbar, null)
         customProgressDialog.setContentView(view)
         customProgressDialog.setCancelable(true)
@@ -344,7 +351,7 @@ class ThanhToanActivity : AppCompatActivity() {
     }
 
 
-    private fun requestZalo() {
+    private fun requestZalo(orderRequest:OrderRequest) {
         val orderApi = CreateOrder()
         val txtAmount = 10000
 
@@ -376,13 +383,48 @@ class ThanhToanActivity : AppCompatActivity() {
                                             transToken
                                         )
                                     )
-                                    .setPositiveButton("OK") { dialog, _ -> }
+                                    .setPositiveButton("OK") { dialog, _ ->
+                                        val serviceOrder = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
+                                        val call = serviceOrder.taodonhang(orderRequest)
+                                        call.enqueue(object : Callback<OrderModel> {
+                                            override fun onResponse(
+                                                call: Call<OrderModel>,
+                                                response: Response<OrderModel>
+                                            ) {
+                                                if (response.isSuccessful) {
+
+                                                    showCustomProgressBar()
+                                                } else {
+                                                    Toast.makeText(
+                                                        this@ThanhToanActivity,
+                                                        "Đặt hàng thất bại",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                    /*Log.d("response error", response.errorBody()?.string().orEmpty())*/
+                                                }
+                                            }
+
+                                            override fun onFailure(call: Call<OrderModel>, t: Throwable) {
+                                                Toast.makeText(
+                                                    this@ThanhToanActivity,
+                                                    "Không thành công",
+                                                    Toast.LENGTH_SHORT
+                                                )
+                                                    .show()
+                                                /* Log.d("error", t.message.toString())*/
+                                                t.printStackTrace()
+                                            }
+                                        })
+                                    }
                                     .setNegativeButton("Cancel", null)
                                     .show()
                             }
                         }
 
-                        override fun onPaymentCanceled(zpTransToken: String?, appTransID: String?) {
+                        override fun onPaymentCanceled(
+                            zpTransToken: String?,
+                            appTransID: String?
+                        ) {
                             AlertDialog.Builder(this@ThanhToanActivity)
                                 .setTitle("User Cancel Payment")
                                 .setMessage(String.format("zpTransToken: %s \n", zpTransToken))
