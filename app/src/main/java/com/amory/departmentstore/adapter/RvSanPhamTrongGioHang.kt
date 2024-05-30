@@ -33,15 +33,15 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
 
             val position = adapterPosition
             val gioHangItem = gioHang[position]
-            val giaGoc = gioHangItem.giasanphamgiohang.toLong() / (gioHangItem.soluongsanphamgiohang)
-            binding.txtGiagoc.text = "x1 " + formatAmount(giaGoc.toString())
+            val giaGoc = gioHangItem.giasanphamgiohang / (gioHangItem.soluongsanphamgiohang)
+            binding.txtGiagoc.text = "x1 " + formatAmount(giaGoc)
             binding.txtCongSanpham.setOnClickListener {
                 val soluongmoi = gioHangItem.soluongsanphamgiohang + 1
                 gioHangItem.soluongsanphamgiohang = soluongmoi
 
                 val tongGiaTriSanPham =
-                    gioHangItem.giasanphamgiohang.toLong() / (soluongmoi - 1) * soluongmoi
-                gioHangItem.giasanphamgiohang = tongGiaTriSanPham.toString()
+                    gioHangItem.giasanphamgiohang / (soluongmoi - 1) * soluongmoi
+                gioHangItem.giasanphamgiohang = tongGiaTriSanPham
 
                 binding.soluongsanpham.text = gioHangItem.soluongsanphamgiohang.toString()
                 binding.txtTonggiasanpham.text = formatAmount(gioHangItem.giasanphamgiohang)
@@ -53,8 +53,8 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
                 if (soluongmoi >= 1) {
                     gioHangItem.soluongsanphamgiohang = soluongmoi
                     val tongGiaTriSanPham =
-                        gioHangItem.giasanphamgiohang.toLong() / (soluongmoi + 1) * soluongmoi
-                    gioHangItem.giasanphamgiohang = tongGiaTriSanPham.toString()
+                        gioHangItem.giasanphamgiohang / (soluongmoi + 1) * soluongmoi
+                    gioHangItem.giasanphamgiohang = tongGiaTriSanPham
                     binding.soluongsanpham.text = gioHangItem.soluongsanphamgiohang.toString()
                     binding.txtTonggiasanpham.text = formatAmount(gioHangItem.giasanphamgiohang)
                     EventBus.getDefault().postSticky(TinhTongEvent())
@@ -94,7 +94,7 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
     }
 
     //dinh dang thanh gia 999.999d
-    fun formatAmount(amount: String): String {
+    fun formatAmount(amount: Double): String {
         val number = amount.toLong()
         val fomart = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${fomart.format(number)}đ"

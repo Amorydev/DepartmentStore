@@ -1,7 +1,9 @@
 package com.amory.departmentstore.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -35,11 +37,13 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminQlsanPhamBinding
     var list = mutableListOf<SanPham>()
     private var listSanPham: SanPham? = null
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminQlsanPhamBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
         onCLickDanhMuc()
         onClickNavViewAdmin()
         showSpnLoai()
@@ -82,6 +86,9 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
                     alertDialog.setPositiveButton("Có"){
                             dialog, which ->
                         Paper.book().delete("user")
+                        val editor = sharedPreferences.edit()
+                        editor.remove("token")
+                        editor.apply()
                         val intent = Intent(this, DangNhapActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)

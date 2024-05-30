@@ -6,7 +6,7 @@ import java.io.Serializable
 data class SanPham(
     val id: Int,
     val name: String,
-    val price: Float,
+    val price: Double,
     val imageUrl: String,
     val description: String,
     val createdAt: String,

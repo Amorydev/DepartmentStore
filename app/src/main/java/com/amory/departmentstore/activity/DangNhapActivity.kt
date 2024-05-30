@@ -29,6 +29,12 @@ class DangNhapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDangNhapBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var sharedPreferences: SharedPreferences
+    var isChiTietDatHang = false
+    private var idsanpham:Int = 0
+    private var giasanpham:Float = 0f
+    private var tensanpham:String = ""
+    private var hinhanhsanpham:String = ""
+    private var motasanpham:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +71,12 @@ class DangNhapActivity : AppCompatActivity() {
         binding.txtSaimatkhau.visibility = View.INVISIBLE
         firebaseAuth = FirebaseAuth.getInstance()
         sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
+        /*isChiTietDatHang = intent.getBooleanExtra("fromActivity",false)
+        idsanpham = intent.getIntExtra("fromActivity_id",0)
+        tensanpham = intent.getStringExtra("fromActivity_name").toString()
+        giasanpham = intent.getFloatExtra("fromActivity_price",0f)
+        hinhanhsanpham = intent.getStringExtra("fromActivity_imageUrl").toString()
+        motasanpham = intent.getStringExtra("fromActivity_description").toString()*/
 
     }
 
@@ -148,6 +160,13 @@ class DangNhapActivity : AppCompatActivity() {
                                     "Đăng nhập thành công",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                /*if (isChiTietDatHang){
+                                    intent.putExtra("name",tensanpham)
+                                    intent.putExtra("price",giasanpham)
+                                    intent.putExtra("hinhanhsanpham",hinhanhsanpham)
+                                    intent.putExtra("idsanpham",idsanpham)
+                                    intent.putExtra("motasanpham",motasanpham)
+                                }*/
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                                 startActivity(intent)
                                 finish()

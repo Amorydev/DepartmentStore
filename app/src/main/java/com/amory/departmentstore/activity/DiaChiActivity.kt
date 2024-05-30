@@ -72,6 +72,10 @@ class DiaChiActivity : AppCompatActivity() {
         call.enqueue(object : Callback<UpdateOrderModel> {
             override fun onResponse(call: Call<UpdateOrderModel>, response: Response<UpdateOrderModel>) {
                 if (response.isSuccessful) {
+                    val intent = Intent(this@DiaChiActivity, ThongTinDonHangActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    finish()
                     Toast.makeText(this@DiaChiActivity, "Cập nhật thành công", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this@DiaChiActivity, "Cập nhật không thành công", Toast.LENGTH_SHORT).show()

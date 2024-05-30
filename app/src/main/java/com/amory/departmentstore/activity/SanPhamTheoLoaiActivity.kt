@@ -1,7 +1,9 @@
 package com.amory.departmentstore.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -39,10 +41,12 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
     lateinit var adapter: RvSanPhamCacLoai
     private lateinit var scrollListener: RvLoadMoreScroll
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySanPhamTheoLoaiBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
         laySanPhamGao()
         quayLaiTrangChu()
         goToGioHang()
@@ -112,8 +116,13 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                     alertDialog.setPositiveButton("Có") { dialog, which ->
                         Paper.book().delete("user")
                         FirebaseAuth.getInstance().signOut()
+                        val editor = sharedPreferences.edit()
+                        editor.remove("token")
+                        editor.apply()
                         val intent = Intent(this, DangNhapActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
+                        finish()
                     }
                     alertDialog.show()
                     true

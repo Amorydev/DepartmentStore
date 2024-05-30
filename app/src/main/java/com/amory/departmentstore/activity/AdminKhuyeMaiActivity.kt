@@ -1,6 +1,8 @@
 package com.amory.departmentstore.activity
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -25,10 +27,12 @@ import retrofit2.Response
 class AdminKhuyeMaiActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminKhuyeMaiBinding
     private var listBanner: Banner? = null
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminKhuyeMaiBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
         onCLickDanhMuc()
         onCLickAdd()
         onClickNavViewAdmin()
@@ -83,9 +87,24 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
                 }
                 R.id.dangxuat ->
                 {
-                    Paper.book().delete("user")
-                    val intent = Intent(this, DangNhapActivity::class.java)
-                    startActivity(intent)
+                    val alertDialog = AlertDialog.Builder(this)
+                    alertDialog.setTitle("Đăng xuất")
+                    alertDialog.setMessage("Bạn chắc chắn muốn đăng xuất")
+                    alertDialog.setNegativeButton("Không"){
+                            dialog, which ->
+                        dialog.dismiss()
+                    }
+                    alertDialog.setPositiveButton("Có"){
+                            dialog, which ->
+                        Paper.book().delete("user")
+                        val editor = sharedPreferences.edit()
+                        editor.remove("token")
+                        editor.apply()
+                        val intent = Intent(this, DangNhapActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        startActivity(intent)
+                        finish()
+                    }
                     true
                 }
                 R.id.xemdonhang ->

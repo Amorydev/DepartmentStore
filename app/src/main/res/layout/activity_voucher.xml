@@ -91,6 +91,29 @@
             app:layout_constraintTop_toTopOf="@+id/textInputLayout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <ImageView
+        android:id="@+id/imv_noVoucher"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/ic_ticket"
+        android:alpha="0.6"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rvVoucher" />
+
+    <TextView
+        android:id="@+id/txt_noVoucher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textStyle="italic"
+        android:text="Rất tiếc hiện chưa có voucher nào dành cho bạn cả"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imv_noVoucher" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvVoucher"
         android:layout_width="match_parent"
@@ -99,5 +122,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout14" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout14"
+    />
 </androidx.constraintlayout.widget.ConstraintLayout>

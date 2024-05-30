@@ -58,13 +58,14 @@ import java.util.Locale
 class ThanhToanActivity : AppCompatActivity() {
     private lateinit var binding: ActivityThanhToanBinding
     private lateinit var customProgressDialog: Dialog
-    private var tongtien: Long = 0
+    private var tongtien: Double = 0.0
     private var isTienMat: Boolean = true
     private var isZalopay: Boolean = false
     private val REQUEST_CODE_ADDRESS = 1
     private var address = ""
     private var fullName = ""
     private var phone = ""
+    private var tonggiamgia = 0.0
     private lateinit var firestore: FirebaseFirestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,14 +137,18 @@ class ThanhToanActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        if (fullName.isEmpty() && address.isEmpty() && phone.isEmpty()){
+        if (fullName.isEmpty() && address.isEmpty() && phone.isEmpty()) {
             binding.txtValid.visibility = View.VISIBLE
             binding.view2.visibility = View.INVISIBLE
             binding.txtName.visibility = View.INVISIBLE
             binding.txtPhone.visibility = View.INVISIBLE
             binding.txtAddress.visibility = View.INVISIBLE
-        }else {
+        } else {
             binding.txtValid.visibility = View.INVISIBLE
+            binding.view2.visibility = View.VISIBLE
+            binding.txtName.visibility = View.VISIBLE
+            binding.txtPhone.visibility = View.VISIBLE
+            binding.txtAddress.visibility = View.VISIBLE
             binding.txtName.text = fullName
             binding.txtPhone.text = phone
             binding.txtAddress.text = address
@@ -166,8 +171,6 @@ class ThanhToanActivity : AppCompatActivity() {
     }
 
 
-
-
     private fun onClickVoucher() {
         binding.voucher.setOnClickListener {
             val intent = Intent(this, VoucherActivity::class.java)
@@ -186,41 +189,40 @@ class ThanhToanActivity : AppCompatActivity() {
     private fun tinhTongThanhToan() {
         val loaigiamgia = intent.getStringExtra("discount_type")
         val tiengiamgia = intent.getDoubleExtra("discount_value", 0.0)
-        var giamgiavoucher: Long = 0
-        binding.txtTamtinh.text = formatAmount(tinhTongTienHang().toString())
-        binding.txtPhivanchuyen.text = formatAmount("30000")
+        binding.txtTamtinh.text = formatAmount(tinhTongTienHang())
+        binding.txtPhivanchuyen.text = formatAmount(30000.0)
 
-        giamgiavoucher = if (loaigiamgia.equals("percent")) {
-            (tinhTongTienHang() * (tiengiamgia / 100)).toLong()
+        val giamgiavoucher = if (loaigiamgia.equals("percent")) {
+            (tinhTongTienHang() * (tiengiamgia / 100))
         } else {
-            tiengiamgia.toLong()
+            tiengiamgia
         }
 
         if (tinhTongTienHang() >= 300000) {
-            binding.txtGiamgia.text = formatAmount("30000")
-            val tonggiamgia = giamgiavoucher + 30000
-            binding.txtTonggiamgia.text = formatAmount(tonggiamgia.toString())
+            binding.txtGiamgia.text = formatAmount(30000.0)
+            tonggiamgia = giamgiavoucher + 30000
+            binding.txtTonggiamgia.text = formatAmount(tonggiamgia)
             tongtien = tinhTongTienHang() - tonggiamgia
-            binding.txtTongtien.text = formatAmount(tongtien.toString())
-            binding.txtTongtienTam.text = formatAmount(tongtien.toString())
+            binding.txtTongtien.text = formatAmount(tongtien)
+            binding.txtTongtienTam.text = formatAmount(tongtien)
         } else {
-            binding.txtGiamgia.text = formatAmount("0")
-            val tonggiamgia = giamgiavoucher
-            binding.txtTonggiamgia.text = formatAmount(tonggiamgia.toString())
+            binding.txtGiamgia.text = formatAmount(0.0)
+            tonggiamgia = giamgiavoucher
+            binding.txtTonggiamgia.text = formatAmount(tonggiamgia)
             tongtien = tinhTongTienHang() + 30000 - giamgiavoucher
             if (tongtien > 0) {
-                binding.txtTongtien.text = formatAmount(tongtien.toString())
-                binding.txtTongtienTam.text = formatAmount(tongtien.toString())
+                binding.txtTongtien.text = formatAmount(tongtien)
+                binding.txtTongtienTam.text = formatAmount(tongtien)
             } else {
-                binding.txtTongtien.text = formatAmount("0")
-                binding.txtTongtienTam.text = formatAmount("0")
+                binding.txtTongtien.text = formatAmount(0.0)
+                binding.txtTongtienTam.text = formatAmount(0.0)
             }
         }
 
     }
 
-    private fun tinhTongTienHang(): Long {
-        var tongtienhang: Long = 0
+    private fun tinhTongTienHang(): Double {
+        var tongtienhang: Double = 0.0
         for (i in 0 until Utils.mangmuahang.size) {
             tongtienhang += Utils.mangmuahang[i].giasanphamgiohang.toLong()
         }
@@ -263,9 +265,9 @@ class ThanhToanActivity : AppCompatActivity() {
 
 
         binding.btnDathang.setOnClickListener {
-           /* Toast.makeText(this, fullName, Toast.LENGTH_SHORT).show()
-            Toast.makeText(this, phone, Toast.LENGTH_SHORT).show()
-            Toast.makeText(this, address, Toast.LENGTH_SHORT).show()*/
+            /* Toast.makeText(this, fullName, Toast.LENGTH_SHORT).show()
+             Toast.makeText(this, phone, Toast.LENGTH_SHORT).show()
+             Toast.makeText(this, address, Toast.LENGTH_SHORT).show()*/
             val note = binding.noteET.text.trim().toString()
             val address = binding.txtAddress.text.toString()
             /*Toast.makeText(this,address,Toast.LENGTH_SHORT).show()*/
@@ -293,20 +295,9 @@ class ThanhToanActivity : AppCompatActivity() {
             call.enqueue(object : Callback<OrderModel> {
                 override fun onResponse(call: Call<OrderModel>, response: Response<OrderModel>) {
                     if (response.isSuccessful) {
-                        val gioHangSet = Utils.manggiohang.map { it.idsanphamgiohang }.toSet()
-                        val muaHangSet = Utils.mangmuahang.map { it.idsanphamgiohang }.toSet()
-                        val itemsToRemove = muaHangSet.intersect(gioHangSet)
-                        Utils.manggiohang.removeAll { gioHang -> itemsToRemove.contains(gioHang.idsanphamgiohang) }
-                        Utils.mangmuahang.clear()
-
                         if (isZalopay) {
                             requestZalo()
-                            showCustomProgressBar()
                         } else {
-                            Toast.makeText(this@ThanhToanActivity, "Đặt hàng thành công", Toast.LENGTH_SHORT).show()
-                            /*val intent = Intent(this@ThanhToanActivity, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()*/
                             showCustomProgressBar()
                         }
                     } else {
@@ -322,7 +313,7 @@ class ThanhToanActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<OrderModel>, t: Throwable) {
                     Toast.makeText(this@ThanhToanActivity, "Không thành công", Toast.LENGTH_SHORT)
                         .show()
-                   /* Log.d("error", t.message.toString())*/
+                    /* Log.d("error", t.message.toString())*/
                     t.printStackTrace()
                 }
             })
@@ -330,19 +321,26 @@ class ThanhToanActivity : AppCompatActivity() {
     }
 
     private fun showCustomProgressBar() {
-        customProgressDialog = Dialog(this)
+        customProgressDialog = BottomSheetDialog(this)
         val view = LayoutInflater.from(this).inflate(R.layout.layout_progressbar, null)
         customProgressDialog.setContentView(view)
-        customProgressDialog.setCancelable(false)
+        customProgressDialog.setCancelable(true)
         customProgressDialog.show()
 
         Handler(Looper.getMainLooper()).postDelayed({
             customProgressDialog.dismiss()
-            val intent = Intent(this@ThanhToanActivity, MainActivity::class.java)
+            val intent = Intent(this@ThanhToanActivity, HoaDonActivity::class.java)
+            intent.putExtra("hoadon_name", fullName)
+            intent.putExtra("hoadon_phone", phone)
+            intent.putExtra("hoadon_address", address)
+            intent.putExtra("hoadon_gia", tinhTongTienHang())
+            intent.putExtra("hoadon_tongtien", tongtien)
+            intent.putExtra("hoadon_giamgia", tonggiamgia)
             startActivity(intent)
             finish()
             pushNotification()
         }, 2000)
+
     }
 
 
@@ -352,7 +350,7 @@ class ThanhToanActivity : AppCompatActivity() {
 
         try {
             val data = orderApi.createOrder(txtAmount.toString())
-           /* Log.d("Amount", txtAmount.toString())*/
+            /* Log.d("Amount", txtAmount.toString())*/
             val code = data.getString("return_code")
             /*Toast.makeText(applicationContext, "return_code: $code", Toast.LENGTH_LONG).show()*/
 
@@ -429,7 +427,8 @@ class ThanhToanActivity : AppCompatActivity() {
             data["title"] = "Thông báo"
             data["body"] = "Bạn có đơn hàng mới"
             val sendNoti = SendNotification(token.toString(), data)
-            val service = RetrofitNotification.retrofitInstance.create(APIPushNotification::class.java)
+            val service =
+                RetrofitNotification.retrofitInstance.create(APIPushNotification::class.java)
             val call = service.sendNotification(sendNoti)
             call.enqueue(object : Callback<NotificationReponse> {
                 override fun onResponse(
@@ -487,7 +486,7 @@ class ThanhToanActivity : AppCompatActivity() {
     }
 
 
-    private fun formatAmount(amount: String): String {
+    private fun formatAmount(amount: Double): String {
         val number = amount.toLong()
         val format = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${format.format(number)}đ"
@@ -505,6 +504,7 @@ class ThanhToanActivity : AppCompatActivity() {
         super.onResume()
         initViews()
     }
+
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

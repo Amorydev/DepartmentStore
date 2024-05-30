@@ -20,15 +20,15 @@ class RvMuaNgay(val ds:MutableList<GioHang>):RecyclerView.Adapter<RvMuaNgay.view
             binding.txtTensanphammuangay.text = data.tensanphamgiohang
             val position = adapterPosition
             val gioHangItem = gioHang[position]
-            val giaGoc = gioHangItem.giasanphamgiohang.toLong() / (gioHangItem.soluongsanphamgiohang)
-            binding.txtGiasanpham.text = formatAmount(giaGoc.toString())
+            val giaGoc = gioHangItem.giasanphamgiohang / (gioHangItem.soluongsanphamgiohang)
+            binding.txtGiasanpham.text = formatAmount(giaGoc)
             binding.txtSoluong.text = "x "+ data.soluongsanphamgiohang.toString()
             binding.txtTongsoluongsanpham.text = "Tổng tiền(${data.soluongsanphamgiohang} sản phẩm):"
             binding.txtTongtien.text = formatAmount(data.giasanphamgiohang)
             Glide.with(binding.root).load(data.hinhanhsanphamgiohang).fitCenter().into(binding.imvHinhanhsanphammuangay)
         }
     }
-    fun formatAmount(amount: String): String {
+    fun formatAmount(amount: Double): String {
         val number = amount.toLong()
         val fomart = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${fomart.format(number)}đ"

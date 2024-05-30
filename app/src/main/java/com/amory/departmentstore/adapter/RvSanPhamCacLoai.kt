@@ -29,7 +29,7 @@ class RvSanPhamCacLoai(private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoa
     }
     inner class LoadingViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
     //chuyen sang dinh dang 000.000d
-    private fun formatAmount(amount: Float): String {
+    private fun formatAmount(amount: Double): String {
         val number = amount.toLong()
         val formatter = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${formatter.format(number)}đ"
@@ -41,7 +41,7 @@ class RvSanPhamCacLoai(private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoa
     }
     fun addLoadingView(){
         android.os.Handler().post {
-            ds.add(SanPham(0,"",100f,"","","","",0, LoaiSanPham(0,"","")))
+            ds.add(SanPham(0,"",100.0,"","","","",0, LoaiSanPham(0,"","")))
             notifyItemInserted(ds.size-1)
         }
     }

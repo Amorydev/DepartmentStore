@@ -43,7 +43,7 @@ class RvSanPhamAdmin(private var ds: MutableList<SanPham>) :
     }
 
     //chuyen sang dinh dang 000.000d
-    private fun formatAmount(amount: Float): String {
+    private fun formatAmount(amount: Double): String {
         val number = amount.toLong()
         val formatter = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${formatter.format(number)}đ"

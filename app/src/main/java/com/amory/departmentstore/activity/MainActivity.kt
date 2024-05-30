@@ -575,7 +575,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onResume() {
         super.onResume()
         if (Utils.manggiohang.getSoluong() != 0) {

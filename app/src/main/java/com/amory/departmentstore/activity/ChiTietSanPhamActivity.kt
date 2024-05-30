@@ -16,7 +16,7 @@ import java.util.Locale
 class ChiTietSanPhamActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChiTietSanPhamBinding
     private lateinit var tensanpham: String
-    private var giasanpham: Float = 0f
+    private var giasanpham: Double = 0.0
     private lateinit var hinhanhsanpham: String
     private lateinit var motasanpham: String
     private var idsanpham: Int = 0
@@ -29,7 +29,6 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         init()
         onClickBack()
         XulyChiTiet()
-
         onCLickCongTruSanPham()
         ThemVaoGioHang()
         GoToGioHang()
@@ -40,13 +39,15 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
     private fun onCLickMuaNgay() {
         binding.btnMuangay.setOnClickListener {
             val user = Paper.book().read<User>("user")
+            var soluong = 0
+            var tongGiaTriSanPham = 0.0
             if (user != null && Utils.user_current != null) {
-                val soluong = soluongsanpham
-                val tongGiaTriSanPham = giasanpham.toLong() * soluong
+                soluong = soluongsanpham
+                tongGiaTriSanPham = giasanpham.toDouble() * soluong
                 val gioHang = GioHang(
                     idsanphamgiohang = idsanpham,
                     tensanphamgiohang = tensanpham,
-                    giasanphamgiohang = tongGiaTriSanPham.toString(),
+                    giasanphamgiohang = tongGiaTriSanPham,
                     hinhanhsanphamgiohang = hinhanhsanpham,
                     soluongsanphamgiohang = soluong
                 )
@@ -56,8 +57,13 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
                /* overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right)*/
             } else {
                 val intent = Intent(this, DangNhapActivity::class.java)
+                /*intent.putExtra("fromActivity",true)
+                intent.putExtra("fromActivity_id",idsanpham)
+                intent.putExtra("fromActivity_name",tensanpham)
+                intent.putExtra("fromActivity_price",giasanpham)
+                intent.putExtra("fromActivity_imageUrl",hinhanhsanpham)
+                intent.putExtra("fromActivity_description",motasanpham)*/
                 startActivity(intent)
-                finish()
             }
         }
     }
@@ -97,7 +103,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
 
     private fun onClickBack() {
         binding.imvBack.setOnClickListener {
-            onBackPressed()
+            this.onBackPressedDispatcher.onBackPressed()
         }
     }
 
@@ -112,19 +118,18 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
                     for (i in 0 until Utils.manggiohang.size) {
                         if (Utils.manggiohang[i].idsanphamgiohang == idsanpham) {
                             Utils.manggiohang[i].soluongsanphamgiohang += soluong
-                            val tongGiaTriSanPham =
-                                giasanpham.toLong() * Utils.manggiohang[i].soluongsanphamgiohang
-                            Utils.manggiohang[i].giasanphamgiohang = tongGiaTriSanPham.toString()
+                            val tongGiaTriSanPham = giasanpham * Utils.manggiohang[i].soluongsanphamgiohang
+                            Utils.manggiohang[i].giasanphamgiohang = tongGiaTriSanPham
                             flags = true
                             break
                         }
                     }
                     if (!flags) {
-                        val tongGiaTriSanPham = giasanpham.toLong() * soluong
+                        val tongGiaTriSanPham = giasanpham * soluong
                         val gioHang = GioHang(
                             idsanphamgiohang = idsanpham,
                             tensanphamgiohang = tensanpham,
-                            giasanphamgiohang = tongGiaTriSanPham.toString(),
+                            giasanphamgiohang = tongGiaTriSanPham,
                             hinhanhsanphamgiohang = hinhanhsanpham,
                             soluongsanphamgiohang = soluong
                         )
@@ -132,11 +137,11 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
                     }
                 } else {
                     val soluong = soluongsanpham
-                    val tongGiaTriSanPham = giasanpham.toLong() * soluong
+                    val tongGiaTriSanPham = giasanpham * soluong
                     val gioHang = GioHang(
                         idsanphamgiohang = idsanpham,
                         tensanphamgiohang = tensanpham,
-                        giasanphamgiohang = tongGiaTriSanPham.toString(),
+                        giasanphamgiohang = tongGiaTriSanPham,
                         hinhanhsanphamgiohang = hinhanhsanpham,
                         soluongsanphamgiohang = soluong
                     )
@@ -165,7 +170,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
     private fun init() {
         Paper.init(this)
         tensanpham = intent.getStringExtra("name").toString()
-        giasanpham = intent.getFloatExtra("price", 0f)
+        giasanpham = intent.getDoubleExtra("price", 0.0)
         hinhanhsanpham = intent.getStringExtra("hinhanhsanpham").toString()
         motasanpham = intent.getStringExtra("motasanpham").toString()
         idsanpham = intent.getIntExtra("idsanpham", 0)
@@ -180,12 +185,11 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         binding.txtChitietTensanpham.text = tensanpham
         binding.txtChitietGiasanpham.text = formatAmount(giasanpham)
         binding.txtChitietMotasanpham.text = motasanpham
-        Glide.with(applicationContext).load(hinhanhsanpham).centerCrop()
-            .into(binding.imvChitietHinhanh)
+        Glide.with(applicationContext).load(hinhanhsanpham).into(binding.imvChitietHinhanh)
     }
 
     //chuyen sang dinh dang 000.000d
-    private fun formatAmount(amount: Float): String {
+    private fun formatAmount(amount: Double): String {
         val number = amount.toLong()
         val formatter = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${formatter.format(number)}đ"

@@ -1,6 +1,8 @@
 package com.amory.departmentstore.activity
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -36,10 +38,12 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
     private lateinit var donhang: OrderRespone
     private var status:String ?= null
     private var _status:String ?= null
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminChiTietDonHangBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
         layChiTietDonHang()
         onCLickDanhMuc()
         onClickNavViewAdmin()
@@ -131,6 +135,9 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
                     alertDialog.setPositiveButton("Có"){
                             dialog, which ->
                         Paper.book().delete("user")
+                        val editor = sharedPreferences.edit()
+                        editor.remove("token")
+                        editor.apply()
                         val intent = Intent(this, DangNhapActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)

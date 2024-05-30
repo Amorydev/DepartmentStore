@@ -30,6 +30,8 @@ class VoucherActivity : AppCompatActivity() {
 
     private fun setupViews() {
         binding.txtKhongcovoucher.visibility = View.INVISIBLE
+        binding.imvNoVoucher.visibility = View.INVISIBLE
+        binding.txtNoVoucher.visibility = View.INVISIBLE
         binding.btnApdung.setOnClickListener {
             searchVoucher()
         }
@@ -75,7 +77,8 @@ class VoucherActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<VoucherModel>, t: Throwable) {
                 t.printStackTrace()
-                Log.d("voucher", t.message.toString())
+                /*Log.d("voucher", t.message.toString())*/
+
                 Toast.makeText(this@VoucherActivity, "Thất bại", Toast.LENGTH_SHORT).show()
             }
         })
@@ -112,8 +115,8 @@ class VoucherActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<VoucherModel>, t: Throwable) {
                 t.printStackTrace()
-                Log.d("voucher", t.message.toString())
-                Toast.makeText(this@VoucherActivity, "Thất bại", Toast.LENGTH_SHORT).show()
+                binding.imvNoVoucher.visibility = View.VISIBLE
+                binding.txtNoVoucher.visibility = View.VISIBLE
             }
         })
     }

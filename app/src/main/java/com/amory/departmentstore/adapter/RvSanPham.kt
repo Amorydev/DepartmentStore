@@ -31,7 +31,7 @@ class RvSanPham(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.A
     }
     inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     //chuyen sang dinh dang 000.000d
-    private fun formatAmount(amount: Float): String {
+    private fun formatAmount(amount: Double): String {
         val number = amount.toLong()
         val formatter = NumberFormat.getInstance(Locale("vi", "VN"))
         return "${formatter.format(number)}đ"
@@ -45,7 +45,7 @@ class RvSanPham(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.A
     fun addLoadingView() {
         //Thêm loading
         Handler().post {
-            ds.add(SanPham(0, "", 1000.0f,"","","","",0, LoaiSanPham(0,"","")))
+            ds.add(SanPham(0, "", 1000.0,"","","","",0, LoaiSanPham(0,"","")))
             notifyItemInserted(ds.size - 1)
         }
     }
@@ -92,8 +92,7 @@ class RvSanPham(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.A
             val sanPhamViewHolder = holder as SanPhamViewHolder
             sanPhamViewHolder.tensanpham.text = ds[position].name
             sanPhamViewHolder.giasanpham.text = formatAmount(ds[position].price)
-            Glide.with(mcontext).load(ds[position].imageUrl).centerCrop()
-                .into(sanPhamViewHolder.hinhanhsanpham)
+            Glide.with(mcontext).load(ds[position].imageUrl).into(sanPhamViewHolder.hinhanhsanpham)
             sanPhamViewHolder.soluong.text = "Đã bán ${ds[position].soldQuantity.toString()}"
         }
         holder.itemView.setOnClickListener {

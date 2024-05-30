@@ -1,6 +1,8 @@
 package com.amory.departmentstore.activity
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
@@ -10,11 +12,13 @@ import io.paperdb.Paper
 
 class AdminActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminBinding
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Paper.init(this)
+        sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
         onCLickDanhMuc()
         onClickNavViewAdmin()
         onCLickChat()
@@ -52,6 +56,9 @@ class AdminActivity : AppCompatActivity() {
                     alertDialog.setPositiveButton("Có"){
                             dialog, which ->
                         Paper.book().delete("user")
+                        val editor = sharedPreferences.edit()
+                        editor.remove("token")
+                        editor.apply()
                         val intent = Intent(this, DangNhapActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
