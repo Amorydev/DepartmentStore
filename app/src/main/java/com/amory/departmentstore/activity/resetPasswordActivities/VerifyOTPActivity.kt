@@ -27,11 +27,11 @@ class VerifyOTPActivity : AppCompatActivity() {
         setContentView(binding.root)
         onClickback()
         startCountdownTimer()
-        XuLyET()
-        VerifyOTP()
+        xuLyET()
+        verifyOTP()
     }
 
-    private fun VerifyOTP() {
+    private fun verifyOTP() {
         var otp: Int = 0
         binding.btnNext.setOnClickListener {
             val otpEditText1 = binding.otpEditText1.text?.trim().toString()
@@ -80,23 +80,8 @@ class VerifyOTPActivity : AppCompatActivity() {
                 }
             })
         }
-        if (isValidOtp(otp.toString())){
-            binding.btnNext.setBackgroundColor(ContextCompat.getColor(this, R.color.main))
-        }
     }
-
-    fun isValidOtp(otp: String): Boolean {
-        val otpPattern = Regex("^[0-9]{6}$")
-        return otpPattern.matches(otp)
-    }
-
-    private fun onClickback() {
-        binding.btnBack.setOnClickListener {
-            onBackPressed()
-        }
-    }
-
-    private fun XuLyET() {
+    private fun xuLyET() {
         val otpEditText1 = binding.otpEditText1
         val otpEditText2 = binding.otpEditText2
         val otpEditText3 = binding.otpEditText3
@@ -113,8 +98,7 @@ class VerifyOTPActivity : AppCompatActivity() {
         )
 
         for (i in otpEditTexts.indices) {
-            val currentIndex = i
-            otpEditTexts[currentIndex].addTextChangedListener(object : TextWatcher {
+            otpEditTexts[i].addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?,
                     start: Int,
@@ -124,11 +108,12 @@ class VerifyOTPActivity : AppCompatActivity() {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if (s?.length == 1 && currentIndex < otpEditTexts.size - 1) {
-                        otpEditTexts[currentIndex + 1].requestFocus()
-                    } else if (s?.length == 0 && currentIndex > 0) {
-                        otpEditTexts[currentIndex - 1].requestFocus()
+                    if (s?.length == 1 && i < otpEditTexts.size - 1) {
+                        otpEditTexts[i + 1].requestFocus()
+                    } else if (s?.length == 0 && i > 0) {
+                        otpEditTexts[i - 1].requestFocus()
                     }
+                    updateButtonColor()
                 }
 
                 override fun afterTextChanged(s: Editable?) {}
@@ -136,6 +121,33 @@ class VerifyOTPActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateButtonColor() {
+        val otp = binding.otpEditText1.text.toString() +
+                binding.otpEditText2.text.toString() +
+                binding.otpEditText3.text.toString() +
+                binding.otpEditText4.text.toString() +
+                binding.otpEditText5.text.toString() +
+                binding.otpEditText6.text.toString()
+
+        if (isValidOtp(otp)) {
+            binding.btnNext.setBackgroundColor(ContextCompat.getColor(this, R.color.main))
+        } else {
+            binding.btnNext.setBackgroundColor(ContextCompat.getColor(this, R.color.color_shimmer))
+        }
+    }
+
+    private fun isValidOtp(otp: String): Boolean {
+        val otpPattern = Regex("^[0-9]{6}$")
+        return otpPattern.matches(otp)
+    }
+
+
+
+    private fun onClickback() {
+        binding.btnBack.setOnClickListener {
+            onBackPressed()
+        }
+    }
     private fun startCountdownTimer() {
         object : CountDownTimer(60000, 1000) {
             @SuppressLint("SetTextI18n")

@@ -6,14 +6,14 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface APICallVouchers {
-    @GET("layvoucher.php")
+    @GET("vouchers")
     fun getVoucher(
     ): Call<VoucherModel>
-    @POST("timkiemvoucher.php")
-    @FormUrlEncoded
-    fun timkiemvoucher(
-        @Field("search") search:String
+    @GET("vouchers/{code}")
+    fun timKiemVoucher(
+        @Path("code") code:String
     ): Call<VoucherModel>
 }

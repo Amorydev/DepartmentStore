@@ -14,10 +14,10 @@ class RvVouvher(val ds:MutableList<Voucher>, private val onClickVoucher : OnClic
     inner class viewHolder(private val binding: LayoutVoucherBinding): RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(data: Voucher){
-            if (data.discount_type == "percent"){
-                binding.txtGiamgia.text = "Giảm giá ${data.discount_value} %"
+            if (data.discountType == "percent"){
+                binding.txtGiamgia.text = "Nhập mã \"${data.code}\" để giảm ${data.discountValue} %"
             }else{
-                binding.txtGiamgia.text = "Giảm giá ${formatAmount(data.discount_value.toLong().toString())}"
+                binding.txtGiamgia.text = "Nhập mã \"${data.code}\" để giảm ${formatAmount(data.discountValue.toLong().toString())}"
             }
         }
     }

@@ -188,7 +188,7 @@
                 android:layout_height="50sp"
                 android:layout_marginTop="30sp"
                 android:layout_marginBottom="30sp"
-                android:background="#AFFAB2"
+                android:background="@drawable/background_button"
                 android:text="Đăng kí"
                 android:textColor="@color/black"
                 android:textSize="20sp"

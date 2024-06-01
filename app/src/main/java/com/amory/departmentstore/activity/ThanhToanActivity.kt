@@ -62,10 +62,14 @@ class ThanhToanActivity : AppCompatActivity() {
     private var isTienMat: Boolean = true
     private var isZalopay: Boolean = false
     private val REQUEST_CODE_ADDRESS = 1
+    private val REQUEST_CODE_VOUCHER = 2
     private var address = ""
     private var fullName = ""
     private var phone = ""
     private var tonggiamgia = 0.0
+    private var discountType = ""
+    private var discountValue = 0.0
+    private var discountCode = ""
     private lateinit var firestore: FirebaseFirestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,6 +91,7 @@ class ThanhToanActivity : AppCompatActivity() {
         showRV()
         onCLickDiaChi()
         showBottomSheet()
+        pushNotification()
     }
 
     @SuppressLint("InflateParams", "MissingInflatedId")
@@ -161,6 +166,8 @@ class ThanhToanActivity : AppCompatActivity() {
             binding.imvPhuongthuc.setImageResource(R.drawable.ic_salary)
             binding.txtPhuongthuc.text = "Thanh toán khi nhận hàng"
         }
+        tinhTongThanhToan()
+        Log.d("code",discountCode)
     }
 
     private fun onCLickDiaChi() {
@@ -174,41 +181,45 @@ class ThanhToanActivity : AppCompatActivity() {
     private fun onClickVoucher() {
         binding.voucher.setOnClickListener {
             val intent = Intent(this, VoucherActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_VOUCHER)
         }
     }
 
     private fun showRV() {
         val adapter = RvMuaNgay(Utils.mangmuahang)
         binding.rvSanphamTrongthanhtoan.adapter = adapter
-        binding.rvSanphamTrongthanhtoan.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.rvSanphamTrongthanhtoan.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvSanphamTrongthanhtoan.setHasFixedSize(true)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun tinhTongThanhToan() {
-        val loaigiamgia = intent.getStringExtra("discount_type")
-        val tiengiamgia = intent.getDoubleExtra("discount_value", 0.0)
-        binding.txtTamtinh.text = formatAmount(tinhTongTienHang())
-        binding.txtPhivanchuyen.text = formatAmount(30000.0)
-
-        val giamgiavoucher = if (loaigiamgia.equals("percent")) {
-            (tinhTongTienHang() * (tiengiamgia / 100))
-        } else {
-            tiengiamgia
+        if (discountCode.isNotEmpty()){
+            binding.txtVoucherCode.text = discountCode
         }
 
+        binding.txtTamtinh.text = formatAmount(tinhTongTienHang())
+        binding.txtPhivanchuyen.text = formatAmount(30000.0)
+        binding.txtVoucherCode.text
+
+        val giamgiavoucher = if (discountType == "percent") {
+            (tinhTongTienHang() * (discountValue / 100))
+        } else {
+            discountValue
+        }
+
+       /* Log.d("giamgiavoucher", giamgiavoucher.toString())*/
         if (tinhTongTienHang() >= 300000) {
-            binding.txtGiamgia.text = formatAmount(30000.0)
+            binding.txtGiamgia.text = "- ${formatAmount(30000.0)}"
             tonggiamgia = giamgiavoucher + 30000
-            binding.txtTonggiamgia.text = formatAmount(tonggiamgia)
+            binding.txtTonggiamgia.text = "- ${formatAmount(tonggiamgia)}"
             tongtien = tinhTongTienHang() - tonggiamgia
             binding.txtTongtien.text = formatAmount(tongtien)
             binding.txtTongtienTam.text = formatAmount(tongtien)
         } else {
             binding.txtGiamgia.text = formatAmount(0.0)
             tonggiamgia = giamgiavoucher
-            binding.txtTonggiamgia.text = formatAmount(tonggiamgia)
+            binding.txtTonggiamgia.text = "- ${formatAmount(tonggiamgia)}"
             tongtien = tinhTongTienHang() + 30000 - giamgiavoucher
             if (tongtien > 0) {
                 binding.txtTongtien.text = formatAmount(tongtien)
@@ -464,13 +475,14 @@ class ThanhToanActivity : AppCompatActivity() {
     }
 
     private fun pushNotification() {
-        getToken("5") { token ->
+        getToken() { token ->
+            Log.d("tokenFCM",token.toString())
             val data: MutableMap<String, String> = HashMap()
             data["title"] = "Thông báo"
             data["body"] = "Bạn có đơn hàng mới"
+
             val sendNoti = SendNotification(token.toString(), data)
-            val service =
-                RetrofitNotification.retrofitInstance.create(APIPushNotification::class.java)
+            val service = RetrofitNotification.retrofitInstance.create(APIPushNotification::class.java)
             val call = service.sendNotification(sendNoti)
             call.enqueue(object : Callback<NotificationReponse> {
                 override fun onResponse(
@@ -486,30 +498,9 @@ class ThanhToanActivity : AppCompatActivity() {
         }
     }
 
-    private fun getIdAdmin(): Int {
-        var adminId = 5
-        val serviceUser = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
-        val callIdAdmin = serviceUser.getUser()
-        callIdAdmin.enqueue(object : Callback<User> {
-            override fun onResponse(call: Call<User>, response: Response<User>) {
-                if (response.isSuccessful) {
-                    val roleUser = response.body()?.role?.id
-                    if (roleUser == 2) {
-                        adminId = response.body()?.id!!
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<User>, t: Throwable) {
-                t.printStackTrace()
-            }
-        })
-        return adminId
-    }
-
-    private fun getToken(userId: String, onTokenRetrieved: (String?) -> Unit) {
+    private fun getToken( onTokenRetrieved: (String?) -> Unit) {
         val ref = firestore.collection("tokens")
-        ref.document(userId).get()
+        ref.document("tokens").get()
             .addOnSuccessListener { documentSnapshot ->
                 val token = documentSnapshot.getString("token")
                 onTokenRetrieved(token)
@@ -554,6 +545,11 @@ class ThanhToanActivity : AppCompatActivity() {
             address = data?.getStringExtra("address").toString()
             fullName = data?.getStringExtra("fullname").toString()
             phone = data?.getStringExtra("phone").toString()
+        }
+        if (requestCode == REQUEST_CODE_VOUCHER && resultCode == Activity.RESULT_OK) {
+            discountType = data?.getStringExtra("discount_type").toString()
+            discountValue = data?.getDoubleExtra("discount_value", 0.0)!!
+            discountCode = data.getStringExtra("discount_code").toString()
         }
     }
 

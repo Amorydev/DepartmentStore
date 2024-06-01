@@ -1,5 +1,7 @@
 package com.amory.departmentstore.model
 
 data class VoucherModel(
-    val result:MutableList<Voucher>
+    val status:String,
+    val message:String,
+    val data:MutableList<Voucher>
 )

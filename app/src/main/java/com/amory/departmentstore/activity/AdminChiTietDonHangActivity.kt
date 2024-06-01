@@ -15,7 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.R
-import com.amory.departmentstore.adapter.RvCHiTietDonHangAdmin
+import com.amory.departmentstore.adapter.RvChiTietDonHangAdmin
 import com.amory.departmentstore.databinding.ActivityAdminChiTietDonHangBinding
 import com.amory.departmentstore.model.EventBus.DonHangEvent
 import com.amory.departmentstore.model.OrderModelAdmin
@@ -105,7 +105,7 @@ class AdminChiTietDonHangActivity : AppCompatActivity() {
     private fun setupRecyclerView(data: MutableList<OrderRespone>?) {
         binding.rvDonhang.apply {
             layoutManager = LinearLayoutManager(this@AdminChiTietDonHangActivity, LinearLayoutManager.VERTICAL, false)
-            adapter = RvCHiTietDonHangAdmin(data)
+            adapter = RvChiTietDonHangAdmin(data)
             setHasFixedSize(true)
         }
     }

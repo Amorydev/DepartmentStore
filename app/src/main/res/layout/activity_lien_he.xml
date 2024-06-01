@@ -50,11 +50,23 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout6" >
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView52"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="NHÓM 1"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="40sp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="20sp"
         android:src="@drawable/lienhe2"
         app:civ_border_color="#06930C"
         app:civ_border_width="2dp"
@@ -67,21 +79,22 @@
         android:layout_width="match_parent"
         android:layout_height="0sp"
         android:layout_marginStart="20sp"
-        android:layout_marginTop="40sp"
         android:layout_marginEnd="20sp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/bg_lienhe"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image">
+        app:layout_constraintTop_toBottomOf="@+id/textView52">
 
-        <ImageView
+        <TextView
             android:id="@+id/imv_fb"
-            android:layout_width="50sp"
-            android:layout_height="50sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CT06N0151"
+            android:textSize="20sp"
             android:layout_marginStart="40sp"
             android:layout_marginTop="40sp"
-            android:background="@drawable/ic_facebook"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -89,19 +102,21 @@
             android:id="@+id/txt_fb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Facebook"
-            android:textSize="20sp"
             android:layout_marginStart="20sp"
+            android:text="Nguyễn Đức Quyền"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/imv_fb"
             app:layout_constraintStart_toEndOf="@+id/imv_fb"
             app:layout_constraintTop_toTopOf="@+id/imv_fb" />
-        <ImageView
+
+        <TextView
             android:id="@+id/imv_insta"
-            android:layout_width="50sp"
-            android:layout_height="50sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="40sp"
             android:layout_marginTop="40sp"
-            android:background="@drawable/ic_instagram"
+            android:text="CT06N0145"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imv_fb" />
 
@@ -109,19 +124,21 @@
             android:id="@+id/txt_insta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Instagram"
-            android:textSize="20sp"
             android:layout_marginStart="20sp"
+            android:text="Huỳnh Tấn Phát"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/imv_insta"
             app:layout_constraintStart_toEndOf="@+id/imv_insta"
             app:layout_constraintTop_toTopOf="@+id/imv_insta" />
-        <ImageView
+
+        <TextView
             android:id="@+id/imv_github"
-            android:layout_width="50sp"
-            android:layout_height="50sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="40sp"
             android:layout_marginTop="40sp"
-            android:background="@drawable/ic_github"
+            android:text="CT06N0110"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imv_insta" />
 
@@ -129,19 +146,21 @@
             android:id="@+id/txt_git"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Github"
-            android:textSize="20sp"
             android:layout_marginStart="20sp"
+            android:text="Vũ Tiến Đạt"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/imv_github"
             app:layout_constraintStart_toEndOf="@+id/imv_github"
             app:layout_constraintTop_toTopOf="@+id/imv_github" />
-        <ImageView
+
+        <TextView
             android:id="@+id/imv_email"
-            android:layout_width="50sp"
-            android:layout_height="50sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="40sp"
             android:layout_marginTop="40sp"
-            android:background="@drawable/ic_email"
+            android:text="CT06N0143"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imv_github" />
 
@@ -149,11 +168,33 @@
             android:id="@+id/txt_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email"
-            android:textSize="20sp"
             android:layout_marginStart="20sp"
+            android:text="Hoàng Thị Cẩm Ly"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/imv_email"
             app:layout_constraintStart_toEndOf="@+id/imv_email"
             app:layout_constraintTop_toTopOf="@+id/imv_email" />
+
+        <TextView
+            android:id="@+id/imv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40sp"
+            android:layout_marginTop="40sp"
+            android:text="CT06N034"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/imv_email"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:text="Nguyễn Hạnh Nhi"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imv"
+            app:layout_constraintStart_toEndOf="@+id/imv"
+            app:layout_constraintTop_toTopOf="@+id/imv" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

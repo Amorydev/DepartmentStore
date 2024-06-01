@@ -38,7 +38,7 @@
             android:layout_height="420sp"
             android:layout_margin="30sp"
             app:cardCornerRadius="20sp"
-
+            app:cardElevation="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_dangnhap">
@@ -134,7 +134,7 @@
                     android:layout_width="150sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="60sp"
-                    android:background="@color/main"
+                    android:background="@drawable/background_button"
                     android:text="Đăng nhập"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

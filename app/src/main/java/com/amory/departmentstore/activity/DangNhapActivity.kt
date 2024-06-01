@@ -52,7 +52,6 @@ class DangNhapActivity : AppCompatActivity() {
             val intent = Intent(this, DangKiActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
-            finish()
         }
     }
 
@@ -136,40 +135,48 @@ class DangNhapActivity : AppCompatActivity() {
                             if (response.isSuccessful) {
                                 val userRole = response.body()?.role?.id
                                 /*Toast.makeText(this@DangNhapActivity,userRole.toString(),Toast.LENGTH_SHORT).show()*/
-                                val intent = if (userRole == 1) {
-                                    Intent(this@DangNhapActivity, MainActivity::class.java)
-                                } else {
-                                    Intent(this@DangNhapActivity, AdminActivity::class.java)
-                                }
-
-                                if (userRole == 1) {
-                                    if (binding.checkBoxNhodangnhap.isChecked) {
-                                        Paper.book().write("isLogin", true)
-                                        Paper.book().write("user", response.body()!!)
-                                        Paper.book().write("email", email)
-                                        Paper.book().write("password", password)
-                                        Paper.book().write("checked", true)
+                                if (response.body()?.active == true) {
+                                    val intent = if (userRole == 1) {
+                                        Intent(this@DangNhapActivity, MainActivity::class.java)
+                                    } else {
+                                        Intent(this@DangNhapActivity, AdminActivity::class.java)
                                     }
-                                } else {
-                                    val adminId = response.body()?.id
-                                    saveTokenAdmin(adminId)
-                                }
-                                Utils.user_current = response.body()!!
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Đăng nhập thành công",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                /*if (isChiTietDatHang){
+
+                                    if (userRole == 1) {
+                                        if (binding.checkBoxNhodangnhap.isChecked) {
+                                            Paper.book().write("isLogin", true)
+                                            Paper.book().write("user", response.body()!!)
+                                            Paper.book().write("email", email)
+                                            Paper.book().write("password", password)
+                                            Paper.book().write("checked", true)
+                                        }
+                                    } else {
+                                        val adminId = response.body()?.id
+                                        saveTokenAdmin(adminId)
+                                    }
+                                    Utils.user_current = response.body()!!
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Đăng nhập thành công",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    /*if (isChiTietDatHang){
                                     intent.putExtra("name",tensanpham)
                                     intent.putExtra("price",giasanpham)
                                     intent.putExtra("hinhanhsanpham",hinhanhsanpham)
                                     intent.putExtra("idsanpham",idsanpham)
                                     intent.putExtra("motasanpham",motasanpham)
                                 }*/
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                startActivity(intent)
-                                finish()
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                    startActivity(intent)
+                                    finish()
+                                }else{
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Tài khoản đã bị khóa",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
                         }
 
@@ -181,7 +188,7 @@ class DangNhapActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         applicationContext,
-                        "Đăng nhập không thành công",
+                        "Tài khoản đã bị khóa",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

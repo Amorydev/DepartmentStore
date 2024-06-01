@@ -48,6 +48,7 @@ class AdminChatUserActivity : AppCompatActivity() {
                         " ",
                         "",
                         "",
+                        true,
                         Role(1,"user")
                     )
                     listUser.add(user)

@@ -42,6 +42,7 @@ import com.amory.departmentstore.model.User
 import com.amory.departmentstore.retrofit.APIBanHang.APICallBanners
 import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
 import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
+import com.amory.departmentstore.retrofit.AuthInterceptor
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
@@ -587,6 +588,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         RetrofitClient.init(this)
+        AuthInterceptor(this)
     }
 
 }

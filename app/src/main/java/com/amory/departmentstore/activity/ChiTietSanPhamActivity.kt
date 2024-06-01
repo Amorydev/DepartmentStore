@@ -76,28 +76,22 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         }
 
     }
-    /*
-        private fun putData() {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("soluongsanpham", soluongsanphamgiohang)
-            startActivity(intent)
-        }*/
-
+ 
     private fun onCLickCongTruSanPham() {
         binding.txtCongSanpham.setOnClickListener {
             soluongsanpham += 1
-            CapNhatSoLuongSanPham()
+            capNhatSoLuongSanPham()
 
         }
         binding.txtTruSanpham.setOnClickListener {
             if (soluongsanpham > 0) {
                 soluongsanpham -= 1
             }
-            CapNhatSoLuongSanPham()
+            capNhatSoLuongSanPham()
         }
     }
 
-    private fun CapNhatSoLuongSanPham() {
+    private fun capNhatSoLuongSanPham() {
         binding.soluongsanpham.text = soluongsanpham.toString()
     }
 

@@ -8,5 +8,6 @@ data class User(
     @SerializedName("lastName") val lastName: String,
     @SerializedName("email") val email: String,
     @SerializedName("password") val password: String,
+    @SerializedName("active") val active: Boolean,
     @SerializedName("role") val role: Role,
 )

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="150sp">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/textView7"
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5sp"
         android:text="Tình trạng đơn hàng"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +20,7 @@
     <Spinner
         android:id="@+id/spn_trangthai"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_margin="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,11 +30,13 @@
         android:id="@+id/btn_xacnhan"
         android:layout_width="200sp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:background="@color/main"
         android:text="Xác nhận"
         android:textSize="15sp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spn_trangthai" />
 </androidx.constraintlayout.widget.ConstraintLayout>

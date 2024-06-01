@@ -1,7 +1,8 @@
 package com.amory.departmentstore.model
 
 data class Voucher(
+    var id:Int,
     var code:String,
-    var discount_type:String,
-    var discount_value:Double
+    var discountType:String,
+    var discountValue:Double
 )

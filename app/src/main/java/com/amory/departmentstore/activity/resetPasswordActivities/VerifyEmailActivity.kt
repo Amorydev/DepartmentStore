@@ -3,10 +3,13 @@ package com.amory.departmentstore.activity.resetPasswordActivities
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -74,6 +77,27 @@ class VerifyEmailActivity : AppCompatActivity() {
                     .show()
             }
         }
+    }
+    private fun setupEmailEditText() {
+        binding.emailEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            @SuppressLint("ResourceAsColor")
+            override fun afterTextChanged(s: Editable?) {
+                val email = s.toString().trim()
+                if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    binding.btnNext.setBackgroundColor(R.color.main)
+                } else {
+                    binding.btnNext.setBackgroundColor(Color.GRAY)
+                }
+            }
+        })
     }
     @SuppressLint("InflateParams")
     private fun showCustomProgressBar() {
