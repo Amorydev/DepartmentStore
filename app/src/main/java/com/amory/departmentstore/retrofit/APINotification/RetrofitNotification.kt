@@ -4,15 +4,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitNotification {
-    private lateinit var retrofit: Retrofit
-    private var BASE_URL = "https://fcm.googleapis.com/"
+    private const val BASE_URL = "https://fcm.googleapis.com/"
 
-    val retrofitInstance: Retrofit
-        get() {
-            retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-            return retrofit
-        }
+    val retrofitInstance: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 }

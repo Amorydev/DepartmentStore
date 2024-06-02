@@ -5,7 +5,7 @@
     android:id="@+id/layout_drawer_admin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.AdminQLSanPhamActivity">
+    tools:context=".activity.admin.AdminQLSanPhamActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -97,6 +97,7 @@
             android:textSize="16sp" />
     </LinearLayout>
 
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnxacnhanphuongthuc"
         android:layout_width="150dp"

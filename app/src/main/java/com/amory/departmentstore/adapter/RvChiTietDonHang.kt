@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.R
-import com.amory.departmentstore.activity.ThongTinDonHangActivity
+import com.amory.departmentstore.activity.user.ThongTinDonHangActivity
 import com.amory.departmentstore.model.EventBus.ThongTinDonHangEvent
 import com.amory.departmentstore.model.OrderRespone
 import org.greenrobot.eventbus.EventBus
@@ -36,7 +36,7 @@ class RvChiTietDonHang(private val parents: MutableList<OrderRespone>?, private 
         val parent = parents!![position]
         holder.bind(parent,txtTinhTrang)
         holder.itemView.setOnClickListener {
-            val intent = Intent(mContext,ThongTinDonHangActivity::class.java)
+            val intent = Intent(mContext, ThongTinDonHangActivity::class.java)
             mContext.startActivity(intent)
             EventBus.getDefault().postSticky(ThongTinDonHangEvent(parents[position]))
         }

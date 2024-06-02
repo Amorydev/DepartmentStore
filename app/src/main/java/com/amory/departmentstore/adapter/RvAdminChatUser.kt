@@ -5,7 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.amory.departmentstore.activity.ChatAdminActivity
+import com.amory.departmentstore.activity.admin.ChatAdminActivity
 import com.amory.departmentstore.databinding.LayoutItemUserBinding
 import com.amory.departmentstore.model.User
 
@@ -32,7 +32,7 @@ class RvAdminChatUser(val list:ArrayList<User>):RecyclerView.Adapter<RvAdminChat
         holder.bind(list[position])
         holder.itemView.setOnClickListener {
             val name = list[position].firstName + " "+ list[position].lastName
-            val intent = Intent(mcontext,ChatAdminActivity::class.java)
+            val intent = Intent(mcontext, ChatAdminActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.putExtra("id",list[position].id)
             intent.putExtra("username",name)

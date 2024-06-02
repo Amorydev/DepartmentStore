@@ -8,7 +8,6 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -38,6 +37,17 @@ import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.amory.departmentstore.Interface.OnClickRvLoaiSanPham
 import com.amory.departmentstore.Interface.OnClickRvSanPham
 import com.amory.departmentstore.Interface.OnLoadMoreListener
+import com.amory.departmentstore.activity.user.ChangePasswordActivity
+import com.amory.departmentstore.activity.user.ChatActivity
+import com.amory.departmentstore.activity.user.ChiTietDonHangActivity
+import com.amory.departmentstore.activity.user.ChiTietSanPhamActivity
+import com.amory.departmentstore.activity.user.DangKiActivity
+import com.amory.departmentstore.activity.user.DangNhapActivity
+import com.amory.departmentstore.activity.user.GioHangActivity
+import com.amory.departmentstore.activity.user.KhuyenMaiActivity
+import com.amory.departmentstore.activity.user.LienHeActivity
+import com.amory.departmentstore.activity.user.SanPhamTheoLoaiActivity
+import com.amory.departmentstore.activity.user.SearchActivity
 import com.amory.departmentstore.model.User
 import com.amory.departmentstore.retrofit.APIBanHang.APICallBanners
 import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories

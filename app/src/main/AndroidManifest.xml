@@ -23,31 +23,40 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activity.HoaDonActivity"
+            android:name=".activity.user.WebViewActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.QuanLyUserActivity"
+            android:name=".activity.admin.AddMaGiamGiaActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.DoanhSoActivity"
+            android:name=".activity.admin.QuanLyMaGiamGiaActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ChangePasswordActivity"
+            android:name=".activity.user.HoaDonActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.resetPasswordActivities.UpdatePasswordActivity"
+            android:name=".activity.admin.QuanLyUserActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.resetPasswordActivities.VerifyOTPActivity"
+            android:name=".activity.user.DoanhSoActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.resetPasswordActivities.VerifyEmailActivity"
+            android:name=".activity.user.ChangePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ThongTinDonHangActivity"
+            android:name=".activity.user.resetPassword.UpdatePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ThanhToanActivity"
+            android:name=".activity.user.resetPassword.VerifyOTPActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.user.resetPassword.VerifyEmailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.user.ThongTinDonHangActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.user.ThanhToanActivity"
             android:exported="false"
             android:launchMode="singleTask"
             tools:ignore="AppLinkUrlError">
@@ -63,80 +72,80 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.DiaChiActivity"
+            android:name=".activity.user.DiaChiActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.VoucherActivity"
+            android:name=".activity.user.VoucherActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.AdminKhuyeMaiActivity"
+            android:name=".activity.admin.AdminKhuyeMaiActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.AdminAddKhuyenMaiActivity"
+            android:name=".activity.admin.AdminAddKhuyenMaiActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.KhuyenMaiActivity"
+            android:name=".activity.user.KhuyenMaiActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.LienHeActivity"
+            android:name=".activity.user.LienHeActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ChatAdminActivity"
+            android:name=".activity.admin.ChatAdminActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.AdminChatUserActivity"
+            android:name=".activity.admin.AdminChatUserActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ChatActivity"
+            android:name=".activity.user.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.AdminChiTietDonHangActivity"
+            android:name=".activity.admin.AdminChiTietDonHangActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.AdminThemLoaiSanPhamActivity"
+            android:name=".activity.admin.AdminThemLoaiSanPhamActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.AdminThemLoaiSanPhamActivity"
+            android:name=".activity.admin.AdminThemLoaiSanPhamActivity"
             android:exported="false"
             tools:ignore="DuplicateActivity" />
         <activity
-            android:name=".activity.AdminThemSanPhamActivity"
+            android:name=".activity.admin.AdminThemSanPhamActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.AdminQLSanPhamActivity"
+            android:name=".activity.admin.AdminQLSanPhamActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.AdminQLLoaiSanPhamActivity"
+            android:name=".activity.admin.AdminQLLoaiSanPhamActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ChiTietDonHangActivity"
+            android:name=".activity.user.ChiTietDonHangActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SearchActivity"
+            android:name=".activity.user.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.AdminActivity"
+            android:name=".activity.admin.AdminActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.DangNhapActivity"
+            android:name=".activity.user.DangNhapActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.DangKiActivity"
+            android:name=".activity.user.DangKiActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SanPhamTheoLoaiActivity"
+            android:name=".activity.user.SanPhamTheoLoaiActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.GioHangActivity"
+            android:name=".activity.user.GioHangActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ChiTietSanPhamActivity"
+            android:name=".activity.user.ChiTietSanPhamActivity"
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".activity.user.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

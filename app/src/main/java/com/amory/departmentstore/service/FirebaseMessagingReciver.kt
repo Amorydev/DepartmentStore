@@ -11,6 +11,7 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.amory.departmentstore.R
 import com.amory.departmentstore.activity.MainActivity
+import com.amory.departmentstore.activity.user.ChatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -34,7 +35,7 @@ class FirebaseMessagingReciver:FirebaseMessagingService() {
     @SuppressLint("ObsoleteSdkInt")
     private fun showNotification(title: String?, body: String?) {
         val chanel_id = "amory"
-        val intent = Intent(this,MainActivity::class.java)
+        val intent = Intent(this,ChatActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this,0,intent,
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)

@@ -6,7 +6,7 @@
     android:layout_margin="10sp"
     app:cardCornerRadius="10sp"
     android:elevation="4sp"
-    android:layout_height="80sp">
+    android:layout_height="100sp">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -33,16 +33,49 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:layout_marginTop="10dp"
             android:id="@+id/txt_giamgia"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
+            android:textStyle="bold"
             android:text="Nhập mã ABC để giảm 15k"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/view5"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_dieukien"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đơn tối thiểu 0đ"
+            android:layout_marginTop="5dp"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/txt_giamgia"
+            app:layout_constraintTop_toBottomOf="@+id/txt_giamgia" />
+
+        <TextView
+            android:id="@+id/txt_hsd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="HSD: 20-05-2045"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/txt_giamgia"
+            app:layout_constraintTop_toBottomOf="@+id/txt_dieukien" />
+
+        <TextView
+            android:id="@+id/txt_hethan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="(Đã hết hạn)"
+            android:textColor="@color/red"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
