@@ -121,74 +121,70 @@ class DangNhapActivity : AppCompatActivity() {
                     editor.putString("token", response.body()?.access_token)
                     editor.putString("refreshToken", response.body()?.refresh_token)
                     editor.apply()
-
-                    val callUser = service.getUser()
-                    callUser.enqueue(object : Callback<User> {
-                        override fun onResponse(
-                            call: Call<User>,
-                            response: Response<User>
-                        ) {
-                            if (response.isSuccessful) {
-                                val userRole = response.body()?.role?.id
-                                /*Toast.makeText(this@DangNhapActivity,userRole.toString(),Toast.LENGTH_SHORT).show()*/
-                                if (response.body()?.active == true) {
-                                    val intent = if (userRole == 1) {
-                                        Intent(this@DangNhapActivity, MainActivity::class.java)
-                                    } else {
-                                        Intent(this@DangNhapActivity, AdminActivity::class.java)
-                                    }
-
-                                    if (userRole == 1) {
-                                        if (binding.checkBoxNhodangnhap.isChecked) {
-                                            Paper.book().write("isLogin", true)
-                                            Paper.book().write("email", email)
-                                            Paper.book().write("password", password)
-                                            Paper.book().write("checked", true)
+                    if (response.body()?.message.equals("Login successfully")) {
+                        val callUser = service.getUser()
+                        callUser.enqueue(object : Callback<User> {
+                            override fun onResponse(
+                                call: Call<User>,
+                                response: Response<User>
+                            ) {
+                                if (response.isSuccessful) {
+                                    val userRole = response.body()?.role?.id
+                                    /*Toast.makeText(this@DangNhapActivity,userRole.toString(),Toast.LENGTH_SHORT).show()*/
+                                    if (response.body()?.active == true) {
+                                        val intent = if (userRole == 1) {
+                                            Intent(this@DangNhapActivity, MainActivity::class.java)
+                                        } else {
+                                            Intent(this@DangNhapActivity, AdminActivity::class.java)
                                         }
-                                        Paper.book().write("user", response.body()!!)
-                                        val userId = response.body()?.id
-                                        saveTokenFCMUser(userId)
-                                    } else {
-                                        val adminId = response.body()?.id
-                                        saveTokenFCMAdmin(adminId)
+
+                                        if (userRole == 1) {
+                                            if (binding.checkBoxNhodangnhap.isChecked) {
+                                                Paper.book().write("isLogin", true)
+                                                Paper.book().write("email", email)
+                                                Paper.book().write("password", password)
+                                                Paper.book().write("checked", true)
+                                            }
+                                            Paper.book().write("user", response.body()!!)
+                                            val userId = response.body()?.id
+                                            saveTokenFCMUser(userId)
+                                        } else {
+                                            val adminId = response.body()?.id
+                                            saveTokenFCMAdmin(adminId)
+                                        }
+                                        Utils.user_current = response.body()!!
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Đăng nhập thành công",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        /*if (isChiTietDatHang){
+                                        intent.putExtra("name",tensanpham)
+                                        intent.putExtra("price",giasanpham)
+                                        intent.putExtra("hinhanhsanpham",hinhanhsanpham)
+                                        intent.putExtra("idsanpham",idsanpham)
+                                        intent.putExtra("motasanpham",motasanpham)
+                                    }*/
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                        startActivity(intent)
+                                        finish()
                                     }
-                                    Utils.user_current = response.body()!!
-                                    Toast.makeText(
-                                        applicationContext,
-                                        "Đăng nhập thành công",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    /*if (isChiTietDatHang){
-                                    intent.putExtra("name",tensanpham)
-                                    intent.putExtra("price",giasanpham)
-                                    intent.putExtra("hinhanhsanpham",hinhanhsanpham)
-                                    intent.putExtra("idsanpham",idsanpham)
-                                    intent.putExtra("motasanpham",motasanpham)
-                                }*/
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                    startActivity(intent)
-                                    finish()
-                                }else{
-                                    Toast.makeText(
-                                        applicationContext,
-                                        "Tài khoản đã bị khóa",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
                                 }
                             }
-                        }
 
-                        override fun onFailure(call: Call<User>, t: Throwable) {
-                            t.printStackTrace()
-                          /*  Log.d("LoiCallMe", t.message.toString())*/
-                        }
-                    })
-                } else {
-                    Toast.makeText(
-                        applicationContext,
-                        "Tài khoản đã bị khóa",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                            override fun onFailure(call: Call<User>, t: Throwable) {
+                                t.printStackTrace()
+                                /*  Log.d("LoiCallMe", t.message.toString())*/
+                            }
+                        })
+                    }else {
+                        Toast.makeText(
+                            applicationContext,
+                            "Tài khoản đã bị khóa",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
                 }
             }
 
@@ -196,13 +192,13 @@ class DangNhapActivity : AppCompatActivity() {
                 binding.prgbar.visibility = View.GONE
                 Toast.makeText(applicationContext, "Đăng nhập không thành công", Toast.LENGTH_SHORT)
                     .show()
-               /* Log.d("dangnhap", t.message.toString())*/
+                /* Log.d("dangnhap", t.message.toString())*/
                 binding.txtSaimatkhau.visibility = View.VISIBLE
             }
         })
     }
 
-    private fun saveTokenFCMUser(userId:Int?) {
+    private fun saveTokenFCMUser(userId: Int?) {
         FirebaseMessaging.getInstance().token
             .addOnSuccessListener { token ->
                 if (!TextUtils.isEmpty(token)) {
@@ -258,6 +254,7 @@ class DangNhapActivity : AppCompatActivity() {
                 /* Log.d("Error token", it.message.toString()) */
             }
     }
+
     private fun onClickQuenMatKhau() {
         binding.txtQuenmatkhau.setOnClickListener {
             val intent = Intent(this, VerifyEmailActivity::class.java)
@@ -265,14 +262,4 @@ class DangNhapActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
-    /*override fun onResume() {
-        super.onResume()
-        val emailPaper = Paper.book().read<String>("email")
-        val passwordPaper = Paper.book().read<String>("password")
-        if (emailPaper!!.isNotEmpty() && passwordPaper!!.isNotEmpty()) {
-            binding.emailEt.setText(emailPaper)
-            binding.passET.setText(passwordPaper)
-        }
-    }*/
 }

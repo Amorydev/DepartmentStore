@@ -120,7 +120,7 @@ class ThongTinDonHangActivity : AppCompatActivity() {
             if (it.paymentMethod == "cash"){
                 binding.txtPhuongthuc.text = "Thanh toán khi nhận hàng"
             }else{
-                binding.txtPhuongthuc.text = "Thanh toán bằng ZaloPay"
+                binding.txtPhuongthuc.text = "Thanh toán bằng VNPay"
             }
             binding.txtTongtien.text = formatAmount(it.totalMoney)
 

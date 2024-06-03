@@ -548,7 +548,6 @@ class MainActivity : AppCompatActivity() {
                         binding.shimmerframe.visibility = View.INVISIBLE
                         binding.shimmerframe.stopShimmer()
                         binding.layoutContrains.visibility = View.VISIBLE
-                        binding.imageSlider.setImageList(imageList, ScaleTypes.FIT)
                         /*
                                                 Toast.makeText(this@MainActivity,listKhuyenMai.toString(),Toast.LENGTH_LONG).show()
                         */
@@ -566,6 +565,7 @@ class MainActivity : AppCompatActivity() {
                             }
                         )
                     }, 1000)
+                    binding.imageSlider.setImageList(imageList, ScaleTypes.FIT)
 
                 }
             }

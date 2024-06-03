@@ -52,7 +52,7 @@ class ThanhToanActivity : AppCompatActivity() {
     private lateinit var customProgressDialog: Dialog
     private var tongtien: Double = 0.0
     private var isTienMat: Boolean = true
-    private var isVNpay: Boolean = false
+    private var isVNPay: Boolean = false
     private val REQUEST_CODE_ADDRESS = 1
     private val REQUEST_CODE_VOUCHER = 2
     private var address = ""
@@ -95,30 +95,30 @@ class ThanhToanActivity : AppCompatActivity() {
             val btnXacNhan = view.findViewById<Button>(R.id.btnxacnhanphuongthuc)
 
             checkboxtienmat.isChecked = isTienMat
-            checkboxzalo.isChecked = isVNpay
+            checkboxzalo.isChecked = isVNPay
 
             checkboxtienmat.setOnClickListener {
                 isTienMat = !isTienMat
                 if (isTienMat) {
-                    isVNpay = false
+                    isVNPay = false
                     checkboxzalo.isChecked = false
                 }
                 checkboxtienmat.isChecked = isTienMat
             }
 
             checkboxzalo.setOnClickListener {
-                isVNpay = !isVNpay
-                if (isVNpay) {
+                isVNPay = !isVNPay
+                if (isVNPay) {
                     isTienMat = false
                     checkboxtienmat.isChecked = false
                 }
-                checkboxzalo.isChecked = isVNpay
+                checkboxzalo.isChecked = isVNPay
             }
 
             btnXacNhan.setOnClickListener {
-                if (isVNpay) {
-                    binding.imvPhuongthuc.setImageResource(R.drawable.ic_zalopay)
-                    binding.txtPhuongthuc.text = "Thanh toán bằng ZaloPay"
+                if (isVNPay) {
+                    binding.imvPhuongthuc.setImageResource(R.drawable.logo_vnpay)
+                    binding.txtPhuongthuc.text = "Thanh toán bằng VNPay"
                 } else if (isTienMat) {
                     binding.imvPhuongthuc.setImageResource(R.drawable.ic_salary)
                     binding.txtPhuongthuc.text = "Thanh toán khi nhận hàng"
@@ -150,7 +150,7 @@ class ThanhToanActivity : AppCompatActivity() {
             binding.txtAddress.text = address
         }
         /*Toast.makeText(this, fullName,Toast.LENGTH_SHORT).show()*/
-        if (isVNpay) {
+        if (isVNPay) {
             binding.imvPhuongthuc.setImageResource(R.drawable.logo_vnpay)
             binding.txtPhuongthuc.text = "Thanh toán bằng VNPay"
         } else if (isTienMat) {
@@ -266,7 +266,7 @@ class ThanhToanActivity : AppCompatActivity() {
         var paymentMethod = "cash"
         if (isTienMat) {
             paymentMethod = "cash"
-        } else if (isVNpay){
+        } else if (isVNPay){
             paymentMethod = "online"
         }
 
@@ -305,7 +305,7 @@ class ThanhToanActivity : AppCompatActivity() {
                 paymentMethod,
                 orderDetails
             )
-            if (isVNpay) {
+            if (isVNPay) {
                 paymentMethod = "online"
                 orderRequest = OrderRequest(
                     userId,
