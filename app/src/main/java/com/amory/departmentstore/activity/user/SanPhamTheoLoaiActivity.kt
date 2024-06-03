@@ -54,7 +54,17 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
         onCLickNav()
         OnclickNavHeader()
         onClickSearch()
+        onClickChat()
     }
+
+    private fun onClickChat() {
+        binding.imvChat.setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
+    }
+
     private fun OnclickNavHeader() {
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         val headerView: View = navigationView.getHeaderView(0)
@@ -83,9 +93,11 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                     val user = Paper.book().read<User>("user")
                     if (user != null || Utils.user_current != null) {
                         val intent = Intent(this, GioHangActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     } else {
                         val intent = Intent(this, DangNhapActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()
                     }
@@ -96,9 +108,11 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                     val user = Paper.book().read<User>("user")
                     if (user != null || Utils.user_current != null) {
                         val intent = Intent(this, ChiTietDonHangActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     } else {
                         val intent = Intent(this, DangNhapActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()
                     }
@@ -129,6 +143,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
 
                 R.id.contact -> {
                     val intent = Intent(this, LienHeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     true
                 }
@@ -140,11 +155,13 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
 
                 R.id.discount -> {
                     val intent = Intent(this, KhuyenMaiActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     true
                 }
                 R.id.changePassword ->{
                     val intent = Intent(this, ChangePasswordActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     true
                 }

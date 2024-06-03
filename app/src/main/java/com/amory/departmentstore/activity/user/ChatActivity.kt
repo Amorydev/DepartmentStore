@@ -108,7 +108,11 @@ class ChatActivity : AppCompatActivity() {
                 .add(message)
                 .addOnSuccessListener { documentReference ->
                     /*Log.d(TAG, " ${documentReference.id}")*/
-                    val fullName = account?.firstName + " " + account?.lastName
+                    val fullName = if (account == null){
+                        Utils.user_current?.firstName + " " + Utils.user_current?.lastName
+                    }else {
+                        account.firstName + " " + account.lastName
+                    }
                     pushNotification(fullName,binding.txtChat.text.toString())
                 }
                 .addOnFailureListener { e ->
@@ -129,7 +133,6 @@ class ChatActivity : AppCompatActivity() {
             val data: MutableMap<String, String> = HashMap()
             data["body"] = chat
             data["title"] = "Bạn có tin nhắn mới từ $fullName"
-
             val sendNoti = SendNotification(token, data)
             Log.d("FCMMessage", sendNoti.toString())
 

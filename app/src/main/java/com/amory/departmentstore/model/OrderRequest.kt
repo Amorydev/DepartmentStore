@@ -1,9 +1,12 @@
+@file:Suppress("DEPRECATED_ANNOTATION")
+
 package com.amory.departmentstore.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
-import java.time.LocalDateTime
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class OrderRequest(
     @SerializedName("user_id") val userId: Int?,
     @SerializedName("full_name") val fullName: String,
@@ -15,4 +18,4 @@ data class OrderRequest(
     @SerializedName("total_money") val totalMoney: Float,
     @SerializedName("payment_method") val paymentMethod: String,
     @SerializedName("cart_items") val cartItems: List<Order>
-): Serializable
+) : Parcelable

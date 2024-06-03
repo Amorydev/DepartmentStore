@@ -30,12 +30,7 @@ class DangNhapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDangNhapBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var sharedPreferences: SharedPreferences
-    var isChiTietDatHang = false
-    private var idsanpham:Int = 0
-    private var giasanpham:Float = 0f
-    private var tensanpham:String = ""
-    private var hinhanhsanpham:String = ""
-    private var motasanpham:String = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,14 +141,16 @@ class DangNhapActivity : AppCompatActivity() {
                                     if (userRole == 1) {
                                         if (binding.checkBoxNhodangnhap.isChecked) {
                                             Paper.book().write("isLogin", true)
-                                            Paper.book().write("user", response.body()!!)
                                             Paper.book().write("email", email)
                                             Paper.book().write("password", password)
                                             Paper.book().write("checked", true)
                                         }
+                                        Paper.book().write("user", response.body()!!)
+                                        val userId = response.body()?.id
+                                        saveTokenFCMUser(userId)
                                     } else {
                                         val adminId = response.body()?.id
-                                        saveTokenAdmin(adminId)
+                                        saveTokenFCMAdmin(adminId)
                                     }
                                     Utils.user_current = response.body()!!
                                     Toast.makeText(
@@ -205,7 +202,16 @@ class DangNhapActivity : AppCompatActivity() {
         })
     }
 
-    private fun saveTokenAdmin(adminId: Int?) {
+    private fun saveTokenFCMUser(userId:Int?) {
+        FirebaseMessaging.getInstance().token
+            .addOnSuccessListener { token ->
+                if (!TextUtils.isEmpty(token)) {
+                    sendToFirebase(token, userId!!)
+                }
+            }
+    }
+
+    private fun saveTokenFCMAdmin(adminId: Int?) {
         FirebaseMessaging.getInstance().token
             .addOnSuccessListener { token ->
                 if (!TextUtils.isEmpty(token)) {
@@ -260,7 +266,7 @@ class DangNhapActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
+    /*override fun onResume() {
         super.onResume()
         val emailPaper = Paper.book().read<String>("email")
         val passwordPaper = Paper.book().read<String>("password")
@@ -268,5 +274,5 @@ class DangNhapActivity : AppCompatActivity() {
             binding.emailEt.setText(emailPaper)
             binding.passET.setText(passwordPaper)
         }
-    }
+    }*/
 }

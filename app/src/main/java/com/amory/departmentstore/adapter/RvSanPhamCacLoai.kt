@@ -25,6 +25,7 @@ class RvSanPhamCacLoai(private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoa
     inner class viewHolder(itemView : View):RecyclerView.ViewHolder(itemView) {
         val txtTenSanPhamCacLoai = itemView.findViewById<TextView>(R.id.txt_tensanpham)!!
         val txtGiaSanPhamCacLoai = itemView.findViewById<TextView>(R.id.txtgiasanpham)!!
+        val txtSlSanPhamCacLoai = itemView.findViewById<TextView>(R.id.txt_soluongdaban)!!
         val imvHinhAnhSanPhamCacLoai = itemView.findViewById<ImageView>(R.id.img_sanpham)!!
     }
     inner class LoadingViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
@@ -77,11 +78,13 @@ class RvSanPhamCacLoai(private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoa
         return ds.size
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder.itemViewType == Constant.VIEW_TYPE_ITEM) {
             val sanPhamTheoLoaiViewHolder = holder as RvSanPhamCacLoai.viewHolder
             sanPhamTheoLoaiViewHolder.txtTenSanPhamCacLoai.text = ds[position].name
             sanPhamTheoLoaiViewHolder.txtGiaSanPhamCacLoai.text = formatAmount(ds[position].price)
+            sanPhamTheoLoaiViewHolder.txtSlSanPhamCacLoai.text = "Đã bán "+ ds[position].soldQuantity.toString()
             Glide.with(mcontext).load(ds[position].imageUrl).centerCrop()
                 .into(sanPhamTheoLoaiViewHolder.imvHinhAnhSanPhamCacLoai)
         }

@@ -49,7 +49,7 @@ class RvChiTietDonHangAdmin(private val orders: List<OrderRespone>?) : RecyclerV
             txtName.text = order.fullName
             txtPhone.text = order.phone
             txtAddress.text = order.address
-            txtMethod.text = if (order.paymentMethod == "online") "Đã thanh toán qua ZaloPay" else "Chưa thanh toán"
+            txtMethod.text = if (order.paymentMethod == "online") "Đã thanh toán qua VNPay" else "Chưa thanh toán"
             txtTinhTrang.text = getOrderStatus(order.status)
             txtTotal.text = formatAmount(order.totalMoney)
 

@@ -33,6 +33,9 @@ class VerifyOTPActivity : AppCompatActivity() {
 
     private fun verifyOTP() {
         var otp: Int = 0
+        val email = intent.getStringExtra("email").toString()
+        Log.d("email",email)
+        binding.txtEmail.text = email
         binding.btnNext.setOnClickListener {
             val otpEditText1 = binding.otpEditText1.text?.trim().toString()
             val otpEditText2 = binding.otpEditText2.text?.trim().toString()
@@ -44,7 +47,7 @@ class VerifyOTPActivity : AppCompatActivity() {
             otp =
                 (otpEditText1 + otpEditText2 + otpEditText3 + otpEditText4 + otpEditText5 + otpEditText6).toInt()
 
-            val email = intent.getStringExtra("email").toString()
+
             val service = RetrofitClient.retrofitInstance.create(APICallUser::class.java)
             val call = service.verifyOtp(otp, email)
             call.enqueue(object : Callback<UpdatePasswordModel> {

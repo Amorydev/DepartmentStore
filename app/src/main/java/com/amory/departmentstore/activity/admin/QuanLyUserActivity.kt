@@ -1,6 +1,8 @@
 package com.amory.departmentstore.activity.admin
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -10,7 +12,6 @@ import com.amory.departmentstore.Interface.OnClickAllowedUser
 import com.amory.departmentstore.Interface.OnClickBlockUser
 import com.amory.departmentstore.R
 import com.amory.departmentstore.activity.user.DangNhapActivity
-import com.amory.departmentstore.activity.user.DoanhSoActivity
 import com.amory.departmentstore.adapter.RvQuanLyUser
 import com.amory.departmentstore.databinding.ActivityQuanLyUserBinding
 import com.amory.departmentstore.model.UpdateOrderModel
@@ -25,10 +26,12 @@ import retrofit2.Response
 
 class QuanLyUserActivity : AppCompatActivity() {
     private lateinit var binding:ActivityQuanLyUserBinding
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityQuanLyUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
         showRvUser()
         onCLickDanhMuc()
         onClickNavViewAdmin()
@@ -152,12 +155,15 @@ class QuanLyUserActivity : AppCompatActivity() {
                     }
                     alertDialog.setPositiveButton("Có"){
                             dialog, which ->
-                        Paper.book().delete("user")
+                        val editor = sharedPreferences.edit()
+                        editor.remove("token")
+                        editor.apply()
                         val intent = Intent(this, DangNhapActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()
                     }
+                    alertDialog.show()
                     true
                 }
                 R.id.xemdonhang ->
@@ -181,6 +187,11 @@ class QuanLyUserActivity : AppCompatActivity() {
                 R.id.quanlyuser ->{
 
                     val intent = Intent(this, QuanLyUserActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.quanlyvoucher ->{
+                    val intent = Intent(this, QuanLyMaGiamGiaActivity::class.java)
                     startActivity(intent)
                     true
                 }

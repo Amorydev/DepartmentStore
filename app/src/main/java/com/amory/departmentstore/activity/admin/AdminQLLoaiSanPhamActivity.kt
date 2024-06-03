@@ -11,7 +11,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.activity.user.DangNhapActivity
-import com.amory.departmentstore.activity.user.DoanhSoActivity
 import com.amory.departmentstore.adapter.RvLoaiSanPhamAdmin
 import com.amory.departmentstore.databinding.ActivityAdminLoaiSanPhamBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaLoaiEvent
@@ -149,6 +148,11 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+                R.id.trangchu ->{
+                    val intent = Intent(this, AdminActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 R.id.dangxuat ->
                 {
                     val alertDialog = AlertDialog.Builder(this)
@@ -169,6 +173,7 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     }
+                    alertDialog.show()
                     true
                 }
                 R.id.xemdonhang ->

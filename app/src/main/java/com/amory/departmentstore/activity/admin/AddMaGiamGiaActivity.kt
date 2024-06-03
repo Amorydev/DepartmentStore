@@ -22,6 +22,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class AddMaGiamGiaActivity : AppCompatActivity() {
@@ -159,8 +160,16 @@ class AddMaGiamGiaActivity : AppCompatActivity() {
             this,
             { _, selectedYear, selectedMonth, selectedDayOfMonth ->
                 val selectedDate = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
-                Toast.makeText(this, "Ngày đã chọn: $selectedDate", Toast.LENGTH_LONG).show()
-                binding.HsdET.text = convertDateFormat(selectedDate)
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val currentDate = Calendar.getInstance().time
+                val selectedDateParsed = dateFormat.parse(selectedDate)
+
+                if (selectedDateParsed!!.before(currentDate)) {
+                    Toast.makeText(this, "Ngày đã chọn không được trước ngày hiện tại!", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "Ngày đã chọn: $selectedDate", Toast.LENGTH_LONG).show()
+                    binding.HsdET.text = convertDateFormat(selectedDate)
+                }
             },
             year, month, day
         )

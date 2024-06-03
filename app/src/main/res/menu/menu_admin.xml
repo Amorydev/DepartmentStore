@@ -14,6 +14,8 @@
         android:title="Quản lý danh sách user" />
     <item android:id="@+id/quanlyvoucher"
         android:title="Quản lý mã giảm giá" />
+    <item android:id="@+id/trangchu"
+        android:title="Quay lại trang chủ" />
     <item android:id="@+id/dangxuat"
         android:title="Đăng xuất" />
 </menu>

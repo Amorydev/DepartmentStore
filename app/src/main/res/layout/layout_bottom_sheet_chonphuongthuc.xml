@@ -85,7 +85,7 @@
             android:layout_height="40sp"
             android:layout_gravity="center"
             android:layout_marginStart="20sp"
-            android:background="@drawable/ic_zalopay"
+            android:background="@drawable/logo_vnpay"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="10sp"
-            android:text="Zalopay"
+            android:text="VNPay"
             android:textSize="16sp" />
     </LinearLayout>
 

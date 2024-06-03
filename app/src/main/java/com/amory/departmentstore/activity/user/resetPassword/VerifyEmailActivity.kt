@@ -48,8 +48,7 @@ class VerifyEmailActivity : AppCompatActivity() {
                     ) {
                         if (response.isSuccessful) {
                             customProgressDialog.dismiss()
-                            val intent =
-                                Intent(this@VerifyEmailActivity, VerifyOTPActivity::class.java)
+                            val intent = Intent(this@VerifyEmailActivity, VerifyOTPActivity::class.java)
                             intent.putExtra("email", email)
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)

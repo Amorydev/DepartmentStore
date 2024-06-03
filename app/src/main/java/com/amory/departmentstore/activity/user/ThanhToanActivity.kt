@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -53,7 +52,7 @@ class ThanhToanActivity : AppCompatActivity() {
     private lateinit var customProgressDialog: Dialog
     private var tongtien: Double = 0.0
     private var isTienMat: Boolean = true
-    private var isZalopay: Boolean = false
+    private var isVNpay: Boolean = false
     private val REQUEST_CODE_ADDRESS = 1
     private val REQUEST_CODE_VOUCHER = 2
     private var address = ""
@@ -80,7 +79,6 @@ class ThanhToanActivity : AppCompatActivity() {
         initViews()
         tinhTongThanhToan()
         onClickBack()
-        onClickDatHang()
         onClickVoucher()
         showRV()
         onCLickDiaChi()
@@ -97,28 +95,28 @@ class ThanhToanActivity : AppCompatActivity() {
             val btnXacNhan = view.findViewById<Button>(R.id.btnxacnhanphuongthuc)
 
             checkboxtienmat.isChecked = isTienMat
-            checkboxzalo.isChecked = isZalopay
+            checkboxzalo.isChecked = isVNpay
 
             checkboxtienmat.setOnClickListener {
                 isTienMat = !isTienMat
                 if (isTienMat) {
-                    isZalopay = false
+                    isVNpay = false
                     checkboxzalo.isChecked = false
                 }
                 checkboxtienmat.isChecked = isTienMat
             }
 
             checkboxzalo.setOnClickListener {
-                isZalopay = !isZalopay
-                if (isZalopay) {
+                isVNpay = !isVNpay
+                if (isVNpay) {
                     isTienMat = false
                     checkboxtienmat.isChecked = false
                 }
-                checkboxzalo.isChecked = isZalopay
+                checkboxzalo.isChecked = isVNpay
             }
 
             btnXacNhan.setOnClickListener {
-                if (isZalopay) {
+                if (isVNpay) {
                     binding.imvPhuongthuc.setImageResource(R.drawable.ic_zalopay)
                     binding.txtPhuongthuc.text = "Thanh toán bằng ZaloPay"
                 } else if (isTienMat) {
@@ -152,9 +150,9 @@ class ThanhToanActivity : AppCompatActivity() {
             binding.txtAddress.text = address
         }
         /*Toast.makeText(this, fullName,Toast.LENGTH_SHORT).show()*/
-        if (isZalopay) {
-            binding.imvPhuongthuc.setImageResource(R.drawable.ic_zalopay)
-            binding.txtPhuongthuc.text = "Thanh toán bằng ZaloPay"
+        if (isVNpay) {
+            binding.imvPhuongthuc.setImageResource(R.drawable.logo_vnpay)
+            binding.txtPhuongthuc.text = "Thanh toán bằng VNPay"
         } else if (isTienMat) {
             binding.imvPhuongthuc.setImageResource(R.drawable.ic_salary)
             binding.txtPhuongthuc.text = "Thanh toán khi nhận hàng"
@@ -191,6 +189,7 @@ class ThanhToanActivity : AppCompatActivity() {
     private fun tinhTongThanhToan() {
         var giamGiaVoucher = 0.0
         val tongTienHang = tinhTongTienHang()
+        val phiVanChuyen = 30000.0
 
         /*Toast.makeText(this, discountCondition.toString(), Toast.LENGTH_SHORT).show()*/
 
@@ -210,20 +209,22 @@ class ThanhToanActivity : AppCompatActivity() {
         }
 
         binding.txtTamtinh.text = formatAmount(tongTienHang)
-        val phiVanChuyen = 30000.0
+
         binding.txtPhivanchuyen.text = formatAmount(phiVanChuyen)
 
-        var tongGiamGia = giamGiaVoucher
+        var tongGiamGia = 0.0
         if (tongTienHang >= 300000) {
             binding.txtGiamgia.text = "- ${formatAmount(phiVanChuyen)}"
-            tongGiamGia += phiVanChuyen
+            tongGiamGia += (phiVanChuyen + giamGiaVoucher)
         } else {
+            tongGiamGia += giamGiaVoucher
             binding.txtGiamgia.text = formatAmount(0.0)
         }
-
+        tonggiamgia = tongGiamGia
         binding.txtTonggiamgia.text = "- ${formatAmount(tongGiamGia)}"
 
-        tongtien = tongTienHang + phiVanChuyen - tongGiamGia
+        tongtien = tongTienHang - tongGiamGia
+        Log.d("TONGTIEN",tongtien.toString())
         if (tongtien > 0) {
             binding.txtTongtien.text = formatAmount(tongtien)
             binding.txtTongtienTam.text = formatAmount(tongtien)
@@ -231,6 +232,7 @@ class ThanhToanActivity : AppCompatActivity() {
             binding.txtTongtien.text = formatAmount(0.0)
             binding.txtTongtienTam.text = formatAmount(0.0)
         }
+        onClickDatHang()
     }
 
     private fun tinhTongTienHang(): Double {
@@ -246,6 +248,7 @@ class ThanhToanActivity : AppCompatActivity() {
         /*val fullName = binding.txtName.text.toString()
         val phone = binding.txtPhone.text.toString()*/
         val totalMoney = tongtien.toFloat()
+        Log.d("ABC", tongtien.toString())
         val status = "pending"
 
         val orderDetails: MutableList<Order> = mutableListOf()
@@ -260,11 +263,11 @@ class ThanhToanActivity : AppCompatActivity() {
             )
         }
         /*Log.d("items", orderDetails.toString())*/
-
-        val paymentMethod = if (isTienMat) {
-            "cash"
-        } else {
-            "online"
+        var paymentMethod = "cash"
+        if (isTienMat) {
+            paymentMethod = "cash"
+        } else if (isVNpay){
+            paymentMethod = "online"
         }
 
         val user = Paper.book().read<User>("user")
@@ -290,7 +293,7 @@ class ThanhToanActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val orderRequest = OrderRequest(
+            var orderRequest = OrderRequest(
                 userId,
                 fullName,
                 email,
@@ -302,7 +305,20 @@ class ThanhToanActivity : AppCompatActivity() {
                 paymentMethod,
                 orderDetails
             )
-            if (isZalopay) {
+            if (isVNpay) {
+                paymentMethod = "online"
+                orderRequest = OrderRequest(
+                    userId,
+                    fullName,
+                    email,
+                    phone,
+                    address,
+                    note,
+                    status,
+                    totalMoney,
+                    paymentMethod,
+                    orderDetails
+                )
                 /*requestZalo(orderRequest)*/
                 val serviceOrder = RetrofitClient.retrofitInstance.create(APICallVnPay::class.java)
                 val call = serviceOrder.getUrlVNPay(orderRequest)
@@ -317,6 +333,13 @@ class ThanhToanActivity : AppCompatActivity() {
                             if (!url.isNullOrEmpty()) {
                                 val urlIntent = Intent(this@ThanhToanActivity,WebViewActivity::class.java)
                                 urlIntent.putExtra("URL",url)
+                                urlIntent.putExtra("order_request",orderRequest)
+                                urlIntent.putExtra("hoadon_name", fullName)
+                                urlIntent.putExtra("hoadon_phone", phone)
+                                urlIntent.putExtra("hoadon_address", address)
+                                urlIntent.putExtra("hoadon_gia", tinhTongTienHang())
+                                urlIntent.putExtra("hoadon_tongtien", tongtien)
+                                urlIntent.putExtra("hoadon_giamgia", tonggiamgia)
                                 startActivity(urlIntent)
                             }
                         }
@@ -376,6 +399,7 @@ class ThanhToanActivity : AppCompatActivity() {
             intent.putExtra("hoadon_gia", tinhTongTienHang())
             intent.putExtra("hoadon_tongtien", tongtien)
             intent.putExtra("hoadon_giamgia", tonggiamgia)
+            intent.putExtra("hoadon_phuongthuc", isTienMat)
             startActivity(intent)
             finish()
             pushNotification()
@@ -512,7 +536,7 @@ class ThanhToanActivity : AppCompatActivity() {
             data["body"] = "Bạn có đơn hàng mới"
             data["title"] = "Thông báo"
 
-            val sendNoti = SendNotification(token, data)
+            val sendNoti = SendNotification(token,data)
             Log.d("FCM", sendNoti.toString())
 
             val service =

@@ -46,8 +46,9 @@ class HoaDonActivity : AppCompatActivity() {
         val hoadonGia = intent.getDoubleExtra("hoadon_gia", 0.0)
         val hoadonTongtien = intent.getDoubleExtra("hoadon_tongtien", 0.0)
         val hoadonGiamgia = intent.getDoubleExtra("hoadon_giamgia", 0.0)
+        val hoadonPhuongThuc = intent.getBooleanExtra("hoadon_phuongthuc", false)
         setupRecyclerView()
-        bindInvoiceDetails(hoadonName, hoadonPhone, hoadonAddress, hoadonGia, hoadonGiamgia, hoadonTongtien)
+        bindInvoiceDetails(hoadonName, hoadonPhone, hoadonAddress, hoadonGia, hoadonGiamgia, hoadonTongtien,hoadonPhuongThuc)
     }
 
     private fun setupRecyclerView() {
@@ -57,13 +58,19 @@ class HoaDonActivity : AppCompatActivity() {
         binding.rvHoaDon.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 
-    private fun bindInvoiceDetails(name: String?, phone: String?, address: String?, gia: Double, giamgia: Double, tongtien: Double) {
+    @SuppressLint("SetTextI18n")
+    private fun bindInvoiceDetails(name: String?, phone: String?, address: String?, gia: Double, giamgia: Double, tongtien: Double,hoadonPhuongThuc:Boolean) {
         binding.txtTen.text = name
         binding.txtSdt.text = phone
         binding.txtDiachi.text = address
         binding.txtGia.text = formatAmount(gia)
-        binding.txtKhuyenmai.text = formatAmount(giamgia)
+        binding.txtKhuyenmai.text = "- ${formatAmount(giamgia)}"
         binding.txtTongtien.text = formatAmount(tongtien)
+        if (hoadonPhuongThuc){
+            binding.txtPhuongthuc.text = "Tiền mặt"
+        }else{
+            binding.txtPhuongthuc.text = "VnPay"
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

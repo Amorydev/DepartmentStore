@@ -58,7 +58,7 @@
                     android:id="@+id/edt_firstname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Firts Name"
+                    android:hint="Họ"
                     android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -79,7 +79,7 @@
                     android:id="@+id/edt_lastname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Last Name"
+                    android:hint="Tên"
                     android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -132,7 +132,7 @@
                     android:id="@+id/passET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password"
+                    android:hint="Mật khẩu"
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -165,7 +165,7 @@
                     android:id="@+id/repassET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Repassword"
+                    android:hint="Nhập lại mât khẩu"
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 

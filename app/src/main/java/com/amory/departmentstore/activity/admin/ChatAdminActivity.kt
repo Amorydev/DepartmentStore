@@ -39,6 +39,7 @@ class ChatAdminActivity : AppCompatActivity() {
         binding = ActivityChatAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ID_NHAN = intent.getIntExtra("id", 0).toString()
+        Log.d("HEHE",ID_NHAN)
         if (ID_NHAN.isNotEmpty()){
             initViews()
             onClickChat()
@@ -71,6 +72,7 @@ class ChatAdminActivity : AppCompatActivity() {
                 .add(message)
                 .addOnSuccessListener { documentReference ->
                     Log.d(ContentValues.TAG, " ${documentReference.id}")
+                    pushNotification(txt_chat)
                 }
                 .addOnFailureListener { e ->
                     Log.w(ContentValues.TAG, "Error", e)
@@ -110,7 +112,6 @@ class ChatAdminActivity : AppCompatActivity() {
                         documentChange.document.getDate(Constant.DATE_TIME)!!
                     )
                     list.add(chatMessage)
-
                 }
             }
             list.sortWith(Comparator { obj1, obj2 -> obj1.dateObj?.compareTo(obj2.dateObj)!! })
@@ -123,6 +124,68 @@ class ChatAdminActivity : AppCompatActivity() {
         } else {
             Log.d("list", "data: null")
         }
+    }
+    private fun pushNotification(chat:String) {
+        getTokenFCM(ID_NHAN.toInt()) { token ->
+            if (token == null) {
+                Log.e("pushNotification", "Failed to retrieve FCM token")
+                return@getTokenFCM
+            }
+            Log.d("tokenFCM", token)
+
+            val data: MutableMap<String, String> = HashMap()
+            data["body"] = chat
+            data["title"] = "Bạn có tin nhắn mới từ Admin"
+
+            val sendNoti = SendNotification(token, data)
+            Log.d("FCMMessage", sendNoti.toString())
+
+            val service =
+                RetrofitNotification.retrofitInstance.create(APIPushNotification::class.java)
+            val call = service.sendNotification(sendNoti)
+            call.enqueue(object : Callback<NotificationReponse> {
+                override fun onResponse(
+                    call: Call<NotificationReponse>,
+                    response: Response<NotificationReponse>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d("FCM Response", "Notification sent successfully")
+                    } else {
+                        Log.e(
+                            "FCM Response",
+                            "Failed to send notification. Response code: ${response.code()}"
+                        )
+                    }
+                }
+
+                override fun onFailure(call: Call<NotificationReponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("FCM Failure", "Error sending notification", t)
+                }
+            })
+        }
+    }
+
+    private fun getTokenFCM(userId: Int, callback: (String?) -> Unit) {
+        val db = FirebaseFirestore.getInstance()
+        val tokensCollection = db.collection("tokens")
+
+        tokensCollection
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (querySnapshot.isEmpty) {
+                    callback(null)
+                } else {
+                    val document = querySnapshot.documents[0]
+                    val token = document.getString("token")
+                    callback(token)
+                }
+            }
+            .addOnFailureListener {
+                it.printStackTrace()
+                callback(null)
+            }
     }
 
     private fun initViews() {

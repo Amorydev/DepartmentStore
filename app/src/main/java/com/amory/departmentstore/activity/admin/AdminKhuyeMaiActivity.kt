@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.activity.user.DangNhapActivity
-import com.amory.departmentstore.activity.user.DoanhSoActivity
 import com.amory.departmentstore.adapter.RvKhuyenMaiAdmin
 import com.amory.departmentstore.databinding.ActivityAdminKhuyeMaiBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaKhuyenMaiEvent
@@ -98,7 +97,7 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
                     }
                     alertDialog.setPositiveButton("Có"){
                             dialog, which ->
-                        Paper.book().delete("user")
+
                         val editor = sharedPreferences.edit()
                         editor.remove("token")
                         editor.apply()
@@ -124,6 +123,11 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
                 R.id.thongke ->{
 
                     val intent = Intent(this, DoanhSoActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.trangchu ->{
+                    val intent = Intent(this, AdminActivity::class.java)
                     startActivity(intent)
                     true
                 }

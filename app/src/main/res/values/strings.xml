@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DepartmentStore</string>
+    <string name="app_name">Cửa hàng tạp hóa</string>
     <string name="lua_chon_dang_tin_cay">Lựa chọn đáng tin cậy của bạn</string>
     <string name="rau_cu">Rau củ</string>
     <string name="_89_900">89.900đ</string>
@@ -21,7 +21,4 @@
     <string name="lien_he">"Liên hệ với chúng tôi"</string>
     <string name="dieule">(Giá này đã bao gồm thuế GTGT, phí đóng gói, phí vận chuyển và các chi phí phát sinh khác)</string>
     <string name="daban">Đã bán 100</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
 </resources>

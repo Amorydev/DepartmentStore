@@ -1,6 +1,8 @@
 package com.amory.departmentstore.activity.admin
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.ContextMenu
@@ -10,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.Interface.OnClickRvVoucher
 import com.amory.departmentstore.R
+import com.amory.departmentstore.activity.user.DangNhapActivity
 import com.amory.departmentstore.adapter.RvVoucherAdmin
 import com.amory.departmentstore.adapter.RvVouvher
 import com.amory.departmentstore.databinding.ActivityQuanLyMaGiamGiaBinding
@@ -29,13 +32,17 @@ import retrofit2.Response
 
 class QuanLyMaGiamGiaActivity : AppCompatActivity() {
     private lateinit var binding:ActivityQuanLyMaGiamGiaBinding
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var voucher: Voucher
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityQuanLyMaGiamGiaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
         showVoucher()
         onClickAdd()
+        onClickNavViewAdmin()
+        onCLickDanhMuc()
     }
 
     private fun onClickAdd() {
@@ -70,6 +77,83 @@ class QuanLyMaGiamGiaActivity : AppCompatActivity() {
                 t.printStackTrace()
             }
         })
+    }
+    private fun onCLickDanhMuc() {
+        binding.imbDanhmucAdmin.setOnClickListener {
+            binding.layoutDrawerAdmin.openDrawer(binding.navViewAdmin)
+        }
+    }
+    private fun onClickNavViewAdmin() {
+        binding.navViewAdmin.setNavigationItemSelectedListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.quanlyloaisanpham ->{
+                    val intent = Intent(this, AdminQLLoaiSanPhamActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.quanlysanpham ->{
+                    val intent = Intent(this, AdminQLSanPhamActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.dangxuat ->
+                {
+                    val alertDialog = AlertDialog.Builder(this)
+                    alertDialog.setTitle("Đăng xuất")
+                    alertDialog.setMessage("Bạn chắc chắn muốn đăng xuất")
+                    alertDialog.setNegativeButton("Không"){
+                            dialog, which ->
+                        dialog.dismiss()
+                    }
+                    alertDialog.setPositiveButton("Có"){
+                            dialog, which ->
+
+                        val editor = sharedPreferences.edit()
+                        editor.remove("token")
+                        editor.apply()
+                        val intent = Intent(this, DangNhapActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        startActivity(intent)
+                        finish()
+                    }
+                    alertDialog.show()
+                    true
+                }
+                R.id.xemdonhang ->
+                {
+                    val intent = Intent(this, AdminChiTietDonHangActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.khuyenmai ->
+                {
+                    val intent = Intent(this, AdminKhuyeMaiActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.thongke ->{
+
+                    val intent = Intent(this, DoanhSoActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.trangchu ->{
+                    val intent = Intent(this, AdminActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.quanlyuser ->{
+
+                    val intent = Intent(this, QuanLyUserActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> {
+                    true
+                }
+            }
+
+        }
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {

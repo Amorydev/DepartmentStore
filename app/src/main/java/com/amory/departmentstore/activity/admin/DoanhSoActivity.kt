@@ -1,4 +1,4 @@
-package com.amory.departmentstore.activity.user
+package com.amory.departmentstore.activity.admin
 
 import android.annotation.SuppressLint
 import android.app.Dialog
