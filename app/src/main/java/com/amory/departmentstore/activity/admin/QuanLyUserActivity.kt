@@ -47,12 +47,22 @@ class QuanLyUserActivity : AppCompatActivity() {
                     val adapter = RvQuanLyUser(list as MutableList<UserResponse>, object : OnClickBlockUser{
                         override fun onClickBlockUser(position: Int) {
                             val id = list[position].id
-                            showBlockUser(id)
+                            if (list[position].active){
+                                showBlockUser(id)
+                            }else{
+                                Toast.makeText(this@QuanLyUserActivity,"Không thể thực hiện khóa khi tài khoản đã bị khóa",Toast.LENGTH_SHORT).show()
+                            }
+
                         }
                     }, object : OnClickAllowedUser{
                         override fun onClickAllowedUser(position: Int) {
                             val id = list[position].id
-                            showAllowedUser(id)
+                            if (!list[position].active){
+                                showAllowedUser(id)
+                            }else{
+                                Toast.makeText(this@QuanLyUserActivity,"Không thể thực hiện mở khóa khi tài khoản đang hoạt động",Toast.LENGTH_SHORT).show()
+                            }
+
                         }
                     })
                     binding.rvUser.adapter = adapter

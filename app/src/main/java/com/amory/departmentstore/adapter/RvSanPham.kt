@@ -45,7 +45,7 @@ class RvSanPham(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.A
     fun addLoadingView() {
         //Thêm loading
         Handler().post {
-            ds.add(SanPham(0, "", 1000.0,"","","","",0, LoaiSanPham(0,"","")))
+            ds.add(SanPham(0, "", 1000.0,"","","","", LoaiSanPham(0,"",""),0))
             notifyItemInserted(ds.size - 1)
         }
     }

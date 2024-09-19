@@ -1,5 +1,6 @@
 package com.amory.departmentstore.activity.user
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -7,8 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Patterns
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import com.amory.departmentstore.R
 import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.activity.MainActivity
 import com.amory.departmentstore.activity.admin.AdminActivity
@@ -30,6 +33,7 @@ class DangNhapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDangNhapBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var customProgressDialog: Dialog
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -178,11 +182,16 @@ class DangNhapActivity : AppCompatActivity() {
                             }
                         })
                     }else {
-                        Toast.makeText(
+                        /*Toast.makeText(
                             applicationContext,
                             "Tài khoản đã bị khóa",
                             Toast.LENGTH_SHORT
-                        ).show()
+                        ).show()*/
+                        customProgressDialog = Dialog(this@DangNhapActivity)
+                        val view = LayoutInflater.from(this@DangNhapActivity).inflate(R.layout.alert_dialog_blocked, null)
+                        customProgressDialog.setContentView(view)
+                        customProgressDialog.setCancelable(true)
+                        customProgressDialog.show()
                     }
 
                 }

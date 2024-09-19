@@ -11,6 +11,6 @@ data class SanPham(
     val description: String,
     val createdAt: String,
     val updatedAt: String,
-    val soldQuantity:Int,
-    val categoryId: LoaiSanPham
+    val categoryId: LoaiSanPham,
+    val soldQuantity:Int
 ) : Serializable

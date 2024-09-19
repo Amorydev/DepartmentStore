@@ -7,5 +7,6 @@ data class UserResponse(
     @SerializedName("firstName") val firstName: String,
     @SerializedName("lastName") val lastName: String,
     @SerializedName("email") val email: String,
-    @SerializedName("active") val active: Boolean
+    @SerializedName("active") val active: Boolean,
+    @SerializedName("violated") val violated: Boolean
 )

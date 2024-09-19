@@ -6,6 +6,7 @@ import com.amory.departmentstore.retrofit.AuthInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 import retrofit2.converter.gson.GsonConverterFactory
@@ -14,9 +15,13 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
     private var BASE_URL = Utils.BASE_URL
     private lateinit var authInterceptor: AuthInterceptor
+    private val loggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
 
     private val okBuilder: OkHttpClient.Builder by lazy {
         OkHttpClient.Builder().addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
