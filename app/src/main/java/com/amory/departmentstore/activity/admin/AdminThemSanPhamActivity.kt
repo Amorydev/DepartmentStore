@@ -56,7 +56,7 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
             sanPham.categoryId.let { category ->
                 binding.spinner.setSelection(category.id)
             }
-            Glide.with(this).load(sanPham.imageUrl).into(binding.imvHinhanh)
+            Glide.with(this).load(sanPham.thumbnail).into(binding.imvHinhanh)
         } ?: run {
             flags = true
         }
@@ -119,7 +119,7 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                         val name = binding.edtTensanpham.text?.trim().toString()
                         val price = binding.edtGiasanpham.text?.trim().toString()
                         val imagePath =
-                            mediaPath.takeIf { it.isNotEmpty() } ?: listSanPham?.imageUrl.toString()
+                            mediaPath.takeIf { it.isNotEmpty() } ?: listSanPham?.thumbnail.toString()
                         val description = binding.edtmotasanpham.text?.trim().toString()
 
                         if (flags) {

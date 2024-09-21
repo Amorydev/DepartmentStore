@@ -1,5 +1,6 @@
 package com.amory.departmentstore.activity.user
 
+import com.amory.departmentstore.adapter.RvShowImagesFromProduct
 import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,28 +11,30 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.marginBottom
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
+import com.amory.departmentstore.Interface.OnClickItemInRvImages
 import com.amory.departmentstore.R
 import com.amory.departmentstore.Utils.Utils
+import com.amory.departmentstore.adapter.RvShowDetailProductImages
 import com.amory.departmentstore.databinding.ActivityChiTietSanPhamBinding
+import com.amory.departmentstore.manager.DetailProductImages
 import com.amory.departmentstore.model.GioHang
 import com.amory.departmentstore.model.User
-import com.bumptech.glide.Glide
-import com.google.android.play.integrity.internal.i
-import com.google.firebase.logger.Logger
-import com.google.rpc.context.AttributeContext.Resource
 import io.paperdb.Paper
 import java.text.NumberFormat
 import java.util.Locale
+import kotlin.math.abs
 
 class ChiTietSanPhamActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChiTietSanPhamBinding
-    private lateinit var tensanpham: String
-    private var giasanpham: Double = 0.0
-    private lateinit var hinhanhsanpham: String
-    private lateinit var motasanpham: String
-    private var idsanpham: Int = 0
-    private var soluongsanpham = 1
+    private lateinit var nameProduct: String
+    private var priceProduct: Double = 0.0
+    private lateinit var imageProduct: String
+    private lateinit var descriptionProduct: String
+    private var idProduct: Int = 0
+    private var qualityProduct = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,47 +42,59 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         setContentView(binding.root)
         init()
         onClickBack()
-        xuLyChiTiet()
-        onCLickCongTruSanPham()
-        ThemVaoGioHang()
-        goToGioHang()
-        onCLickMuaNgay()
-        /*Toast.makeText(this,idsanpham.toString(),Toast.LENGTH_SHORT).show()*/
+        handleDescription()
+        onClickPlusOrMinus()
+        addToCarts()
+        goToCart()
+        onClickBuyNow()
+        synchronizeRv()
     }
 
-    private fun onCLickMuaNgay() {
+
+    private fun showDetailImages(id: Int, onResult: (List<String>) -> Unit) {
+        val listImages = mutableListOf<String>()
+        DetailProductImages.getDetailProductImages(id, { productImages ->
+
+            for (i in productImages[0].productImages.indices) {
+                listImages.add(productImages[0].productImages[i].imageUrl1)
+                listImages.add(productImages[0].productImages[i].imageUrl2)
+                listImages.add(productImages[0].productImages[i].imageUrl3)
+            }
+            Log.d("productImages", "showDetailImages: $listImages")
+            onResult(listImages)
+        }, { error ->
+            Log.d("error", "showDetailImages: $error")
+            onResult(emptyList())
+        })
+    }
+
+
+    private fun onClickBuyNow() {
         binding.btnMuangay.setOnClickListener {
             val user = Paper.book().read<User>("user")
             var soluong = 0
             var tongGiaTriSanPham = 0.0
             if (user != null && Utils.user_current != null) {
-                soluong = soluongsanpham
-                tongGiaTriSanPham = giasanpham.toDouble() * soluong
+                soluong = qualityProduct
+                tongGiaTriSanPham = priceProduct.toDouble() * soluong
                 val gioHang = GioHang(
-                    idsanphamgiohang = idsanpham,
-                    tensanphamgiohang = tensanpham,
+                    idsanphamgiohang = idProduct,
+                    tensanphamgiohang = nameProduct,
                     giasanphamgiohang = tongGiaTriSanPham,
-                    hinhanhsanphamgiohang = hinhanhsanpham,
+                    hinhanhsanphamgiohang = imageProduct,
                     soluongsanphamgiohang = soluong
                 )
                 Utils.mangmuahang.add(gioHang)
                 val intent = Intent(this, ThanhToanActivity::class.java)
                 startActivity(intent)
-                /* overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right)*/
             } else {
                 val intent = Intent(this, DangNhapActivity::class.java)
-                /*intent.putExtra("fromActivity",true)
-                intent.putExtra("fromActivity_id",idsanpham)
-                intent.putExtra("fromActivity_name",tensanpham)
-                intent.putExtra("fromActivity_price",giasanpham)
-                intent.putExtra("fromActivity_imageUrl",hinhanhsanpham)
-                intent.putExtra("fromActivity_description",motasanpham)*/
                 startActivity(intent)
             }
         }
     }
 
-    private fun goToGioHang() {
+    private fun goToCart() {
         binding.imgGiohangchitiet.setOnClickListener {
             val intent = Intent(this, GioHangActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -88,23 +103,38 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
 
     }
 
-    private fun onCLickCongTruSanPham() {
+    private fun onClickPlusOrMinus() {
         binding.txtCongSanpham.setOnClickListener {
-            soluongsanpham += 1
-            capNhatSoLuongSanPham()
+            qualityProduct += 1
+            updateQuanlityProduct()
 
         }
         binding.txtTruSanpham.setOnClickListener {
-            if (soluongsanpham > 0) {
-                soluongsanpham -= 1
+            if (qualityProduct > 0) {
+                qualityProduct -= 1
             }
-            capNhatSoLuongSanPham()
+            updateQuanlityProduct()
         }
     }
 
-    private fun capNhatSoLuongSanPham() {
-        binding.soluongsanpham.text = soluongsanpham.toString()
+    private fun updateQuanlityProduct() {
+        binding.soluongsanpham.text = qualityProduct.toString()
     }
+    private fun synchronizeRv() {
+        binding.rvImagesProducts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val selectedPosition = layoutManager.findFirstVisibleItemPosition()
+
+                val rvImagesAdapter = binding.rvImages.adapter as RvShowImagesFromProduct
+                rvImagesAdapter.updateSelectedPosition(selectedPosition)
+
+                binding.rvImages.scrollToPosition(selectedPosition)
+            }
+        })
+    }
+
 
     private fun onClickBack() {
         binding.imvBack.setOnClickListener {
@@ -112,43 +142,43 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
         }
     }
 
-    private fun ThemVaoGioHang() {
+    private fun addToCarts() {
 
         binding.layoutThemvaogiohang.setOnClickListener {
             val user = Paper.book().read<User>("user")
             if (user != null && Utils.user_current != null) {
                 if (Utils.manggiohang.size > 0) {
-                    val soluong = soluongsanpham
+                    val quality = qualityProduct
                     var flags = false
                     for (i in 0 until Utils.manggiohang.size) {
-                        if (Utils.manggiohang[i].idsanphamgiohang == idsanpham) {
-                            Utils.manggiohang[i].soluongsanphamgiohang += soluong
-                            val tongGiaTriSanPham =
-                                giasanpham * Utils.manggiohang[i].soluongsanphamgiohang
-                            Utils.manggiohang[i].giasanphamgiohang = tongGiaTriSanPham
+                        if (Utils.manggiohang[i].idsanphamgiohang == idProduct) {
+                            Utils.manggiohang[i].soluongsanphamgiohang += quality
+                            val totalMoneyProduct =
+                                priceProduct * Utils.manggiohang[i].soluongsanphamgiohang
+                            Utils.manggiohang[i].giasanphamgiohang = totalMoneyProduct
                             flags = true
                             break
                         }
                     }
                     if (!flags) {
-                        val tongGiaTriSanPham = giasanpham * soluong
+                        val tongGiaTriSanPham = priceProduct * quality
                         val gioHang = GioHang(
-                            idsanphamgiohang = idsanpham,
-                            tensanphamgiohang = tensanpham,
+                            idsanphamgiohang = idProduct,
+                            tensanphamgiohang = nameProduct,
                             giasanphamgiohang = tongGiaTriSanPham,
-                            hinhanhsanphamgiohang = hinhanhsanpham,
-                            soluongsanphamgiohang = soluong
+                            hinhanhsanphamgiohang = imageProduct,
+                            soluongsanphamgiohang = quality
                         )
                         Utils.manggiohang.add(gioHang)
                     }
                 } else {
-                    val soluong = soluongsanpham
-                    val tongGiaTriSanPham = giasanpham * soluong
+                    val soluong = qualityProduct
+                    val tongGiaTriSanPham = priceProduct * soluong
                     val gioHang = GioHang(
-                        idsanphamgiohang = idsanpham,
-                        tensanphamgiohang = tensanpham,
+                        idsanphamgiohang = idProduct,
+                        tensanphamgiohang = nameProduct,
                         giasanphamgiohang = tongGiaTriSanPham,
-                        hinhanhsanphamgiohang = hinhanhsanpham,
+                        hinhanhsanphamgiohang = imageProduct,
                         soluongsanphamgiohang = soluong
                     )
                     Utils.manggiohang.add(gioHang)
@@ -175,28 +205,61 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
 
     private fun init() {
         Paper.init(this)
-        tensanpham = intent.getStringExtra("name").toString()
-        giasanpham = intent.getDoubleExtra("price", 0.0)
-        hinhanhsanpham = intent.getStringExtra("hinhanhsanpham").toString()
-        motasanpham = intent.getStringExtra("motasanpham").toString()
-        idsanpham = intent.getIntExtra("idsanpham", 0)
+        nameProduct = intent.getStringExtra("name").toString()
+        priceProduct = intent.getDoubleExtra("price", 0.0)
+        imageProduct = intent.getStringExtra("hinhanhsanpham").toString()
+        descriptionProduct = intent.getStringExtra("motasanpham").toString()
+        idProduct = intent.getIntExtra("idsanpham", 0)
         if (Utils.manggiohang.getSoluong() != 0) {
             binding.badgeCart.setNumber(Utils.manggiohang.getSoluong())
         } else {
             binding.badgeCart.setNumber(0)
         }
+        showDetailImages(idProduct) { listImages ->
+            Log.d("listImages", "init: $listImages")
+            if (listImages.isNotEmpty()) {
+                val adapter = RvShowImagesFromProduct(listImages, object : OnClickItemInRvImages {
+                    override fun onClick(position: Int) {
+                        binding.rvImagesProducts.scrollToPosition(position)
+                    }
+                })
+                binding.rvImages.adapter = adapter
+                binding.rvImages.layoutManager =
+                    LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                renderProductImages(listImages)
+            }
+        }
     }
 
-    private fun xuLyChiTiet() {
-        binding.txtChitietTensanpham.text = tensanpham
-        binding.txtChitietGiasanpham.text = formatAmount(giasanpham)
-        Glide.with(applicationContext).load(hinhanhsanpham).into(binding.imvChitietHinhanh)
+    private fun renderProductImages(listImages: List<String>) {
+        val adapter = RvShowDetailProductImages(listImages, object : OnClickItemInRvImages {
+            override fun onClick(position: Int) {
+            }
+        })
+
+        with(binding.rvImagesProducts) {
+            this.adapter = adapter
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+            LinearSnapHelper().attachToRecyclerView(this)
+
+            onFlingListener = object : RecyclerView.OnFlingListener() {
+                override fun onFling(velocityX: Int, velocityY: Int): Boolean {
+                    return abs(velocityX) <= abs(velocityY)
+                }
+            }
+        }
+    }
+
+    private fun handleDescription() {
+        binding.txtChitietTensanpham.text = nameProduct
+        binding.txtChitietGiasanpham.text = formatAmount(priceProduct)
         renderDataToTable()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun renderDataToTable() {
-        val description = motasanpham.trimIndent()
+        val description = descriptionProduct.trimIndent()
         Log.d("description", "renderDataToTable: $description")
         val productPair = mutableListOf<Pair<String, String>>()
         val additionalText = mutableListOf<String>()
@@ -306,7 +369,6 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
             binding.tableLayout.addView(tableRow)
         }
 
-        // Hiển thị thuộc tính bổ sung bên dưới bảng
         if (additionalText.isNotEmpty()) {
             val extraTextView = findViewById<TextView>(R.id.longTextView)
             extraTextView.text = additionalText.joinToString("\n")
@@ -330,15 +392,4 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
             binding.badgeCart.setNumber(0)
         }
     }
-
-    /* override fun finish() {
-         super.finish()
-         this.overridePendingTransition(R.anim.slide_out_left,R.anim.slide_in_right)
-     }
-
-     @Deprecated("Deprecated in Java")
-     override fun onBackPressed() {
-         super.onBackPressed()
-         *//*this.overridePendingTransition(R.anim.slide_out_left,R.anim.slide_in_right)*//*
-    }*/
 }

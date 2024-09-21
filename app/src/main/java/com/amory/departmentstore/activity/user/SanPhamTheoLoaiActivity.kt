@@ -252,7 +252,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                                         )
                                         intent.putExtra("name", list[position].name)
                                         intent.putExtra("price", list[position].price)
-                                        intent.putExtra("hinhanhsanpham", list[position].imageUrl)
+                                        intent.putExtra("hinhanhsanpham", list[position].thumbnail)
                                         intent.putExtra("motasanpham", list[position].description)
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(intent)

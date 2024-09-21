@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.databinding.LayoutChitietitemsBinding
-import com.amory.departmentstore.model.Items
 import com.amory.departmentstore.model.Order
 import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
@@ -15,7 +14,6 @@ import retrofit2.Call
 import retrofit2.Response
 import java.text.NumberFormat
 import java.util.Locale
-import javax.security.auth.callback.Callback
 
 class RvItems(private val ds: List<Order>) : RecyclerView.Adapter<RvItems.viewHolder>() {
     inner class viewHolder(private val binding: LayoutChitietitemsBinding) :
@@ -30,7 +28,7 @@ class RvItems(private val ds: List<Order>) : RecyclerView.Adapter<RvItems.viewHo
                     if (response.isSuccessful) {
                         val product = response.body()?.data?.get(0)
                         binding.txtName.text = product?.name
-                        Glide.with(binding.root).load(product?.imageUrl).centerCrop().into(binding.imbHinhanh)
+                        Glide.with(binding.root).load(product?.thumbnail).centerCrop().into(binding.imbHinhanh)
                         binding.txtSoluongsanpham1.text = "x ${data.quantity}"
                         binding.txtGiasanpham.text = formatAmount(data.price)
                         binding.txtSoluongsanpham2.text = "${data.quantity} sản phẩm"

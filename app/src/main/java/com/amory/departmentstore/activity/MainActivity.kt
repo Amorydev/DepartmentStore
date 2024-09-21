@@ -458,7 +458,7 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("name", sanPham.name)
         intent.putExtra("idsanpham", sanPham.id)
         intent.putExtra("price", sanPham.price)
-        intent.putExtra("hinhanhsanpham", sanPham.imageUrl)
+        intent.putExtra("hinhanhsanpham", sanPham.thumbnail)
         intent.putExtra("motasanpham", sanPham.description)
         startActivity(intent)
         /*overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right)*/

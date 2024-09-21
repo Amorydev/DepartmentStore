@@ -85,7 +85,7 @@ class RvSanPhamCacLoai(private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoa
             sanPhamTheoLoaiViewHolder.txtTenSanPhamCacLoai.text = ds[position].name
             sanPhamTheoLoaiViewHolder.txtGiaSanPhamCacLoai.text = formatAmount(ds[position].price)
             sanPhamTheoLoaiViewHolder.txtSlSanPhamCacLoai.text = "Đã bán "+ ds[position].soldQuantity.toString()
-            Glide.with(mcontext).load(ds[position].imageUrl).centerCrop()
+            Glide.with(mcontext).load(ds[position].thumbnail).centerCrop()
                 .into(sanPhamTheoLoaiViewHolder.imvHinhAnhSanPhamCacLoai)
         }
         holder.itemView.setOnClickListener {

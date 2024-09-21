@@ -1,5 +1,6 @@
 package com.amory.departmentstore.retrofit.APIBanHang
 
+import com.amory.departmentstore.model.ProductImages
 import com.amory.departmentstore.model.SanPhamModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -30,6 +31,11 @@ interface APICallProducts {
         @Query("category_id") categoryId:Int?,
         @Query("keyword") search:String
     ): Call<SanPhamModel>
+
+    @GET("products/moreInfo/{id}")
+    fun getMoreInfo(
+        @Path("id") id: Int?
+    ): Call<ProductImages>
 
     @Multipart
     @POST("products")

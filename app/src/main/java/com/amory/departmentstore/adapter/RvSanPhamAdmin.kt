@@ -65,7 +65,7 @@ class RvSanPhamAdmin(private var ds: MutableList<SanPham>) :
             val sanPhamViewHolder = holder as SanPhamViewHolder
             sanPhamViewHolder.tensanpham.text = ds[position].name
             sanPhamViewHolder.giasanpham.text = formatAmount(ds[position].price)
-            Glide.with(mcontext).load(ds[position].imageUrl).centerCrop()
+            Glide.with(mcontext).load(ds[position].thumbnail).centerCrop()
                 .into(sanPhamViewHolder.hinhanhsanpham)
 
             sanPhamViewHolder.itemView.setOnLongClickListener {

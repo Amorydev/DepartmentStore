@@ -93,18 +93,6 @@ class WebViewActivity : AppCompatActivity() {
             val vnpTxnRef = params?.get("vnp_TxnRef").toString()
             val vnpSecureHash = params?.get("vnp_SecureHash").toString()
 
-            /*Log.d("VIEW",vnpAmount.toString())
-        Log.d("VIEW",vnpBankTranNo.toString())
-        Log.d("VIEW",vnpBankCode.toString())
-        Log.d("VIEW",vnpCardType.toString())
-        Log.d("VIEW",vnpOrderInfo.toString())
-        Log.d("VIEW",vnpPayDate.toString())
-        Log.d("VIEW",vnpResponseCode.toString())
-        Log.d("VIEW",vnpTmnCode.toString())
-        Log.d("VIEW",vnpTransactionNo.toString())
-        Log.d("VIEW",vnpTransactionStatus.toString())
-        Log.d("VIEW",vnpTxnRef.toString())
-        Log.d("VIEW",vnpSecureHash.toString())*/
 
             val service = RetrofitClient.retrofitInstance.create(APICallVnPay::class.java)
             val call = service.getPaymentCallback(

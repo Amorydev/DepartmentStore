@@ -92,7 +92,7 @@ class RvSanPham(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.A
             val sanPhamViewHolder = holder as SanPhamViewHolder
             sanPhamViewHolder.tensanpham.text = ds[position].name
             sanPhamViewHolder.giasanpham.text = formatAmount(ds[position].price)
-            Glide.with(mcontext).load(ds[position].imageUrl).into(sanPhamViewHolder.hinhanhsanpham)
+            Glide.with(mcontext).load(ds[position].thumbnail).into(sanPhamViewHolder.hinhanhsanpham)
             sanPhamViewHolder.soluong.text = "Đã bán ${ds[position].soldQuantity.toString()}"
         }
         holder.itemView.setOnClickListener {

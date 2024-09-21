@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.R
 import com.amory.departmentstore.adapter.RvMuaNgay
 import com.amory.departmentstore.databinding.ActivityThanhToanBinding
-import com.amory.departmentstore.model.CreateOrder
 import com.amory.departmentstore.model.Order
 import com.amory.departmentstore.model.OrderRequest
 import com.amory.departmentstore.model.User
@@ -40,10 +39,6 @@ import io.paperdb.Paper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import vn.zalopay.sdk.Environment
-import vn.zalopay.sdk.ZaloPayError
-import vn.zalopay.sdk.ZaloPaySDK
-import vn.zalopay.sdk.listeners.PayOrderListener
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -72,8 +67,6 @@ class ThanhToanActivity : AppCompatActivity() {
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
 
-        // ZaloPay SDK Init
-        ZaloPaySDK.init(2553, Environment.SANDBOX)
         firestore = FirebaseFirestore.getInstance()
 
         initViews()
@@ -405,123 +398,6 @@ class ThanhToanActivity : AppCompatActivity() {
             pushNotification()
         }, 2000)
 
-    }
-
-
-    private fun requestZalo(orderRequest: OrderRequest) {
-        val orderApi = CreateOrder()
-        val txtAmount = 10000
-
-        try {
-            val data = orderApi.createOrder(txtAmount.toString())
-            /* Log.d("Amount", txtAmount.toString())*/
-            val code = data.getString("return_code")
-            /*Toast.makeText(applicationContext, "return_code: $code", Toast.LENGTH_LONG).show()*/
-
-            if (code == "1") {
-                val token = data.getString("zp_trans_token")
-                ZaloPaySDK.getInstance().payOrder(
-                    this@ThanhToanActivity,
-                    token,
-                    "demozpdk://app",
-                    object : PayOrderListener {
-                        override fun onPaymentSucceeded(
-                            transactionId: String?,
-                            transToken: String?,
-                            appTransID: String?
-                        ) {
-                            runOnUiThread {
-                                AlertDialog.Builder(this@ThanhToanActivity)
-                                    .setTitle("Payment Success")
-                                    .setMessage(
-                                        String.format(
-                                            "TransactionId: %s - TransToken: %s",
-                                            transactionId,
-                                            transToken
-                                        )
-                                    )
-                                    .setPositiveButton("OK") { dialog, _ ->
-                                        val serviceOrder =
-                                            RetrofitClient.retrofitInstance.create(APICallUser::class.java)
-                                        val call = serviceOrder.taodonhang(orderRequest)
-                                        call.enqueue(object : Callback<OrderModel> {
-                                            override fun onResponse(
-                                                call: Call<OrderModel>,
-                                                response: Response<OrderModel>
-                                            ) {
-                                                if (response.isSuccessful) {
-
-                                                    showCustomProgressBar()
-                                                } else {
-                                                    Toast.makeText(
-                                                        this@ThanhToanActivity,
-                                                        "Đặt hàng thất bại",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    /*Log.d("response error", response.errorBody()?.string().orEmpty())*/
-                                                }
-                                            }
-
-                                            override fun onFailure(
-                                                call: Call<OrderModel>,
-                                                t: Throwable
-                                            ) {
-                                                Toast.makeText(
-                                                    this@ThanhToanActivity,
-                                                    "Không thành công",
-                                                    Toast.LENGTH_SHORT
-                                                )
-                                                    .show()
-                                                /* Log.d("error", t.message.toString())*/
-                                                t.printStackTrace()
-                                            }
-                                        })
-                                    }
-                                    .setNegativeButton("Cancel", null)
-                                    .show()
-                            }
-                        }
-
-                        override fun onPaymentCanceled(
-                            zpTransToken: String?,
-                            appTransID: String?
-                        ) {
-                            AlertDialog.Builder(this@ThanhToanActivity)
-                                .setTitle("User Cancel Payment")
-                                .setMessage(String.format("zpTransToken: %s \n", zpTransToken))
-                                .setPositiveButton("OK") { _, _ -> }
-                                .setNegativeButton("Cancel", null)
-                                .show()
-                        }
-
-                        override fun onPaymentError(
-                            zaloPayError: ZaloPayError?,
-                            zpTransToken: String?,
-                            appTransID: String?
-                        ) {
-                            AlertDialog.Builder(this@ThanhToanActivity)
-                                .setTitle("Payment Fail")
-                                .setMessage(
-                                    String.format(
-                                        "ZaloPayErrorCode: %s \nTransToken: %s",
-                                        zaloPayError.toString(),
-                                        zpTransToken
-                                    )
-                                )
-                                .setPositiveButton("OK") { dialog, _ -> }
-                                .setNegativeButton("Cancel", null)
-                                .show()
-                        }
-                    })
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        ZaloPaySDK.getInstance().onResult(intent)
     }
 
     private fun pushNotification() {

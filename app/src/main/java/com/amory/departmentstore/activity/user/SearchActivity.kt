@@ -67,7 +67,7 @@ class SearchActivity : AppCompatActivity() {
                         intent.putExtra("name", result?.get(position)?.name)
                         intent.putExtra("idsanpham", result?.get(position)?.id)
                         intent.putExtra("price", result?.get(position)?.price)
-                        intent.putExtra("hinhanhsanpham", result?.get(position)?.imageUrl)
+                        intent.putExtra("hinhanhsanpham", result?.get(position)?.thumbnail)
                         intent.putExtra("motasanpham", result?.get(position)?.description)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
