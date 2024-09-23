@@ -14,8 +14,8 @@ import com.amory.departmentstore.activity.user.DangNhapActivity
 import com.amory.departmentstore.adapter.RvLoaiSanPhamAdmin
 import com.amory.departmentstore.databinding.ActivityAdminLoaiSanPhamBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaLoaiEvent
-import com.amory.departmentstore.model.LoaiSanPham
-import com.amory.departmentstore.model.LoaiSanPhamModel
+import com.amory.departmentstore.model.Category
+import com.amory.departmentstore.model.CategoryModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import io.paperdb.Paper
@@ -28,7 +28,7 @@ import retrofit2.Response
 
 class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminLoaiSanPhamBinding
-    private var loaiSanPham: LoaiSanPham? = null
+    private var category: Category? = null
     private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,10 +52,10 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
     private fun hienThiLoai() {
         val service = RetrofitClient.retrofitInstance.create(APICallCategories::class.java)
         val call = service.getLoaisanPham()
-        call.enqueue(object : Callback<LoaiSanPhamModel> {
+        call.enqueue(object : Callback<CategoryModel> {
             override fun onResponse(
-                call: Call<LoaiSanPhamModel>,
-                response: Response<LoaiSanPhamModel>
+                call: Call<CategoryModel>,
+                response: Response<CategoryModel>
             ) {
                 if (response.isSuccessful) {
 
@@ -72,7 +72,7 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
+            override fun onFailure(call: Call<CategoryModel>, t: Throwable) {
                 t.printStackTrace()
                 Toast.makeText(
                     this@AdminQLLoaiSanPhamActivity,
@@ -98,7 +98,7 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
     private fun SuaLoaiSanPham() {
         val intent =
             Intent(this@AdminQLLoaiSanPhamActivity, AdminThemLoaiSanPhamActivity::class.java)
-        intent.putExtra("sua", loaiSanPham)
+        intent.putExtra("sua", category)
         startActivity(intent)
     }
 
@@ -107,11 +107,11 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
         dialog.setTitle("Bạn có chắc chắn muốn xóa")
         dialog.setPositiveButton("Có") { dialog, which ->
             val service = RetrofitClient.retrofitInstance.create(APICallCategories::class.java)
-            val call = service.xoaLoaiSanPham(loaiSanPham!!.id)
-            call.enqueue(object : Callback<LoaiSanPhamModel> {
+            val call = service.xoaLoaiSanPham(category!!.id)
+            call.enqueue(object : Callback<CategoryModel> {
                 override fun onResponse(
-                    call: Call<LoaiSanPhamModel>,
-                    response: Response<LoaiSanPhamModel>
+                    call: Call<CategoryModel>,
+                    response: Response<CategoryModel>
                 ) {
                     if (response.isSuccessful) {
                         Toast.makeText(
@@ -119,12 +119,12 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
                             "Xóa thành công",
                             Toast.LENGTH_SHORT
                         ).show()
-                        loaiSanPham = null
+                        category = null
                         hienThiLoai()
                     }
                 }
 
-                override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
+                override fun onFailure(call: Call<CategoryModel>, t: Throwable) {
                     t.printStackTrace()
                 }
             })
@@ -220,7 +220,7 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun eventBus(event: SuaXoaLoaiEvent) {
-        loaiSanPham = event.loaiSanPham
+        category = event.category
     }
 
     override fun onStart() {

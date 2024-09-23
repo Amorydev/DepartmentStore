@@ -6,8 +6,8 @@ import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.adapter.RvKhuyenMai
 import com.amory.departmentstore.databinding.ActivityKhuyenMaiBinding
-import com.amory.departmentstore.model.Banner
-import com.amory.departmentstore.model.BannerModel
+import com.amory.departmentstore.model.Promotion
+import com.amory.departmentstore.model.PromotionModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallBanners
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import retrofit2.Call
@@ -16,12 +16,12 @@ import retrofit2.Response
 
 class KhuyenMaiActivity : AppCompatActivity() {
     private lateinit var binding:ActivityKhuyenMaiBinding
-    private lateinit var listBanners: List<Banner>
+    private lateinit var listPromotions: List<Promotion>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityKhuyenMaiBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        listBanners = mutableListOf()
+        listPromotions = mutableListOf()
         showRvKhuyenMai()
         onClickBack()
     }
@@ -35,21 +35,21 @@ class KhuyenMaiActivity : AppCompatActivity() {
     private fun showRvKhuyenMai() {
         val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
         val call = service.layKhuyenMai()
-        call.enqueue(object : Callback<BannerModel>{
+        call.enqueue(object : Callback<PromotionModel>{
             override fun onResponse(
-                call: Call<BannerModel>,
-                response: Response<BannerModel>
+                call: Call<PromotionModel>,
+                response: Response<PromotionModel>
             ) {
                 if (response.isSuccessful){
-                    listBanners = response.body()?.data!!
-                    val adapter = RvKhuyenMai(listBanners)
+                    listPromotions = response.body()?.data!!
+                    val adapter = RvKhuyenMai(listPromotions)
                     binding.rvKhuyenmai.adapter = adapter
                     binding.rvKhuyenmai.layoutManager = LinearLayoutManager(this@KhuyenMaiActivity,LinearLayoutManager.VERTICAL,false)
                     binding.rvKhuyenmai.setHasFixedSize(true)
                 }
             }
 
-            override fun onFailure(call: Call<BannerModel>, t: Throwable) {
+            override fun onFailure(call: Call<PromotionModel>, t: Throwable) {
                 t.printStackTrace()
                 Log.d("Error Banner",t.message.toString())
             }

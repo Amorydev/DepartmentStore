@@ -1,6 +1,6 @@
 package com.amory.departmentstore.retrofit.APIBanHang
 
-import com.amory.departmentstore.model.BannerModel
+import com.amory.departmentstore.model.PromotionModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -16,31 +16,31 @@ interface APICallBanners {
     /*Call KhuyenMaiModel*/
     @GET("banners")
     fun layKhuyenMai(
-    ): Call<BannerModel>
+    ): Call<PromotionModel>
     @Multipart
     @POST("banners")
     fun themKhuyenMaiMoi(
         @Part("name") name: RequestBody,
         @Part("description") description: RequestBody
-    ): Call<BannerModel>
+    ): Call<PromotionModel>
     @Multipart
     @POST("banners")
     fun themKhuyenMaiMoi(
         @Part("name") name: RequestBody,
         @Part fileImage: MultipartBody.Part,
         @Part("description") description: RequestBody
-    ): Call<BannerModel>
+    ): Call<PromotionModel>
     @DELETE("banners/{id}")
     fun xoaKhuyenMai(
         @Path("id") id: Int?
-    ): Call<BannerModel>
+    ): Call<PromotionModel>
     @Multipart
     @PUT("banners/{id}")
     fun suaKhuyenMai(
         @Path("id") id: Int?,
         @Part("name") name: RequestBody,
         @Part("description") description: RequestBody
-    ): Call<BannerModel>
+    ): Call<PromotionModel>
     @Multipart
     @PUT("banners/{id}")
     fun suaKhuyenMai(
@@ -48,5 +48,5 @@ interface APICallBanners {
         @Part("name") name: RequestBody,
         @Part fileImage: MultipartBody.Part,
         @Part("description") description: RequestBody
-    ): Call<BannerModel>
+    ): Call<PromotionModel>
 }

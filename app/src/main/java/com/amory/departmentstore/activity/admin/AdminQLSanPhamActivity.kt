@@ -19,7 +19,7 @@ import com.amory.departmentstore.activity.user.DangNhapActivity
 import com.amory.departmentstore.adapter.RvSanPhamAdmin
 import com.amory.departmentstore.databinding.ActivityAdminQlsanPhamBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaEvent
-import com.amory.departmentstore.model.LoaiSanPhamModel
+import com.amory.departmentstore.model.CategoryModel
 import com.amory.departmentstore.model.Product
 import com.amory.departmentstore.model.ProductResponse
 import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
@@ -231,10 +231,10 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
     private fun showSpnLoai(){
         val serviceCategories = RetrofitClient.retrofitInstance.create(APICallCategories::class.java)
         val callCategories = serviceCategories.getLoaisanPham()
-        callCategories.enqueue(object : Callback<LoaiSanPhamModel>{
+        callCategories.enqueue(object : Callback<CategoryModel>{
             override fun onResponse(
-                call: Call<LoaiSanPhamModel>,
-                response: Response<LoaiSanPhamModel>
+                call: Call<CategoryModel>,
+                response: Response<CategoryModel>
             ) {
                 if (response.isSuccessful){
                     var  listCategories = mutableListOf<String>()
@@ -265,7 +265,7 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
 
             }
 
-            override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
+            override fun onFailure(call: Call<CategoryModel>, t: Throwable) {
                 t.printStackTrace()
             }
         })

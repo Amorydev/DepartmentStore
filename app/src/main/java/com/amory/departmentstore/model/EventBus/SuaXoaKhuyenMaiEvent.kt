@@ -1,6 +1,6 @@
 package com.amory.departmentstore.model.EventBus
 
-import com.amory.departmentstore.model.Banner
+import com.amory.departmentstore.model.Promotion
 
-class SuaXoaKhuyenMaiEvent(var khuyenmai :Banner) {
+class SuaXoaKhuyenMaiEvent(var khuyenmai :Promotion) {
 }

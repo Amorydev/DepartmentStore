@@ -1,6 +1,6 @@
 package com.amory.departmentstore.model.EventBus
 
-import com.amory.departmentstore.model.LoaiSanPham
+import com.amory.departmentstore.model.Category
 
-class SuaXoaLoaiEvent(val loaiSanPham:LoaiSanPham) {
+class SuaXoaLoaiEvent(val category:Category) {
 }

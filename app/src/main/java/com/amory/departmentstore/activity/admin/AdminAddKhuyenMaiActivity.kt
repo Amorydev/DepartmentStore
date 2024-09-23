@@ -10,8 +10,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.amory.departmentstore.databinding.ActivityAdminAddKhuyenMaiBinding
-import com.amory.departmentstore.model.Banner
-import com.amory.departmentstore.model.BannerModel
+import com.amory.departmentstore.model.Promotion
+import com.amory.departmentstore.model.PromotionModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallBanners
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.bumptech.glide.Glide
@@ -28,7 +28,7 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminAddKhuyenMaiBinding
     private var mediaPath = ""
     var flags = false
-    var listBanner: Banner? = null
+    var listPromotion: Promotion? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,13 +38,13 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
         onCLickThemHinhAnh()
         onClickBack()
         if (intent != null && intent.hasExtra("khuyenmai")) {
-            listBanner = intent.getSerializableExtra("khuyenmai") as? Banner
+            listPromotion = intent.getSerializableExtra("khuyenmai") as? Promotion
         }
-        if (listBanner != null) {
+        if (listPromotion != null) {
             binding.txt.text = "Sửa khuyến mãi"
-            binding.edtKhuyenmai.setText(listBanner?.name)
-            binding.edtThongtin.setText(listBanner?.description)
-            Glide.with(binding.root).load(listBanner?.imageUrl).centerCrop()
+            binding.edtKhuyenmai.setText(listPromotion?.name)
+            binding.edtThongtin.setText(listPromotion?.description)
+            Glide.with(binding.root).load(listPromotion?.imageUrl).centerCrop()
                 .into(binding.imvHinhanh)
         } else {
             flags = true
@@ -62,7 +62,7 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
             val khuyenmai = binding.edtKhuyenmai.text?.trim().toString()
             val thongtin = binding.edtThongtin.text?.trim().toString()
             val imagePath =
-                mediaPath.takeIf { it.isNotEmpty() } ?: listBanner?.imageUrl.toString()
+                mediaPath.takeIf { it.isNotEmpty() } ?: listPromotion?.imageUrl.toString()
             if (flags) {
                 val nameRequestBody =
                     RequestBody.create("text/plain".toMediaTypeOrNull(), khuyenmai)
@@ -84,10 +84,10 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
                 if (imagePart?.equals("") == true) {
                     val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
                     val call = service.themKhuyenMaiMoi(nameRequestBody, imagePart, descRequestBody)
-                    call.enqueue(object : Callback<BannerModel> {
+                    call.enqueue(object : Callback<PromotionModel> {
                         override fun onResponse(
-                            call: Call<BannerModel>,
-                            response: Response<BannerModel>
+                            call: Call<PromotionModel>,
+                            response: Response<PromotionModel>
                         ) {
                             if (response.isSuccessful) {
                                 Toast.makeText(
@@ -104,7 +104,7 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
                             }
                         }
 
-                        override fun onFailure(call: Call<BannerModel>, t: Throwable) {
+                        override fun onFailure(call: Call<PromotionModel>, t: Throwable) {
                             t.printStackTrace()
                             Log.d("loi banner", t.message.toString())
                         }
@@ -113,10 +113,10 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
                 if (imagePart?.equals("") != true) {
                     val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
                     val call = service.themKhuyenMaiMoi(nameRequestBody, descRequestBody)
-                    call.enqueue(object : Callback<BannerModel> {
+                    call.enqueue(object : Callback<PromotionModel> {
                         override fun onResponse(
-                            call: Call<BannerModel>,
-                            response: Response<BannerModel>
+                            call: Call<PromotionModel>,
+                            response: Response<PromotionModel>
                         ) {
                             if (response.isSuccessful) {
                                 Toast.makeText(
@@ -133,7 +133,7 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
                             }
                         }
 
-                        override fun onFailure(call: Call<BannerModel>, t: Throwable) {
+                        override fun onFailure(call: Call<PromotionModel>, t: Throwable) {
                             t.printStackTrace()
                             Log.d("loi banner", t.message.toString())
                         }
@@ -160,15 +160,15 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
                 if (imagePart!=null) {
                     val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
                     val call = service.suaKhuyenMai(
-                        listBanner?.id,
+                        listPromotion?.id,
                         nameRequestBody,
                         imagePart,
                         descRequestBody
                     )
-                    call.enqueue(object : Callback<BannerModel> {
+                    call.enqueue(object : Callback<PromotionModel> {
                         override fun onResponse(
-                            call: Call<BannerModel>,
-                            response: Response<BannerModel>
+                            call: Call<PromotionModel>,
+                            response: Response<PromotionModel>
                         ) {
                             if (response.isSuccessful) {
                                 Toast.makeText(
@@ -185,7 +185,7 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
                             }
                         }
 
-                        override fun onFailure(call: Call<BannerModel>, t: Throwable) {
+                        override fun onFailure(call: Call<PromotionModel>, t: Throwable) {
                             t.printStackTrace()
                         }
                     })
@@ -193,14 +193,14 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
                 if (imagePart?.equals("") != true) {
                     val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
                     val call = service.suaKhuyenMai(
-                        listBanner?.id,
+                        listPromotion?.id,
                         nameRequestBody,
                         descRequestBody
                     )
-                    call.enqueue(object : Callback<BannerModel> {
+                    call.enqueue(object : Callback<PromotionModel> {
                         override fun onResponse(
-                            call: Call<BannerModel>,
-                            response: Response<BannerModel>
+                            call: Call<PromotionModel>,
+                            response: Response<PromotionModel>
                         ) {
                             if (response.isSuccessful) {
                                 Toast.makeText(
@@ -217,7 +217,7 @@ class AdminAddKhuyenMaiActivity : AppCompatActivity() {
                             }
                         }
 
-                        override fun onFailure(call: Call<BannerModel>, t: Throwable) {
+                        override fun onFailure(call: Call<PromotionModel>, t: Throwable) {
                             t.printStackTrace()
 
                         }

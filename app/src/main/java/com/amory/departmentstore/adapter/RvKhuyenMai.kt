@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.databinding.LayoutItemKhuyenmaiBinding
-import com.amory.departmentstore.model.Banner
+import com.amory.departmentstore.model.Promotion
 import com.bumptech.glide.Glide
 
-class RvKhuyenMai(val list: List<Banner>):RecyclerView.Adapter<RvKhuyenMai.viewHolder>() {
+class RvKhuyenMai(val list: List<Promotion>):RecyclerView.Adapter<RvKhuyenMai.viewHolder>() {
     inner class viewHolder(private val binding: LayoutItemKhuyenmaiBinding):RecyclerView.ViewHolder(binding.root) {
-        fun bind(data:Banner){
+        fun bind(data:Promotion){
             binding.txtKhuyenmai.text = data.name
             binding.txtThongtinKhuyenmai.text = data.description
             Glide.with(binding.root).load(data.imageUrl).fitCenter().into(binding.imgKhuyenmai)

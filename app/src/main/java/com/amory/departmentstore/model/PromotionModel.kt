@@ -1,7 +1,7 @@
 package com.amory.departmentstore.model
 
-data class LoaiSanPhamModel(
+data class PromotionModel(
     val status:String,
     val message:String,
-    val data: MutableList<LoaiSanPham>
+    val data: MutableList<Promotion>
 )

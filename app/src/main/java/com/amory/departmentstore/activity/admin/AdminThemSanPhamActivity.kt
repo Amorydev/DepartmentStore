@@ -13,7 +13,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.amory.departmentstore.databinding.ActivityAdminThemSanPhamBinding
-import com.amory.departmentstore.model.LoaiSanPhamModel
+import com.amory.departmentstore.model.CategoryModel
 import com.amory.departmentstore.model.Product
 import com.amory.departmentstore.model.ProductResponse
 import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
@@ -82,10 +82,10 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
         var categoryId = 0
         val service = RetrofitClient.retrofitInstance.create(APICallCategories::class.java)
         val call = service.getLoaisanPham()
-        call.enqueue(object : Callback<LoaiSanPhamModel> {
+        call.enqueue(object : Callback<CategoryModel> {
             override fun onResponse(
-                call: Call<LoaiSanPhamModel>,
-                response: Response<LoaiSanPhamModel>
+                call: Call<CategoryModel>,
+                response: Response<CategoryModel>
             ) {
                 if (response.isSuccessful) {
                     val list =
@@ -327,7 +327,7 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
+            override fun onFailure(call: Call<CategoryModel>, t: Throwable) {
                 t.printStackTrace()
             }
         })

@@ -13,7 +13,7 @@ import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.model.Product
 import com.amory.departmentstore.Interface.OnClickSanPhamTheoLoai
-import com.amory.departmentstore.model.LoaiSanPham
+import com.amory.departmentstore.model.Category
 import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import java.util.Locale
@@ -42,7 +42,7 @@ class RvSanPhamCacLoai(private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoa
     }
     fun addLoadingView(){
         android.os.Handler().post {
-            ds.add(Product(0,"",100.0,"","","","",LoaiSanPham(0,"",""), 0))
+            ds.add(Product(0,"",100.0,"","","","",Category(0,"",""), 0))
             notifyItemInserted(ds.size-1)
         }
     }

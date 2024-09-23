@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/product"
+        android:icon="@drawable/home"
+        android:title="Sản phẩm"
+        tools:ignore="HardcodedText"/>
+    <item
+        android:id="@+id/discount"
+        android:icon="@drawable/discount"
+        android:title="Khuyến mãi"
+        tools:ignore="HardcodedText"/>
+    <item
+        android:id="@+id/carts"
+        android:icon="@drawable/ic_cart_main"
+        android:title="Giỏ hàng"
+        tools:ignore="HardcodedText"/>
+    <item
+        android:id="@+id/account"
+        android:icon="@drawable/ic_account"
+        android:title="Tài khoản"
+        tools:ignore="HardcodedText"/>
+</menu>

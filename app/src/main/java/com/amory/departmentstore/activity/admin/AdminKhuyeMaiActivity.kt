@@ -13,11 +13,10 @@ import com.amory.departmentstore.activity.user.DangNhapActivity
 import com.amory.departmentstore.adapter.RvKhuyenMaiAdmin
 import com.amory.departmentstore.databinding.ActivityAdminKhuyeMaiBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaKhuyenMaiEvent
-import com.amory.departmentstore.model.Banner
-import com.amory.departmentstore.model.BannerModel
+import com.amory.departmentstore.model.Promotion
+import com.amory.departmentstore.model.PromotionModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallBanners
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
-import io.paperdb.Paper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -27,7 +26,7 @@ import retrofit2.Response
 
 class AdminKhuyeMaiActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminKhuyeMaiBinding
-    private var listBanner: Banner? = null
+    private var listPromotion: Promotion? = null
     private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,10 +49,10 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
     private fun showKhuyenMai() {
         val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
         val call = service.layKhuyenMai()
-        call.enqueue(object : Callback<BannerModel> {
+        call.enqueue(object : Callback<PromotionModel> {
             override fun onResponse(
-                call: Call<BannerModel>,
-                response: Response<BannerModel>
+                call: Call<PromotionModel>,
+                response: Response<PromotionModel>
             ) {
                 if (response.isSuccessful) {
                     val listKhuyenMai = response.body()?.data!!
@@ -67,7 +66,7 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<BannerModel>, t: Throwable) {
+            override fun onFailure(call: Call<PromotionModel>, t: Throwable) {
                 t.printStackTrace()
             }
         })
@@ -160,18 +159,18 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
         dialog.setTitle("Bạn có chắc chắn muốn xóa")
         dialog.setPositiveButton("Có") { dialog, which ->
             val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
-            val call = service.xoaKhuyenMai(listBanner?.id)
-            call.enqueue(object : Callback<BannerModel> {
+            val call = service.xoaKhuyenMai(listPromotion?.id)
+            call.enqueue(object : Callback<PromotionModel> {
                 override fun onResponse(
-                    call: Call<BannerModel>,
-                    response: Response<BannerModel>
+                    call: Call<PromotionModel>,
+                    response: Response<PromotionModel>
                 ) {
                     if (response.isSuccessful) {
                         showKhuyenMai()
                     }
                 }
 
-                override fun onFailure(call: Call<BannerModel>, t: Throwable) {
+                override fun onFailure(call: Call<PromotionModel>, t: Throwable) {
                     t.printStackTrace()
                 }
             })
@@ -184,7 +183,7 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
 
     private fun SuaKhuyenMai() {
         val intent = Intent(this, AdminAddKhuyenMaiActivity::class.java)
-        intent.putExtra("khuyenmai", listBanner)
+        intent.putExtra("khuyenmai", listPromotion)
         startActivity(intent)
     }
 
@@ -196,7 +195,7 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun eventSuaXoaKhuyenMai(event: SuaXoaKhuyenMaiEvent) {
-        listBanner = event.khuyenmai
+        listPromotion = event.khuyenmai
     }
 
     override fun onStart() {

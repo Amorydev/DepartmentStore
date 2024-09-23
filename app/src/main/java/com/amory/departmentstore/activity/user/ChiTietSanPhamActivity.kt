@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -157,6 +158,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
     private fun init() {
         Paper.init(this)
         idProduct = intent.getIntExtra("idsanpham", 0)
+        Log.d("idsanpham",idProduct.toString())
         if (Utils.manggiohang.getSoluong() != 0) {
             binding.badgeCart.setNumber(Utils.manggiohang.getSoluong())
         } else {

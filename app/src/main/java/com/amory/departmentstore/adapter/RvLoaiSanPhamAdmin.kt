@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.databinding.LayoutLoaisanphamAdminBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaLoaiEvent
-import com.amory.departmentstore.model.LoaiSanPham
+import com.amory.departmentstore.model.Category
 import com.bumptech.glide.Glide
 import org.greenrobot.eventbus.EventBus
 
-class RvLoaiSanPhamAdmin(val ds:List<LoaiSanPham>):RecyclerView.Adapter<RvLoaiSanPhamAdmin.viewHolder>() {
+class RvLoaiSanPhamAdmin(val ds:List<Category>):RecyclerView.Adapter<RvLoaiSanPhamAdmin.viewHolder>() {
 
     inner class viewHolder(private val binding:LayoutLoaisanphamAdminBinding):RecyclerView.ViewHolder(binding.root),
         View.OnCreateContextMenuListener {
-        fun bind(data:LoaiSanPham){
+        fun bind(data:Category){
             binding.tvloaisanpham.text = data.name
             Glide.with(binding.root).load(data.imageUrl).centerCrop().into(binding.imvhinhanh)
         }

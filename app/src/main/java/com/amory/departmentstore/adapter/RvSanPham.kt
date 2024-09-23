@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.Interface.OnClickRvSanPham
-import com.amory.departmentstore.model.LoaiSanPham
+import com.amory.departmentstore.model.Category
 
 class RvSanPham(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private lateinit var mcontext: Context
@@ -45,7 +45,7 @@ class RvSanPham(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.A
     fun addLoadingView() {
         //Thêm loading
         Handler().post {
-            ds.add(Product(0, "", 1000.0,"","","","", LoaiSanPham(0,"",""),0))
+            ds.add(Product(0, "", 1000.0,"","","","", Category(0,"",""),0))
             notifyItemInserted(ds.size - 1)
         }
     }

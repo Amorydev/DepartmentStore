@@ -1,7 +1,7 @@
 package com.amory.departmentstore.model
 
-data class BannerModel(
+data class CategoryModel(
     val status:String,
     val message:String,
-    val data: MutableList<Banner>
+    val data: MutableList<Category>
 )

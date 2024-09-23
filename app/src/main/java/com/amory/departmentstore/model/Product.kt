@@ -11,7 +11,7 @@ data class Product(
     val description: String,
     val createdAt: String,
     val updatedAt: String,
-    val categoryId: LoaiSanPham,
+    val categoryId: Category,
     val soldQuantity:Int,
     @SerializedName("productImages") val productImages: ProductImages = ProductImages()
 ) : Serializable

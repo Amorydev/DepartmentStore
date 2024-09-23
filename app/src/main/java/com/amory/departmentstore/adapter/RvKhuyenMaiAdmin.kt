@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.databinding.LayoutItemKhuyenmaiBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaKhuyenMaiEvent
-import com.amory.departmentstore.model.Banner
+import com.amory.departmentstore.model.Promotion
 import com.bumptech.glide.Glide
 import org.greenrobot.eventbus.EventBus
 
-class RvKhuyenMaiAdmin(val list: List<Banner>): RecyclerView.Adapter<RvKhuyenMaiAdmin.viewHolder>() {
+class RvKhuyenMaiAdmin(val list: List<Promotion>): RecyclerView.Adapter<RvKhuyenMaiAdmin.viewHolder>() {
     inner class viewHolder(private val binding: LayoutItemKhuyenmaiBinding): RecyclerView.ViewHolder(binding.root),
         View.OnCreateContextMenuListener {
-        fun bind(data: Banner){
+        fun bind(data: Promotion){
             binding.txtKhuyenmai.text = data.name
             binding.txtThongtinKhuyenmai.text = data.description
             Glide.with(binding.root).load(data.imageUrl).centerCrop().into(binding.imgKhuyenmai)

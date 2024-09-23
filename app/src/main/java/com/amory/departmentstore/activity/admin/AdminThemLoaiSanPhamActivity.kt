@@ -10,8 +10,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.amory.departmentstore.databinding.ActivityAdminThemLoaiSanPhamBinding
-import com.amory.departmentstore.model.LoaiSanPham
-import com.amory.departmentstore.model.LoaiSanPhamModel
+import com.amory.departmentstore.model.Category
+import com.amory.departmentstore.model.CategoryModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.bumptech.glide.Glide
@@ -26,7 +26,7 @@ import java.io.File
 
 class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminThemLoaiSanPhamBinding
-    private var loaiSanPham: LoaiSanPham? = null
+    private var category: Category? = null
     private var mediaPath: String? = null
     private var flags = false
 
@@ -41,13 +41,13 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
         onClickAddLoaiSanPham()
 
         if (intent != null && intent.hasExtra("sua")) {
-            loaiSanPham = intent.getSerializableExtra("sua") as? LoaiSanPham
+            category = intent.getSerializableExtra("sua") as? Category
         }
-        if (loaiSanPham != null) {
+        if (category != null) {
             flags = true
             binding.txt.text = "Sửa loại sản phẩm"
-            binding.edtTensanpham.setText(loaiSanPham!!.name)
-            Glide.with(this).load(loaiSanPham!!.imageUrl).into(binding.imvHinhanh)
+            binding.edtTensanpham.setText(category!!.name)
+            Glide.with(this).load(category!!.imageUrl).into(binding.imvHinhanh)
         } else {
             flags = false
         }
@@ -56,7 +56,7 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
     private fun onClickAddLoaiSanPham() {
         binding.imbAdd.setOnClickListener {
             val name = binding.edtTensanpham.text.toString().trim()
-            val imagePath = mediaPath.takeIf { !it.isNullOrEmpty() } ?: loaiSanPham?.imageUrl ?: ""
+            val imagePath = mediaPath.takeIf { !it.isNullOrEmpty() } ?: category?.imageUrl ?: ""
             val service = RetrofitClient.retrofitInstance.create(APICallCategories::class.java)
 
             val nameRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), name)
@@ -71,10 +71,10 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
             if (!flags) {
                 if (imagePart != null) {
                     val call = service.themLoaiSanPhamMoi(nameRequestBody, imagePart)
-                    call.enqueue(object : Callback<LoaiSanPhamModel> {
+                    call.enqueue(object : Callback<CategoryModel> {
                         override fun onResponse(
-                            call: Call<LoaiSanPhamModel>,
-                            response: Response<LoaiSanPhamModel>
+                            call: Call<CategoryModel>,
+                            response: Response<CategoryModel>
                         ) {
                             Log.d("Response", response.toString())
                             if (response.isSuccessful) {
@@ -89,7 +89,7 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                             }
                         }
 
-                        override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
+                        override fun onFailure(call: Call<CategoryModel>, t: Throwable) {
                             t.printStackTrace()
                             Log.d("loi", t.message.toString())
                             Toast.makeText(
@@ -102,10 +102,10 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                 }else {
                     if (imagePart?.equals("") != true) {
                         val call = service.themLoaiSanPhamMoi(nameRequestBody)
-                        call.enqueue(object : Callback<LoaiSanPhamModel> {
+                        call.enqueue(object : Callback<CategoryModel> {
                             override fun onResponse(
-                                call: Call<LoaiSanPhamModel>,
-                                response: Response<LoaiSanPhamModel>
+                                call: Call<CategoryModel>,
+                                response: Response<CategoryModel>
                             ) {
                                 Log.d("Response", response.toString())
                                 if (response.isSuccessful) {
@@ -124,7 +124,7 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                                 }
                             }
 
-                            override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
+                            override fun onFailure(call: Call<CategoryModel>, t: Throwable) {
                                 t.printStackTrace()
                                 Log.d("loi", t.message.toString())
                                 Toast.makeText(
@@ -138,13 +138,13 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                 }
             } else {
 
-                val id = loaiSanPham?.id ?: return@setOnClickListener
+                val id = category?.id ?: return@setOnClickListener
                 if (imagePart != null) {
                     val call = service.suaLoaiSanPham(id, nameRequestBody, imagePart)
-                    call.enqueue(object : Callback<LoaiSanPhamModel> {
+                    call.enqueue(object : Callback<CategoryModel> {
                         override fun onResponse(
-                            call: Call<LoaiSanPhamModel>,
-                            response: Response<LoaiSanPhamModel>
+                            call: Call<CategoryModel>,
+                            response: Response<CategoryModel>
                         ) {
                             Log.d("Response", response.toString())
                             if (response.isSuccessful) {
@@ -159,11 +159,11 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                                 )
                                 startActivity(intent)
                                 finish()
-                                loaiSanPham = null
+                                category = null
                             }
                         }
 
-                        override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
+                        override fun onFailure(call: Call<CategoryModel>, t: Throwable) {
                             t.printStackTrace()
                             Log.d("loisua", t.message.toString())
                         }
@@ -171,10 +171,10 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                 } else {
                     if (imagePart?.equals("") != true) {
                         val call = service.suaLoaiSanPham(id, nameRequestBody)
-                        call.enqueue(object : Callback<LoaiSanPhamModel> {
+                        call.enqueue(object : Callback<CategoryModel> {
                             override fun onResponse(
-                                call: Call<LoaiSanPhamModel>,
-                                response: Response<LoaiSanPhamModel>
+                                call: Call<CategoryModel>,
+                                response: Response<CategoryModel>
                             ) {
                                 Log.d("Response", response.toString())
                                 if (response.isSuccessful) {
@@ -189,11 +189,11 @@ class AdminThemLoaiSanPhamActivity : AppCompatActivity() {
                                     )
                                     startActivity(intent)
                                     finish()
-                                    loaiSanPham = null
+                                    category = null
                                 }
                             }
 
-                            override fun onFailure(call: Call<LoaiSanPhamModel>, t: Throwable) {
+                            override fun onFailure(call: Call<CategoryModel>, t: Throwable) {
                                 t.printStackTrace()
                                 Log.d("loisua", t.message.toString())
                             }
