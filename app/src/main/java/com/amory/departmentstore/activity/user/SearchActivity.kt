@@ -7,7 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.ArrayAdapter
 import com.amory.departmentstore.databinding.ActivitySearchBinding
-import com.amory.departmentstore.model.SanPhamModel
+import com.amory.departmentstore.model.ProductResponse
 import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import retrofit2.Call
@@ -54,8 +54,8 @@ class SearchActivity : AppCompatActivity() {
         val service = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
         val call = service.timkiem(categoryId, search)
         val adapter = ArrayAdapter(this@SearchActivity, android.R.layout.simple_list_item_1, list)
-        call.enqueue(object : retrofit2.Callback<SanPhamModel> {
-            override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
+        call.enqueue(object : retrofit2.Callback<ProductResponse> {
+            override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
                 if (response.isSuccessful) {
                     val result = response.body()?.data
                     for (i in 0 until response.body()?.data?.size!!) {
@@ -78,7 +78,7 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
+            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
                 t.printStackTrace()
             }
         })

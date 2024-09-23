@@ -1,9 +1,9 @@
 package com.amory.departmentstore.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.amory.departmentstore.model.SanPham
+import com.amory.departmentstore.model.Product
 
-class RvSanPhamDiffCallback(private val oldList: List<SanPham>, private val newList: List<SanPham>) :
+class RvSanPhamDiffCallback(private val oldList: List<Product>, private val newList: List<Product>) :
     DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {

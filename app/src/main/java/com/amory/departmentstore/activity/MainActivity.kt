@@ -31,8 +31,8 @@ import com.amory.departmentstore.model.GioHang
 import com.amory.departmentstore.model.Banner
 import com.amory.departmentstore.model.BannerModel
 import com.amory.departmentstore.model.LoaiSanPhamModel
-import com.amory.departmentstore.model.SanPham
-import com.amory.departmentstore.model.SanPhamModel
+import com.amory.departmentstore.model.Product
+import com.amory.departmentstore.model.ProductResponse
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.amory.departmentstore.Interface.OnClickRvLoaiSanPham
 import com.amory.departmentstore.Interface.OnClickRvSanPham
@@ -81,24 +81,19 @@ class MainActivity : AppCompatActivity() {
 
         Paper.init(this)
 
-        /*  onTouch()*/
-        /*  showSanPham()*/
-        /*Log.d("paper", Paper.book().path)*/
-
         if (Utils.kiemTraKetNoi(this)) {
-            /* Toast.makeText(this, "Có internet", Toast.LENGTH_SHORT).show()*/
             listBanners = mutableListOf()
             RetrofitClient.init(this)
             sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
-            /* Toast.makeText(this@MainActivity,Utils.user_current.toString(),Toast.LENGTH_SHORT).show()*/
+
             paddingRv()
-            laySanPham()
-            layLoaiSanPham()
-            onClickDanhMuc()
-            OnclickNavHeader()
+            fetchDataProducts()
+            fetchDataCategories()
+            onClickMenu()
+            onClickNavHeader()
             onClickSearch()
-            SlideQuangCao()
-            goToGioHang()
+            slideQuangCao()
+            goToCart()
             gotoChat()
             onCLickNav()
         } else {
@@ -143,20 +138,20 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun OnclickNavHeader() {
+    private fun onClickNavHeader() {
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         val headerView: View = navigationView.getHeaderView(0)
         val btnDangKy = headerView.findViewById<Button>(R.id.btnDangky)
         val btnDangNhap = headerView.findViewById<Button>(R.id.btnDangnhap)
         val imageProfile = headerView.findViewById<ImageView>(R.id.profile_image)
-        val txt_nav = headerView.findViewById<TextView>(R.id.txt_email_nav)
+        val txtNav = headerView.findViewById<TextView>(R.id.txt_email_nav)
         val user = Paper.book().read<User>("user")
         if (user != null) {
-            txt_nav.text = Paper.book().read<String>("email")
+            txtNav.text = Paper.book().read<String>("email")
             btnDangNhap.visibility = View.INVISIBLE
             btnDangKy.visibility = View.INVISIBLE
         } else {
-            txt_nav.text = Utils.user_current?.email
+            txtNav.text = Utils.user_current?.email
             btnDangNhap.visibility = View.INVISIBLE
             btnDangKy.visibility = View.INVISIBLE
         }
@@ -165,7 +160,7 @@ class MainActivity : AppCompatActivity() {
             btnDangNhap.visibility = View.VISIBLE
             btnDangKy.visibility = View.VISIBLE
             imageProfile.visibility = View.INVISIBLE
-            txt_nav.visibility = View.INVISIBLE
+            txtNav.visibility = View.INVISIBLE
         }
         btnDangKy.setOnClickListener {
             val intent = Intent(this, DangKiActivity::class.java)
@@ -185,7 +180,7 @@ class MainActivity : AppCompatActivity() {
     private fun onCLickNav() {
         val userCurrent = Paper.book().read<User>("user")
         val menu = binding.navView.menu
-        if (userCurrent == null || Utils.user_current == null){
+        if (userCurrent == null || Utils.user_current == null) {
             menu.findItem(R.id.logout).isVisible = false
             menu.findItem(R.id.changePassword).isVisible = false
         }
@@ -225,10 +220,10 @@ class MainActivity : AppCompatActivity() {
                     val alertDialog = AlertDialog.Builder(this)
                     alertDialog.setTitle("Đăng xuất")
                     alertDialog.setMessage("Bạn chắc chắn muốn đăng xuất")
-                    alertDialog.setNegativeButton("Không") { dialog, which ->
+                    alertDialog.setNegativeButton("Không") { dialog, _ ->
                         dialog.dismiss()
                     }
-                    alertDialog.setPositiveButton("Có") { dialog, which ->
+                    alertDialog.setPositiveButton("Có") { _, _ ->
                         Paper.book().delete("user")
                         FirebaseAuth.getInstance().signOut()
                         val editor = sharedPreferences.edit()
@@ -261,7 +256,8 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-                R.id.changePassword ->{
+
+                R.id.changePassword -> {
                     val intent = Intent(this, ChangePasswordActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
@@ -275,14 +271,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun onClickDanhMuc() {
+    private fun onClickMenu() {
         binding.imbTrangchu.setOnClickListener {
             binding.layoutDrawer.openDrawer(binding.navView)
         }
     }
 
 
-    private fun goToGioHang() {
+    private fun goToCart() {
         binding.imvGiohang.setOnClickListener {
             val user = Paper.book().read<User>("user")
             if (user != null || Utils.user_current != null) {
@@ -299,7 +295,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun layLoaiSanPham() {
+    private fun fetchDataCategories() {
         val service = RetrofitClient.retrofitInstance.create(APICallCategories::class.java)
         val call = service.getLoaisanPham()
         binding.shimmerframe.visibility = View.VISIBLE
@@ -312,20 +308,11 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
 
                     val list = response.body()?.data
-                    /*Toast.makeText(this@MainActivity, list, Toast.LENGTH_SHORT).show()*/
                     val adapter = list?.let {
                         RvLoaiSanPham(it, object : OnClickRvLoaiSanPham {
                             override fun onClickLoaiSanPham(position: Int) {
-                                /*Toast.makeText(
-                                    this@MainActivity,
-                                    "Bạn chọn " + list[position].tenloaisanpham,
-                                    Toast.LENGTH_SHORT
-                                ).show()*/
                                 when (list[position].id) {
                                     1 -> {
-                                        /*
-                                                                                GoToSanPhamGao()
-                                        */
                                         val intent = Intent(
                                             this@MainActivity,
                                             SanPhamTheoLoaiActivity::class.java
@@ -335,6 +322,7 @@ class MainActivity : AppCompatActivity() {
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         startActivity(intent)
                                     }
+
                                     else -> {
                                         val intent = Intent(
                                             this@MainActivity,
@@ -374,47 +362,38 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun laySanPham() {
+    private fun fetchDataProducts() {
         val service = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
         val call = service.getData()
         binding.shimmerframe.visibility = View.VISIBLE
         binding.layoutContrains.visibility = View.INVISIBLE
         binding.shimmerframe.startShimmer()
-        call.enqueue(object : Callback<SanPhamModel> {
-            override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
+        call.enqueue(object : Callback<ProductResponse> {
+            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
                 t.printStackTrace()
-                /*Log.e("Amory", "Error occurred: ${t.message}", t)*/
                 Toast.makeText(this@MainActivity, "Lấy sản phẩm thất bại", Toast.LENGTH_SHORT)
                     .show()
             }
 
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
-                call: Call<SanPhamModel>,
-                response: Response<SanPhamModel>
+                call: Call<ProductResponse>,
+                response: Response<ProductResponse>
             ) {
                 if (response.isSuccessful) {
                     val produce = response.body()?.data
-                    /*
-                      Toast.makeText(this@MainActivity, produce, Toast.LENGTH_SHORT).show()
-                    */
-
                     if (!produce.isNullOrEmpty()) {
 
                         val list = produce.shuffled().take(12)
 
                         if (list.isNotEmpty()) {
 
-                            adapter = RvSanPham( object : OnClickRvSanPham {
-                                    override fun onClickSanPham(position: Int) {
-                                        /*Toast.makeText(
-                                            applicationContext,
-                                            "Mua " + list[position].category_id, Toast.LENGTH_SHORT
-                                        ).show()*/
-                                       startChiTietSanPham(list[position])
-                                    }
-                                })
-                            adapter.updateList(list as MutableList<SanPham>)
+                            adapter = RvSanPham(object : OnClickRvSanPham {
+                                override fun onClickSanPham(position: Int) {
+                                    startChiTietSanPham(list[position])
+                                }
+                            })
+                            adapter.updateList(list as MutableList<Product>)
                             Handler().postDelayed({
                                 binding.shimmerframe.visibility = View.GONE
                                 binding.shimmerframe.stopShimmer()
@@ -451,17 +430,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun startChiTietSanPham(sanPham: SanPham) {
+    private fun startChiTietSanPham(product: Product) {
         val intent = Intent(
             this@MainActivity, ChiTietSanPhamActivity::class.java
         )
-        intent.putExtra("name", sanPham.name)
-        intent.putExtra("idsanpham", sanPham.id)
-        intent.putExtra("price", sanPham.price)
-        intent.putExtra("hinhanhsanpham", sanPham.thumbnail)
-        intent.putExtra("motasanpham", sanPham.description)
+        intent.putExtra("name", product.name)
+        intent.putExtra("idsanpham", product.id)
+        intent.putExtra("price", product.price)
+        intent.putExtra("hinhanhsanpham", product.thumbnail)
+        intent.putExtra("motasanpham", product.description)
         startActivity(intent)
-        /*overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right)*/
     }
 
     private fun MutableList<GioHang>.getSoluong(): Int {
@@ -472,12 +450,12 @@ class MainActivity : AppCompatActivity() {
         return totalSoluong
     }
 
-    private fun addEventLoad(produce: MutableList<SanPham>, list: MutableList<SanPham>) {
+    private fun addEventLoad(produce: MutableList<Product>, list: MutableList<Product>) {
         scrollListener = RvLoadMoreScroll(mLayoutManager as GridLayoutManager)
         scrollListener.setOnLoadMoreListener(object :
             OnLoadMoreListener {
             override fun onLoadMore() {
-                LoadMoreData(produce.toMutableList(), list)
+                loadMoreData(produce.toMutableList(), list)
             }
         })
         binding.rvSanpham.addOnScrollListener(scrollListener)
@@ -501,19 +479,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun LoadMoreData(produce: MutableList<SanPham>, current: MutableList<SanPham>) {
+    private fun loadMoreData(produce: MutableList<Product>, current: MutableList<Product>) {
         adapter.addLoadingView()
         Handler().postDelayed({
             adapter.removeLoadingView()
-            /*Thực hiện lọc kiểm tra phần tử trước đó đã hiển thị hay chưa*/
             val remainingItems = produce.filter {
-                /*san pham đã hiên thị không còn chưa trong produce*/
                 !current.contains(it)
             }
-            val newlist = remainingItems.take(12)
+            val newList = remainingItems.take(12)
 
-            current.addAll(newlist)
-            adapter.addData(newlist)
+            current.addAll(newList)
+            adapter.addData(newList)
 
             scrollListener.setLoaded()
             binding.rvSanpham.post {
@@ -523,12 +499,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun SlideQuangCao() {
+    private fun slideQuangCao() {
         val imageList = ArrayList<SlideModel>()
-        /*imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/thanh-ly-giam-soc-22032024894.jpg"))
-        imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/san-sale-gia-soc-cung-bhx-12032024133716.jpg"))
-        imageList.add(SlideModel("https://cdn.tgdd.vn/bachhoaxanh/banners/5599/sua-cac-loai-3012202311948.jpg"))
-        binding.imageSlider.setImageList(imageList,ScaleTypes.FIT)*/
         val service = RetrofitClient.retrofitInstance.create(APICallBanners::class.java)
         val call = service.layKhuyenMai()
         binding.shimmerframe.visibility = View.VISIBLE
@@ -541,16 +513,13 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     listBanners = response.body()?.data!!
                     for (element in listBanners) {
-                        val image_url = element.imageUrl
-                        imageList.add(SlideModel("$image_url"))
+                        val imageUrl = element.imageUrl
+                        imageList.add(SlideModel(imageUrl))
                     }
                     Handler().postDelayed({
                         binding.shimmerframe.visibility = View.INVISIBLE
                         binding.shimmerframe.stopShimmer()
                         binding.layoutContrains.visibility = View.VISIBLE
-                        /*
-                                                Toast.makeText(this@MainActivity,listKhuyenMai.toString(),Toast.LENGTH_LONG).show()
-                        */
                         binding.imageSlider.setItemClickListener(
                             object : ItemClickListener {
                                 override fun doubleClick(position: Int) {
@@ -572,7 +541,6 @@ class MainActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<BannerModel>, t: Throwable) {
                 t.printStackTrace()
-                /*Log.d("banners", t.message.toString())*/
             }
         })
     }

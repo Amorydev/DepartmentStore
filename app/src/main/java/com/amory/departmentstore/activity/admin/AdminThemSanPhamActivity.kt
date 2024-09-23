@@ -14,8 +14,8 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.amory.departmentstore.databinding.ActivityAdminThemSanPhamBinding
 import com.amory.departmentstore.model.LoaiSanPhamModel
-import com.amory.departmentstore.model.SanPham
-import com.amory.departmentstore.model.SanPhamModel
+import com.amory.departmentstore.model.Product
+import com.amory.departmentstore.model.ProductResponse
 import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
 import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
@@ -32,7 +32,7 @@ import java.io.File
 class AdminThemSanPhamActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminThemSanPhamBinding
     private var mediaPath: String = ""
-    var listSanPham: SanPham? = null
+    var listProduct: Product? = null
     var flags: Boolean = false
 
     @SuppressLint("SetTextI18n")
@@ -45,10 +45,10 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
         onCLickThemHinhAnh()
         onClickBack()
         if (intent != null && intent.hasExtra("sua")) {
-            listSanPham = intent.getSerializableExtra("sua") as? SanPham
+            listProduct = intent.getSerializableExtra("sua") as? Product
         }
 
-        listSanPham?.let { sanPham ->
+        listProduct?.let { sanPham ->
             binding.txt.text = "Sửa sản phẩm"
             binding.edtTensanpham.setText(sanPham.name)
             binding.edtmotasanpham.setText(sanPham.description)
@@ -119,7 +119,7 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                         val name = binding.edtTensanpham.text?.trim().toString()
                         val price = binding.edtGiasanpham.text?.trim().toString()
                         val imagePath =
-                            mediaPath.takeIf { it.isNotEmpty() } ?: listSanPham?.thumbnail.toString()
+                            mediaPath.takeIf { it.isNotEmpty() } ?: listProduct?.thumbnail.toString()
                         val description = binding.edtmotasanpham.text?.trim().toString()
 
                         if (flags) {
@@ -156,10 +156,10 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                     descRequestBody,
                                     categoryIdRequestBody
                                 )
-                                call2.enqueue(object : Callback<SanPhamModel> {
+                                call2.enqueue(object : Callback<ProductResponse> {
                                     override fun onResponse(
-                                        call: Call<SanPhamModel>,
-                                        response: Response<SanPhamModel>
+                                        call: Call<ProductResponse>,
+                                        response: Response<ProductResponse>
                                     ) {
                                         if (response.isSuccessful) {
                                             Toast.makeText(
@@ -176,7 +176,7 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                         }
                                     }
 
-                                    override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
+                                    override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
                                         t.printStackTrace()
                                         Log.d("add loi", t.message.toString())
                                     }
@@ -191,10 +191,10 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                         descRequestBody,
                                         categoryIdRequestBody
                                     )
-                                    call2.enqueue(object : Callback<SanPhamModel> {
+                                    call2.enqueue(object : Callback<ProductResponse> {
                                         override fun onResponse(
-                                            call: Call<SanPhamModel>,
-                                            response: Response<SanPhamModel>
+                                            call: Call<ProductResponse>,
+                                            response: Response<ProductResponse>
                                         ) {
                                             if (response.isSuccessful) {
                                                 Toast.makeText(
@@ -212,7 +212,7 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                         }
 
                                         override fun onFailure(
-                                            call: Call<SanPhamModel>,
+                                            call: Call<ProductResponse>,
                                             t: Throwable
                                         ) {
                                             t.printStackTrace()
@@ -250,17 +250,17 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                 val serviceProducts =
                                     RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
                                 val call3 = serviceProducts.suasanpham(
-                                    listSanPham?.id,
+                                    listProduct?.id,
                                     nameRequestBody,
                                     priceRequestBody,
                                     imagePart,
                                     descRequestBody,
                                     categoryIdRequestBody
                                 )
-                                call3.enqueue(object : Callback<SanPhamModel> {
+                                call3.enqueue(object : Callback<ProductResponse> {
                                     override fun onResponse(
-                                        call: Call<SanPhamModel>,
-                                        response: Response<SanPhamModel>
+                                        call: Call<ProductResponse>,
+                                        response: Response<ProductResponse>
                                     ) {
                                         if (response.isSuccessful) {
                                             Toast.makeText(
@@ -277,7 +277,7 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                         }
                                     }
 
-                                    override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
+                                    override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
                                         t.printStackTrace()
                                     }
                                 })
@@ -286,16 +286,16 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                     val serviceProducts =
                                         RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
                                     val call3 = serviceProducts.suasanpham(
-                                        listSanPham?.id,
+                                        listProduct?.id,
                                         nameRequestBody,
                                         priceRequestBody,
                                         descRequestBody,
                                         categoryIdRequestBody
                                     )
-                                    call3.enqueue(object : Callback<SanPhamModel> {
+                                    call3.enqueue(object : Callback<ProductResponse> {
                                         override fun onResponse(
-                                            call: Call<SanPhamModel>,
-                                            response: Response<SanPhamModel>
+                                            call: Call<ProductResponse>,
+                                            response: Response<ProductResponse>
                                         ) {
                                             if (response.isSuccessful) {
                                                 Toast.makeText(
@@ -313,7 +313,7 @@ class AdminThemSanPhamActivity : AppCompatActivity() {
                                         }
 
                                         override fun onFailure(
-                                            call: Call<SanPhamModel>,
+                                            call: Call<ProductResponse>,
                                             t: Throwable
                                         ) {
                                             t.printStackTrace()

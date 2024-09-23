@@ -1,7 +1,6 @@
 package com.amory.departmentstore.retrofit.APIBanHang
 
-import com.amory.departmentstore.model.ProductImages
-import com.amory.departmentstore.model.SanPhamModel
+import com.amory.departmentstore.model.ProductResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -17,25 +16,25 @@ import retrofit2.http.Query
 interface APICallProducts {
     /*Call SanPhamModel*/
     @GET("products")
-    fun getData(): Call<SanPhamModel>
+    fun getData(): Call<ProductResponse>
     @GET("products/{id}")
     fun getProductsById(
         @Path("id") id: Int?
-    ): Call<SanPhamModel>
+    ): Call<ProductResponse>
     @GET("products")
     fun getSanPhamTheoLoai(
         @Query("category_id") loai: Int
-    ): Call<SanPhamModel>
+    ): Call<ProductResponse>
     @GET("products")
     fun timkiem(
         @Query("category_id") categoryId:Int?,
         @Query("keyword") search:String
-    ): Call<SanPhamModel>
+    ): Call<ProductResponse>
 
     @GET("products/moreInfo/{id}")
     fun getMoreInfo(
         @Path("id") id: Int?
-    ): Call<ProductImages>
+    ): Call<ProductResponse>
 
     @Multipart
     @POST("products")
@@ -45,7 +44,7 @@ interface APICallProducts {
         @Part fileImage: MultipartBody.Part,
         @Part("description") description: RequestBody,
         @Part("categoryId") category_id: RequestBody
-    ): Call<SanPhamModel>
+    ): Call<ProductResponse>
     @Multipart
     @POST("products")
     fun themsanphammoi(
@@ -53,11 +52,11 @@ interface APICallProducts {
         @Part("price") price: RequestBody,
         @Part("description") description: RequestBody,
         @Part("categoryId") category_id: RequestBody
-    ): Call<SanPhamModel>
+    ): Call<ProductResponse>
     @DELETE("products/{id}")
     fun xoaSanPham(
         @Path("id") id: Int?
-    ): Call<SanPhamModel>
+    ): Call<ProductResponse>
 
     @Multipart
     @PUT("products/{id}")
@@ -68,7 +67,7 @@ interface APICallProducts {
         @Part fileImage: MultipartBody.Part,
         @Part("description") description: RequestBody,
         @Part("categoryId") category_id: RequestBody
-    ): Call<SanPhamModel>
+    ): Call<ProductResponse>
     @Multipart
     @PUT("products/{id}")
     fun suasanpham(
@@ -77,5 +76,5 @@ interface APICallProducts {
         @Part("price") price: RequestBody,
         @Part("description") description: RequestBody,
         @Part("categoryId") category_id: RequestBody
-    ): Call<SanPhamModel>
+    ): Call<ProductResponse>
 }

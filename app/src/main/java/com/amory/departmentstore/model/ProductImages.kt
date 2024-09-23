@@ -1,9 +1,11 @@
 package com.amory.departmentstore.model
 
-import java.io.Serializable
+import com.google.gson.annotations.SerializedName
 
 data class ProductImages(
-    val status:String,
-    val message:String,
-    val data: List<DetailProduct>
-): Serializable
+    val createdAt: String = "",
+    val updatedAt: String = "",
+    @SerializedName("image_url_1") val imageUrl1: String = "",
+    @SerializedName("image_url_2") val imageUrl2: String = "",
+    @SerializedName("image_url_3") val imageUrl3: String = ""
+)

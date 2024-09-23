@@ -1,8 +1,9 @@
 package com.amory.departmentstore.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-data class DetailProduct(
+data class Product(
     val id: Int,
     val name: String,
     val price: Double,
@@ -12,6 +13,5 @@ data class DetailProduct(
     val updatedAt: String,
     val categoryId: LoaiSanPham,
     val soldQuantity:Int,
-    @SerializedName("productImages") val productImages: List<DetailProductImages>
-) {
-}
+    @SerializedName("productImages") val productImages: ProductImages = ProductImages()
+) : Serializable

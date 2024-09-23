@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
-                android:fontFamily="@font/asap"
+                android:fontFamily="@font/roboto"
                 android:text="@string/test_gia_chitiet"
                 android:textColor="@color/red"
                 android:textSize="25sp"
@@ -109,7 +109,7 @@
                 android:layout_width="390dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/asap"
+                android:fontFamily="@font/roboto"
                 android:text="@string/test_chitiet"
                 android:textColor="@color/black"
                 android:textSize="22sp"
@@ -126,7 +126,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/asap"
+                android:fontFamily="@font/roboto"
                 android:text="Thông tin sản phẩm"
                 android:textColor="@color/black"
                 android:textSize="22sp"
@@ -150,7 +150,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
-                    android:text=""
+                    android:fontFamily="@font/roboto"
                     android:textColor="@android:color/black"
                     android:visibility="gone" />
 
@@ -160,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:shrinkColumns="1"
-                    android:stretchColumns="1"></TableLayout>
+                    android:stretchColumns="1"/>
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -204,7 +204,7 @@
                 android:id="@+id/soluongsanpham"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/asap"
+                android:fontFamily="@font/roboto"
                 android:gravity="center"
                 android:text="1"
                 android:textAlignment="center"
@@ -270,7 +270,7 @@
                 android:layout_marginHorizontal="5dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginBottom="4sp"
-                android:fontFamily="@font/asap"
+                android:fontFamily="@font/roboto"
                 android:text="Thêm vào giỏ hàng"
                 android:textSize="15sp"
 
@@ -287,7 +287,7 @@
             android:layout_marginStart="10sp"
             android:layout_marginEnd="5dp"
             android:background="@drawable/custom_color_button"
-            android:fontFamily="@font/asap"
+            android:fontFamily="@font/roboto"
             android:text="Mua ngay"
             android:textSize="18sp"
             android:textStyle="bold"

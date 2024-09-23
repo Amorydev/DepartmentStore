@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.model.EventBus.SuaXoaEvent
-import com.amory.departmentstore.model.SanPham
+import com.amory.departmentstore.model.Product
 import com.bumptech.glide.Glide
 import org.greenrobot.eventbus.EventBus
 import java.text.NumberFormat
 import java.util.Locale
 
-class RvSanPhamAdmin(private var ds: MutableList<SanPham>) :
+class RvSanPhamAdmin(private var ds: MutableList<Product>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var mcontext: Context
 

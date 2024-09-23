@@ -5,7 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.amory.departmentstore.model.SanPham
+import com.amory.departmentstore.model.Product
 import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import java.util.Locale
@@ -21,7 +21,7 @@ import com.amory.departmentstore.model.LoaiSanPham
 
 class RvSanPham(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private lateinit var mcontext: Context
-    private var ds: MutableList<SanPham> = mutableListOf()
+    private var ds: MutableList<Product> = mutableListOf()
 
     inner class SanPhamViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val tensanpham: TextView = itemView.findViewById(R.id.txt_tensanpham)
@@ -37,7 +37,7 @@ class RvSanPham(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.A
         return "${formatter.format(number)}đ"
     }
     @SuppressLint("NotifyDataSetChanged")
-    fun addData(dateView: List<SanPham>) {
+    fun addData(dateView: List<Product>) {
         this.ds.addAll(dateView)
         notifyDataSetChanged()
     }
@@ -45,7 +45,7 @@ class RvSanPham(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.A
     fun addLoadingView() {
         //Thêm loading
         Handler().post {
-            ds.add(SanPham(0, "", 1000.0,"","","","", LoaiSanPham(0,"",""),0))
+            ds.add(Product(0, "", 1000.0,"","","","", LoaiSanPham(0,"",""),0))
             notifyItemInserted(ds.size - 1)
         }
     }
@@ -57,7 +57,7 @@ class RvSanPham(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.A
             notifyItemRemoved(ds.size-1)
         }
     }
-    fun updateList(newList: List<SanPham>) {
+    fun updateList(newList: List<Product>) {
         val diffCallback = RvSanPhamDiffCallback(ds, newList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         ds.clear()

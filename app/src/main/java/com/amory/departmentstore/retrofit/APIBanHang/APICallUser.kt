@@ -6,7 +6,6 @@ import com.amory.departmentstore.model.OrderRequest
 import com.amory.departmentstore.model.RegisterModel
 import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.model.RefreshToken
-import com.amory.departmentstore.model.SanPhamModel
 import com.amory.departmentstore.model.UpdateOrderModel
 import com.amory.departmentstore.model.UpdatePasswordModel
 import com.amory.departmentstore.model.User

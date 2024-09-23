@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.R
 import com.amory.departmentstore.model.Constant
-import com.amory.departmentstore.model.SanPham
+import com.amory.departmentstore.model.Product
 import com.amory.departmentstore.Interface.OnClickSanPhamTheoLoai
 import com.amory.departmentstore.model.LoaiSanPham
 import com.bumptech.glide.Glide
@@ -20,7 +20,7 @@ import java.util.Locale
 
 class RvSanPhamCacLoai(private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoai): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var mcontext:Context
-    private var ds: MutableList<SanPham> = mutableListOf()
+    private var ds: MutableList<Product> = mutableListOf()
 
     inner class viewHolder(itemView : View):RecyclerView.ViewHolder(itemView) {
         val txtTenSanPhamCacLoai = itemView.findViewById<TextView>(R.id.txt_tensanpham)!!
@@ -36,13 +36,13 @@ class RvSanPhamCacLoai(private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoa
         return "${formatter.format(number)}đ"
     }
     @SuppressLint("NotifyDataSetChanged")
-    fun addData(dataView : List<SanPham>){
+    fun addData(dataView : List<Product>){
         this.ds.addAll(dataView)
         notifyDataSetChanged()
     }
     fun addLoadingView(){
         android.os.Handler().post {
-            ds.add(SanPham(0,"",100.0,"","","","",LoaiSanPham(0,"",""), 0))
+            ds.add(Product(0,"",100.0,"","","","",LoaiSanPham(0,"",""), 0))
             notifyItemInserted(ds.size-1)
         }
     }
@@ -52,7 +52,7 @@ class RvSanPhamCacLoai(private val onClickSanPhamTheoLoai: OnClickSanPhamTheoLoa
             notifyItemRemoved(ds.size-1)
         }
     }
-    fun updateList(newList: List<SanPham>) {
+    fun updateList(newList: List<Product>) {
         val diffCallback = RvSanPhamTheoLoaiDiffCallBack(ds, newList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         ds.clear()

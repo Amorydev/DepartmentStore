@@ -20,8 +20,8 @@ import com.amory.departmentstore.adapter.RvSanPhamAdmin
 import com.amory.departmentstore.databinding.ActivityAdminQlsanPhamBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaEvent
 import com.amory.departmentstore.model.LoaiSanPhamModel
-import com.amory.departmentstore.model.SanPham
-import com.amory.departmentstore.model.SanPhamModel
+import com.amory.departmentstore.model.Product
+import com.amory.departmentstore.model.ProductResponse
 import com.amory.departmentstore.retrofit.APIBanHang.APICallCategories
 import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
@@ -35,8 +35,8 @@ import retrofit2.Response
 
 class AdminQLSanPhamActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminQlsanPhamBinding
-    var list = mutableListOf<SanPham>()
-    private var listSanPham: SanPham? = null
+    var list = mutableListOf<Product>()
+    private var listProduct: Product? = null
     private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -146,11 +146,11 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
     private fun hienThiSanPham() {
         val service = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
         val call = service.getData()
-        call.enqueue(object : Callback<SanPhamModel> {
+        call.enqueue(object : Callback<ProductResponse> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
-                call: Call<SanPhamModel>,
-                response: Response<SanPhamModel>
+                call: Call<ProductResponse>,
+                response: Response<ProductResponse>
             ) {
                 if (response.isSuccessful) {
                     val produce = response.body()?.data
@@ -182,7 +182,7 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
                     }
                 }
             }
-            override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
+            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
                 t.printStackTrace()
                 Log.e("Amory", "Error occurred: ${t.message}", t)
                 Toast.makeText(this@AdminQLSanPhamActivity, "Lấy sản phẩm thất bại", Toast.LENGTH_SHORT)
@@ -205,14 +205,14 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
         dialog.setTitle("Bạn có chắc chắn muốn xóa")
         dialog.setPositiveButton("Có") { dialog, which ->
             val service = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
-            val call = service.xoaSanPham(listSanPham!!.id)
-            call.enqueue(object : Callback<SanPhamModel> {
-                override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
+            val call = service.xoaSanPham(listProduct!!.id)
+            call.enqueue(object : Callback<ProductResponse> {
+                override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
                     if (response.isSuccessful){
                         hienThiSanPham()
                     }
                 }
-                override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
+                override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
                     t.printStackTrace()
                 }
             })
@@ -225,7 +225,7 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
 
     private fun SuaSanPham() {
         val intent = Intent(this@AdminQLSanPhamActivity, AdminThemSanPhamActivity::class.java)
-        intent.putExtra("sua",listSanPham)
+        intent.putExtra("sua",listProduct)
         startActivity(intent)
     }
     private fun showSpnLoai(){
@@ -276,11 +276,11 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
         binding.imbSearch.setOnClickListener {
             val serviceSearch = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
             val callSearch = serviceSearch.timkiem(categoryId,keyEDT)
-            callSearch.enqueue(object : Callback<SanPhamModel>{
+            callSearch.enqueue(object : Callback<ProductResponse>{
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
-                    call: Call<SanPhamModel>,
-                    response: Response<SanPhamModel>
+                    call: Call<ProductResponse>,
+                    response: Response<ProductResponse>
                 ) {
                     if (response.isSuccessful){
                         list.clear()
@@ -293,7 +293,7 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
+                override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
                     t.printStackTrace()
                 }
             })
@@ -303,7 +303,7 @@ class AdminQLSanPhamActivity : AppCompatActivity() {
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun eventSuaXoa(event: SuaXoaEvent){
-        listSanPham = event.sanpham
+        listProduct = event.sanpham
     }
     override fun onStart() {
         super.onStart()

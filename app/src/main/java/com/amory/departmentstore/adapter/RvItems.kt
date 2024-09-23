@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amory.departmentstore.databinding.LayoutChitietitemsBinding
 import com.amory.departmentstore.model.Order
-import com.amory.departmentstore.model.SanPhamModel
+import com.amory.departmentstore.model.ProductResponse
 import com.amory.departmentstore.retrofit.APIBanHang.APICallProducts
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.bumptech.glide.Glide
@@ -23,8 +23,8 @@ class RvItems(private val ds: List<Order>) : RecyclerView.Adapter<RvItems.viewHo
         fun bind(data: Order) {
             val service = RetrofitClient.retrofitInstance.create(APICallProducts::class.java)
             val callProducts = service.getProductsById(data.product_id)
-            callProducts.enqueue(object : retrofit2.Callback<SanPhamModel> {
-                override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
+            callProducts.enqueue(object : retrofit2.Callback<ProductResponse> {
+                override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
                     if (response.isSuccessful) {
                         val product = response.body()?.data?.get(0)
                         binding.txtName.text = product?.name
@@ -35,7 +35,7 @@ class RvItems(private val ds: List<Order>) : RecyclerView.Adapter<RvItems.viewHo
                         binding.txtTongtien.text = formatAmount(data.total_money)
                     }
                 }
-                override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
+                override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
 
                 }
             })

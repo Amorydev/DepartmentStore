@@ -350,7 +350,6 @@
                     android:id="@+id/rv_sanpham"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#AFFAB2"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 

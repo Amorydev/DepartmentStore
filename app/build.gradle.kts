@@ -102,6 +102,14 @@ dependencies {
     //Pie Chart
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
+    //viewModel
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
+    implementation ("androidx.lifecycle:lifecycle-service:2.8.6")
+    implementation ("androidx.activity:activity-ktx:1.9.2")
 
+    //LiveData
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
+    //Fragment
+    implementation ("androidx.fragment:fragment-ktx:1.8.3")
 
 }

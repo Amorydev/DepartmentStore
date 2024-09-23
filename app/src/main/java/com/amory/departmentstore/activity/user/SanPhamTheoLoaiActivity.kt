@@ -22,8 +22,8 @@ import com.amory.departmentstore.databinding.ActivitySanPhamTheoLoaiBinding
 import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.model.GioHang
 
-import com.amory.departmentstore.model.SanPham
-import com.amory.departmentstore.model.SanPhamModel
+import com.amory.departmentstore.model.Product
+import com.amory.departmentstore.model.ProductResponse
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.amory.departmentstore.Interface.OnClickSanPhamTheoLoai
 import com.amory.departmentstore.Interface.OnLoadMoreListener
@@ -227,9 +227,9 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
         binding.shimmerframe.visibility = View.VISIBLE
         binding.rvsanphamtheoloaiGao.visibility = View.INVISIBLE
         binding.shimmerframe.startShimmer()
-        call.enqueue(object : retrofit2.Callback<SanPhamModel> {
+        call.enqueue(object : retrofit2.Callback<ProductResponse> {
             @SuppressLint("NotifyDataSetChanged")
-            override fun onResponse(call: Call<SanPhamModel>, response: Response<SanPhamModel>) {
+            override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
                 if (response.isSuccessful) {
                     val produce = response.body()?.data
                     /*
@@ -250,6 +250,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                                             this@SanPhamTheoLoaiActivity,
                                             ChiTietSanPhamActivity::class.java
                                         )
+                                        intent.putExtra("idsanpham", list[position].id)
                                         intent.putExtra("name", list[position].name)
                                         intent.putExtra("price", list[position].price)
                                         intent.putExtra("hinhanhsanpham", list[position].thumbnail)
@@ -269,7 +270,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                             val itemDecoration = ItemOffsetDecoration(3)
                             binding.rvsanphamtheoloaiGao.addItemDecoration(itemDecoration)
                             setRVLayoutManager()
-                            addEventLoad(produce, list as MutableList<SanPham>)
+                            addEventLoad(produce, list as MutableList<Product>)
                             binding.badgeCart.setNumber(Utils.manggiohang.getSoluong(),true)
 
                         } else {
@@ -291,7 +292,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
 
             }
 
-            override fun onFailure(call: Call<SanPhamModel>, t: Throwable) {
+            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
                 t.printStackTrace()
             }
         }
@@ -314,7 +315,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
         }
     }
 
-    private fun addEventLoad(produce: MutableList<SanPham>, list: MutableList<SanPham>) {
+    private fun addEventLoad(produce: MutableList<Product>, list: MutableList<Product>) {
         scrollListener = RvLoadMoreScroll(mLayoutManager as GridLayoutManager)
         scrollListener.setOnLoadMoreListener(object :
             OnLoadMoreListener {
@@ -327,7 +328,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
 
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun LoadMoreData(produce: MutableList<SanPham>, current: MutableList<SanPham>) {
+    private fun LoadMoreData(produce: MutableList<Product>, current: MutableList<Product>) {
 
         adapter.addLoadingView()
         Handler().postDelayed({
