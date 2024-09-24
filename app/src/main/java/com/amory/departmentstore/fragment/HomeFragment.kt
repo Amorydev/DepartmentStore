@@ -16,11 +16,10 @@ import com.amory.departmentstore.Interface.OnClickRvLoaiSanPham
 import com.amory.departmentstore.Interface.OnClickRvSanPham
 import com.amory.departmentstore.Interface.OnLoadMoreListener
 import com.amory.departmentstore.activity.user.ChiTietSanPhamActivity
-import com.amory.departmentstore.activity.user.KhuyenMaiActivity
 import com.amory.departmentstore.activity.user.SanPhamTheoLoaiActivity
 import com.amory.departmentstore.adapter.RvLoadMoreScroll
 import com.amory.departmentstore.adapter.RvLoaiSanPham
-import com.amory.departmentstore.adapter.RvSanPham
+import com.amory.departmentstore.adapter.RvProducts
 import com.amory.departmentstore.databinding.FragmentHomeBinding
 import com.amory.departmentstore.model.Category
 import com.amory.departmentstore.model.Constant.VIEW_TYPE_ITEM
@@ -38,7 +37,7 @@ class HomeFragment : Fragment() {
     private lateinit var _binding: FragmentHomeBinding
     private val binding get() = _binding
     private val homeViewModel: HomeViewModel by viewModels()
-    private lateinit var adapter: RvSanPham
+    private lateinit var adapter: RvProducts
     private lateinit var scrollListener: RvLoadMoreScroll
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
 
@@ -115,9 +114,7 @@ class HomeFragment : Fragment() {
                 }
 
                 override fun onItemSelected(position: Int) {
-                    val intent = Intent(requireContext(), KhuyenMaiActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
+
                 }
             }
         )
@@ -127,7 +124,7 @@ class HomeFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     private fun renderProducts(listProduct: MutableList<Product>?) {
         val list = listProduct!!.shuffled().take(12) as MutableList<Product>
-        adapter = RvSanPham(object : OnClickRvSanPham {
+        adapter = RvProducts(object : OnClickRvSanPham {
             override fun onClickSanPham(position: Int) {
                 startChiTietSanPham(list[position])
             }

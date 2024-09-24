@@ -24,10 +24,10 @@ import com.amory.departmentstore.activity.user.ChiTietDonHangActivity
 import com.amory.departmentstore.activity.user.DangKiActivity
 import com.amory.departmentstore.activity.user.DangNhapActivity
 import com.amory.departmentstore.activity.user.GioHangActivity
-import com.amory.departmentstore.activity.user.KhuyenMaiActivity
 import com.amory.departmentstore.activity.user.LienHeActivity
 import com.amory.departmentstore.activity.user.SearchActivity
 import com.amory.departmentstore.fragment.HomeFragment
+import com.amory.departmentstore.fragment.PromotionFragment
 import com.amory.departmentstore.model.GioHang
 import com.amory.departmentstore.model.User
 import com.amory.departmentstore.retrofit.AuthInterceptor
@@ -81,6 +81,11 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.promotion ->{
+                    val fragmentPromotion = PromotionFragment()
+                    replaceFragment(fragmentPromotion)
+                    true
+                }
                 else -> {
                     val fragmentHome = HomeFragment()
                     replaceFragment(fragmentHome)
@@ -235,13 +240,6 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.product -> {
                     binding.layoutDrawer.closeDrawer(binding.navView)
-                    true
-                }
-
-                R.id.discount -> {
-                    val intent = Intent(this, KhuyenMaiActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
                     true
                 }
 

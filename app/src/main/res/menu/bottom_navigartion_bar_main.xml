@@ -7,7 +7,7 @@
         android:title="Sản phẩm"
         tools:ignore="HardcodedText"/>
     <item
-        android:id="@+id/discount"
+        android:id="@+id/promotion"
         android:icon="@drawable/discount"
         android:title="Khuyến mãi"
         tools:ignore="HardcodedText"/>

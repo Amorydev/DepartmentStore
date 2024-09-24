@@ -153,12 +153,6 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.discount -> {
-                    val intent = Intent(this, KhuyenMaiActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
-                    true
-                }
                 R.id.changePassword ->{
                     val intent = Intent(this, ChangePasswordActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

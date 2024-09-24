@@ -19,7 +19,7 @@ import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.Interface.OnClickRvSanPham
 import com.amory.departmentstore.model.Category
 
-class RvSanPham(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class RvProducts(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private lateinit var mcontext: Context
     private var ds: MutableList<Product> = mutableListOf()
 
@@ -99,6 +99,8 @@ class RvSanPham(private val onClickRvSanPham: OnClickRvSanPham) : RecyclerView.A
             onClickRvSanPham.onClickSanPham(position)
         }
     }
+
+
 
 }
 

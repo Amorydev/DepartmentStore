@@ -1,8 +1,5 @@
 package com.amory.departmentstore.manager
 
-import android.util.Log
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.amory.departmentstore.adapter.RvKhuyenMai
 import com.amory.departmentstore.model.Promotion
 import com.amory.departmentstore.model.PromotionModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallBanners
