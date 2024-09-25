@@ -12,4 +12,5 @@ object Constant {
     const val PATH = "chat"
     const val SUCCESS = "SUCCESS"
     const val EMAIL_DUPLICATED = "EMAIL_DUPLICATED"
+    const val ROLE_ID = 1
 }

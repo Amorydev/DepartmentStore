@@ -130,7 +130,7 @@
             android:name=".activity.user.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.user.DangKiActivity"
+            android:name=".activity.user.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".activity.user.SanPhamTheoLoaiActivity"

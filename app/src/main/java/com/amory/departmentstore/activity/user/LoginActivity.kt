@@ -24,8 +24,6 @@ import com.amory.departmentstore.model.User
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.amory.departmentstore.viewModel.LoginViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.messaging.FirebaseMessaging
 import io.paperdb.Paper
 
 class LoginActivity : AppCompatActivity() {
@@ -119,7 +117,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun startRegisterActivity() {
-            val intent = Intent(this, DangKiActivity::class.java)
+            val intent = Intent(this, RegisterActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
     }

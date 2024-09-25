@@ -1,6 +1,8 @@
 package com.amory.departmentstore.manager
 
+import com.amory.departmentstore.model.Constant
 import com.amory.departmentstore.model.LoginModel
+import com.amory.departmentstore.model.RegisterModel
 import com.amory.departmentstore.model.User
 import com.amory.departmentstore.retrofit.APIBanHang.APICallUser
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
@@ -45,6 +47,30 @@ object AccountManager {
                 if (response.isSuccessful) {
                     callbackSuccess(response.body()!!)
                 } else {
+                    callbackError(response.message())
+                }
+            }
+        })
+    }
+
+    fun register(
+        firstName: String,
+        lastName: String,
+        email: String,
+        password: String,
+        callbackSuccess: (RegisterModel) -> Unit,
+        callbackError: (String) -> Unit
+    ) {
+        val call = service.dangkitaikhoan(firstName, lastName, email, password, Constant.ROLE_ID)
+        call.enqueue(object : Callback<RegisterModel> {
+            override fun onFailure(call: Call<RegisterModel>, t: Throwable) {
+                callbackError(t.message.toString())
+            }
+
+            override fun onResponse(call: Call<RegisterModel>, response: Response<RegisterModel>) {
+                if(response.isSuccessful){
+                    callbackSuccess(response.body()!!)
+                }else{
                     callbackError(response.message())
                 }
             }

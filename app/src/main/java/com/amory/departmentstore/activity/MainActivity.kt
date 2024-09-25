@@ -21,7 +21,7 @@ import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
 import com.amory.departmentstore.activity.user.ChangePasswordActivity
 import com.amory.departmentstore.activity.user.ChatActivity
 import com.amory.departmentstore.activity.user.ChiTietDonHangActivity
-import com.amory.departmentstore.activity.user.DangKiActivity
+import com.amory.departmentstore.activity.user.RegisterActivity
 import com.amory.departmentstore.activity.user.LoginActivity
 import com.amory.departmentstore.activity.user.GioHangActivity
 import com.amory.departmentstore.activity.user.LienHeActivity
@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity() {
             txtNav.visibility = View.INVISIBLE
         }
         btnDangKy.setOnClickListener {
-            val intent = Intent(this, DangKiActivity::class.java)
+            val intent = Intent(this, RegisterActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
             finish()
