@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.amory.departmentstore.activity.user.DangNhapActivity
+import com.amory.departmentstore.activity.user.LoginActivity
 import com.amory.departmentstore.databinding.ActivityUpdatePasswordBinding
 import com.amory.departmentstore.model.UpdatePasswordModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallUser
@@ -42,7 +42,7 @@ class UpdatePasswordActivity : AppCompatActivity() {
                     ) {
                         if (response.isSuccessful) {
                             val intent =
-                                Intent(this@UpdatePasswordActivity, DangNhapActivity::class.java)
+                                Intent(this@UpdatePasswordActivity, LoginActivity::class.java)
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                             startActivity(intent)
                             finish()

@@ -127,7 +127,7 @@
             android:name=".activity.admin.AdminActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.user.DangNhapActivity"
+            android:name=".activity.user.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".activity.user.DangKiActivity"

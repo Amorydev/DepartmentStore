@@ -113,7 +113,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
     }
 
     private fun goToLogin() {
-        val intent = Intent(this, DangNhapActivity::class.java)
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
 

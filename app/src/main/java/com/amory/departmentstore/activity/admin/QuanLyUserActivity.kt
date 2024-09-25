@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.Interface.OnClickAllowedUser
 import com.amory.departmentstore.Interface.OnClickBlockUser
 import com.amory.departmentstore.R
-import com.amory.departmentstore.activity.user.DangNhapActivity
+import com.amory.departmentstore.activity.user.LoginActivity
 import com.amory.departmentstore.adapter.RvQuanLyUser
 import com.amory.departmentstore.databinding.ActivityQuanLyUserBinding
 import com.amory.departmentstore.model.UpdateOrderModel
@@ -19,7 +19,6 @@ import com.amory.departmentstore.model.UserModel
 import com.amory.departmentstore.model.UserResponse
 import com.amory.departmentstore.retrofit.APIBanHang.APICallUser
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
-import io.paperdb.Paper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -168,7 +167,7 @@ class QuanLyUserActivity : AppCompatActivity() {
                         val editor = sharedPreferences.edit()
                         editor.remove("token")
                         editor.apply()
-                        val intent = Intent(this, DangNhapActivity::class.java)
+                        val intent = Intent(this, LoginActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()

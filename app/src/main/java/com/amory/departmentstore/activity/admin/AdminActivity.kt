@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import com.amory.departmentstore.R
-import com.amory.departmentstore.activity.user.DangNhapActivity
+import com.amory.departmentstore.activity.user.LoginActivity
 import com.amory.departmentstore.databinding.ActivityAdminBinding
 import io.paperdb.Paper
 
@@ -59,7 +59,7 @@ class AdminActivity : AppCompatActivity() {
                         val editor = sharedPreferences.edit()
                         editor.remove("token")
                         editor.apply()
-                        val intent = Intent(this, DangNhapActivity::class.java)
+                        val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
                         finish()
                     }

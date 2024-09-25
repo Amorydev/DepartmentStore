@@ -9,7 +9,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.R
-import com.amory.departmentstore.activity.user.DangNhapActivity
+import com.amory.departmentstore.activity.user.LoginActivity
 import com.amory.departmentstore.adapter.RvKhuyenMaiAdmin
 import com.amory.departmentstore.databinding.ActivityAdminKhuyeMaiBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaKhuyenMaiEvent
@@ -100,7 +100,7 @@ class AdminKhuyeMaiActivity : AppCompatActivity() {
                         val editor = sharedPreferences.edit()
                         editor.remove("token")
                         editor.apply()
-                        val intent = Intent(this, DangNhapActivity::class.java)
+                        val intent = Intent(this, LoginActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()

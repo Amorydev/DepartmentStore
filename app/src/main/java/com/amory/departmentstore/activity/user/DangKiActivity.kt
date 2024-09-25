@@ -119,7 +119,7 @@ class DangKiActivity : AppCompatActivity() {
                                 "Đăng kí thành công",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            val intent = Intent(this@DangKiActivity, DangNhapActivity::class.java)
+                            val intent = Intent(this@DangKiActivity, LoginActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else if (response.body()?.status.equals(Constant.EMAIL_DUPLICATED)) {

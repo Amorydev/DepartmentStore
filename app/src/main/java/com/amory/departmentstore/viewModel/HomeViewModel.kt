@@ -25,9 +25,13 @@ class HomeViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean?>()
     val isLoading: LiveData<Boolean?> get() = _isLoading
 
+    init {
+        _isLoading.postValue(true)
+    }
+
     fun fetchDataCategories() {
+        _isLoading.postValue(true)
         viewModelScope.launch {
-            _isLoading.postValue(true)
             CategoryManager.getCategories({ listCategories ->
                 _listCategories.postValue(listCategories)
                 _isLoading.postValue(false)
@@ -37,8 +41,8 @@ class HomeViewModel : ViewModel() {
     }
 
     fun fetchDataProducts() {
+        _isLoading.postValue(true)
         viewModelScope.launch {
-            _isLoading.postValue(true)
             ProductManager.getProducts({ listProducts ->
                 _isLoading.postValue(false)
                 _listProduct.postValue(listProducts)
@@ -49,8 +53,8 @@ class HomeViewModel : ViewModel() {
     }
 
     fun fetchDataPromotions() {
+        _isLoading.postValue(true)
         viewModelScope.launch {
-            _isLoading.postValue(true)
             PromotionManager.getPromotions({ listPromotions ->
                 _isLoading.postValue(false)
                 _listPromotion.postValue(listPromotions)

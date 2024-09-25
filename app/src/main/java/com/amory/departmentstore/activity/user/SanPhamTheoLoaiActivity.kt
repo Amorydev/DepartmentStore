@@ -96,7 +96,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     } else {
-                        val intent = Intent(this, DangNhapActivity::class.java)
+                        val intent = Intent(this, LoginActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()
@@ -111,7 +111,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     } else {
-                        val intent = Intent(this, DangNhapActivity::class.java)
+                        val intent = Intent(this, LoginActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()
@@ -132,7 +132,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                         val editor = sharedPreferences.edit()
                         editor.remove("token")
                         editor.apply()
-                        val intent = Intent(this, DangNhapActivity::class.java)
+                        val intent = Intent(this, LoginActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()

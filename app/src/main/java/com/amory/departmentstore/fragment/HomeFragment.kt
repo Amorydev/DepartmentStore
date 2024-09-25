@@ -34,8 +34,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
-    private lateinit var _binding: FragmentHomeBinding
-    private val binding get() = _binding
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var adapter: RvProducts
     private lateinit var scrollListener: RvLoadMoreScroll
@@ -45,14 +45,19 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        setUpViewModel()
+        setUpObserver()
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setUpViewModel()
-        setUpObserver()
     }
 
     private fun setUpViewModel() {
@@ -62,22 +67,22 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpObserver() {
-        homeViewModel.listPromotion.observe(this) { listPromotion ->
+        homeViewModel.listPromotion.observe(viewLifecycleOwner) { listPromotion ->
             renderSlidePromotion(listPromotion)
         }
-        homeViewModel.listCategories.observe(this) { listCategories ->
+        homeViewModel.listCategories.observe(viewLifecycleOwner) { listCategories ->
             renderCategories(listCategories)
         }
-        homeViewModel.listProduct.observe(this) { listProduct ->
+        homeViewModel.listProduct.observe(viewLifecycleOwner) { listProduct ->
             renderProducts(listProduct)
         }
-        homeViewModel.isLoading.observe(this) { isLoading ->
-            if (isLoading!!) {
+        homeViewModel.isLoading.observe(viewLifecycleOwner){isLoading ->
+            if (isLoading!!){
                 binding.shimmerframe.visibility = View.VISIBLE
                 binding.shimmerframe.startShimmer()
-            } else {
-                binding.shimmerframe.stopShimmer()
+            }else{
                 binding.shimmerframe.visibility = View.GONE
+                binding.shimmerframe.stopShimmer()
                 binding.layoutContrains.visibility = View.VISIBLE
             }
         }

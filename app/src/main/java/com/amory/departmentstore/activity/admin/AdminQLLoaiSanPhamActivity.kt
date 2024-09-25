@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amory.departmentstore.R
-import com.amory.departmentstore.activity.user.DangNhapActivity
+import com.amory.departmentstore.activity.user.LoginActivity
 import com.amory.departmentstore.adapter.RvLoaiSanPhamAdmin
 import com.amory.departmentstore.databinding.ActivityAdminLoaiSanPhamBinding
 import com.amory.departmentstore.model.EventBus.SuaXoaLoaiEvent
@@ -168,7 +168,7 @@ class AdminQLLoaiSanPhamActivity : AppCompatActivity() {
                         val editor = sharedPreferences.edit()
                         editor.remove("token")
                         editor.apply()
-                        val intent = Intent(this, DangNhapActivity::class.java)
+                        val intent = Intent(this, LoginActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()

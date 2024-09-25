@@ -22,7 +22,7 @@ import com.amory.departmentstore.activity.user.ChangePasswordActivity
 import com.amory.departmentstore.activity.user.ChatActivity
 import com.amory.departmentstore.activity.user.ChiTietDonHangActivity
 import com.amory.departmentstore.activity.user.DangKiActivity
-import com.amory.departmentstore.activity.user.DangNhapActivity
+import com.amory.departmentstore.activity.user.LoginActivity
 import com.amory.departmentstore.activity.user.GioHangActivity
 import com.amory.departmentstore.activity.user.LienHeActivity
 import com.amory.departmentstore.activity.user.SearchActivity
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             } else {
-                val intent = Intent(this, DangNhapActivity::class.java)
+                val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 finish()
@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
         btnDangNhap.setOnClickListener {
-            val intent = Intent(this, DangNhapActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
             finish()
@@ -186,7 +186,7 @@ class MainActivity : AppCompatActivity() {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     } else {
-                        val intent = Intent(this, DangNhapActivity::class.java)
+                        val intent = Intent(this, LoginActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()
@@ -201,7 +201,7 @@ class MainActivity : AppCompatActivity() {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     } else {
-                        val intent = Intent(this, DangNhapActivity::class.java)
+                        val intent = Intent(this, LoginActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()
@@ -222,7 +222,7 @@ class MainActivity : AppCompatActivity() {
                         val editor = sharedPreferences.edit()
                         editor.remove("token")
                         editor.apply()
-                        val intent = Intent(this, DangNhapActivity::class.java)
+                        val intent = Intent(this, LoginActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()
@@ -272,7 +272,7 @@ class MainActivity : AppCompatActivity() {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             } else {
-                val intent = Intent(this, DangNhapActivity::class.java)
+                val intent = Intent(this, LoginActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
                 finish()
