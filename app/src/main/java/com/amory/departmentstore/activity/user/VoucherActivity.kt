@@ -7,13 +7,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.Interface.OnClickRvVoucher
 import com.amory.departmentstore.adapter.RvVouvher
 import com.amory.departmentstore.databinding.ActivityVoucherBinding
+import com.amory.departmentstore.manager.VoucherManager.searchVoucher
+import com.amory.departmentstore.model.Voucher
 import com.amory.departmentstore.model.VoucherModel
 import com.amory.departmentstore.retrofit.APIBanHang.APICallVouchers
 import com.amory.departmentstore.retrofit.APIBanHang.RetrofitClient
+import com.amory.departmentstore.viewModel.VoucherViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,110 +25,76 @@ import retrofit2.Response
 class VoucherActivity : AppCompatActivity() {
     private lateinit var binding: ActivityVoucherBinding
     private lateinit var adapter: RvVouvher
+    private val viewModel: VoucherViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityVoucherBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupViews()
+        setUpViewModel()
+        setUpObserver()
+        onClickListener()
+    }
+
+    private fun setUpViewModel() {
+        viewModel.getVoucher()
+    }
+
+    private fun onClickListener() {
+        val txtVoucher = binding.txtVoucher.text?.trim().toString()
+        binding.btnApdung.setOnClickListener { viewModel.searchVoucher(txtVoucher) }
+        binding.imvBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+    }
+
+    private fun setUpObserver() {
+        viewModel.listVoucher.observe(this) { listVoucher ->
+            if (listVoucher.isNotEmpty()) {
+                renderRvVoucher(listVoucher)
+            } else {
+                binding.imvNoVoucher.visibility = View.VISIBLE
+                binding.txtNoVoucher.visibility = View.VISIBLE
+            }
+        }
+        viewModel.searchVoucherResult.observe(this) { searchResult ->
+            if (searchResult.isNotEmpty()) {
+                renderRvVoucher(searchResult)
+            } else {
+                binding.imvNoVoucher.visibility = View.VISIBLE
+                binding.txtNoVoucher.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun renderRvVoucher(listVoucher: MutableList<Voucher>?) {
+        binding.imvNoVoucher.visibility = View.INVISIBLE
+        binding.txtNoVoucher.visibility = View.INVISIBLE
+        adapter = RvVouvher(listVoucher!!, object : OnClickRvVoucher {
+            override fun onClickVoucher(position: Int) {
+                val intent = Intent().apply {
+                    putExtra("discount_condition", listVoucher[position].term)
+                    putExtra("discount_type", listVoucher[position].discountType)
+                    putExtra("discount_value", listVoucher[position].discountValue)
+                    putExtra("discount_code", listVoucher[position].code)
+                }
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
+        })
+        binding.rvVoucher.adapter = adapter
+        binding.rvVoucher.setHasFixedSize(true)
+        binding.rvVoucher.layoutManager = LinearLayoutManager(
+            this@VoucherActivity,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
     }
 
     private fun setupViews() {
         binding.imvNoVoucher.visibility = View.INVISIBLE
         binding.txtNoVoucher.visibility = View.INVISIBLE
         binding.txtKhongcovoucher.visibility = View.INVISIBLE
-        searchVoucher()
-        showVoucher()
-        binding.imvBack.setOnClickListener {
-            onBackPressed()
-        }
+
     }
 
-    private fun searchVoucher() {
-        binding.btnApdung.setOnClickListener {
-            val txtVoucher = binding.txtVoucher.text?.trim().toString()
-            val service = RetrofitClient.retrofitInstance.create(APICallVouchers::class.java)
-            val call = service.searchVoucher(txtVoucher)
-            call.enqueue(object : Callback<VoucherModel> {
-                override fun onResponse(call: Call<VoucherModel>, response: Response<VoucherModel>) {
-                    if (response.isSuccessful) {
-                        val resultList = response.body()?.data
-                        if (!resultList.isNullOrEmpty()) {
-                            binding.txtKhongcovoucher.visibility = View.INVISIBLE
-                            adapter = RvVouvher(resultList, object : OnClickRvVoucher {
-                                override fun onClickVoucher(position: Int) {
-                                    val intent = Intent().apply {
-                                        putExtra("discount_condition", resultList[position].term)
-                                        putExtra("discount_type", resultList[position].discountType)
-                                        putExtra("discount_value", resultList[position].discountValue)
-                                        putExtra("discount_code", resultList[position].code)
-                                    }
-                                    setResult(Activity.RESULT_OK, intent)
-                                    finish()
-                                }
-                            })
-                            binding.rvVoucher.adapter = adapter
-                            binding.rvVoucher.setHasFixedSize(true)
-                            binding.rvVoucher.layoutManager = LinearLayoutManager(
-                                this@VoucherActivity,
-                                LinearLayoutManager.VERTICAL,
-                                false
-                            )
-                        } else {
-                            binding.txtKhongcovoucher.visibility = View.VISIBLE
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<VoucherModel>, t: Throwable) {
-                    t.printStackTrace()
-                    Log.d("voucher", t.message.toString())
-                    binding.imvNoVoucher.visibility = View.INVISIBLE
-                    binding.txtNoVoucher.visibility = View.INVISIBLE
-                    Toast.makeText(this@VoucherActivity, "Thất bại", Toast.LENGTH_SHORT).show()
-                }
-            })
-        }
-    }
-
-    private fun showVoucher() {
-        val service = RetrofitClient.retrofitInstance.create(APICallVouchers::class.java)
-        val call = service.getVoucher()
-        call.enqueue(object : Callback<VoucherModel> {
-            override fun onResponse(call: Call<VoucherModel>, response: Response<VoucherModel>) {
-                if (response.isSuccessful) {
-                    binding.imvNoVoucher.visibility = View.INVISIBLE
-                    binding.txtNoVoucher.visibility = View.INVISIBLE
-                    val resultList = response.body()?.data
-                    if (!resultList.isNullOrEmpty()) {
-                        adapter = RvVouvher(resultList, object : OnClickRvVoucher {
-                            override fun onClickVoucher(position: Int) {
-                                val intent = Intent().apply {
-                                    putExtra("discount_condition", resultList[position].term)
-                                    putExtra("discount_type", resultList[position].discountType)
-                                    putExtra("discount_value", resultList[position].discountValue)
-                                    putExtra("discount_code", resultList[position].code)
-                                }
-                                setResult(Activity.RESULT_OK, intent)
-                                finish()
-                            }
-                        })
-                        binding.rvVoucher.adapter = adapter
-                        binding.rvVoucher.setHasFixedSize(true)
-                        binding.rvVoucher.layoutManager = LinearLayoutManager(
-                            this@VoucherActivity,
-                            LinearLayoutManager.VERTICAL,
-                            false
-                        )
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<VoucherModel>, t: Throwable) {
-                t.printStackTrace()
-                binding.imvNoVoucher.visibility = View.VISIBLE
-                binding.txtNoVoucher.visibility = View.VISIBLE
-            }
-        })
-    }
 }
