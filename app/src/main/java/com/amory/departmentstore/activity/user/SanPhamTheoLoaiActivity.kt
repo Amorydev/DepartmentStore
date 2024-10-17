@@ -92,7 +92,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
                 R.id.cart -> {
                     val user = Paper.book().read<User>("user")
                     if (user != null || Utils.user_current != null) {
-                        val intent = Intent(this, GioHangActivity::class.java)
+                        val intent = Intent(this, CartActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     } else {
@@ -303,7 +303,7 @@ class SanPhamTheoLoaiActivity : AppCompatActivity() {
 
     private fun goToGioHang() {
         binding.imvGiohang.setOnClickListener {
-            val intent = Intent(this, GioHangActivity::class.java)
+            val intent = Intent(this, CartActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }

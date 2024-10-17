@@ -35,18 +35,23 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var list: ArrayList<ChatMessage>
     private lateinit var adapter: RvChatAdapter
     private lateinit var sharedPreferences: SharedPreferences
-    lateinit var ID_NHAN:String
-    
+    private lateinit var ID_NHAN: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initViews()
-        onClickChat()
+        onClickListener()
         getChat()
         insertUser()
-        onCLickBack()
     }
+
+    private fun onClickListener() {
+        binding.btnBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        binding.btnSend.setOnClickListener { sendToFirebase() }
+    }
+
     private fun initViews() {
         list = ArrayList()
         db = FirebaseFirestore.getInstance()
@@ -54,43 +59,32 @@ class ChatActivity : AppCompatActivity() {
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvChat.setHasFixedSize(true)
         val account = Paper.book().read<User>("user")
-        adapter = if (account != null){
+        adapter = if (account != null) {
             RvChatAdapter(list, account.id.toString())
-        }else{
+        } else {
             RvChatAdapter(list, Utils.user_current?.id.toString())
         }
         binding.rvChat.adapter = adapter
         sharedPreferences = this.getSharedPreferences("SAVE_TOKEN", Context.MODE_PRIVATE)
-        ID_NHAN = sharedPreferences.getInt("adminId",5).toString()
+        ID_NHAN = sharedPreferences.getInt("adminId", 5).toString()
     }
 
-    private fun onCLickBack() {
-        binding.btnBack.setOnClickListener {
-            onBackPressed()
-        }
-    }
     private fun insertUser() {
-        val name:String
-        val user:HashMap<String,Any> = hashMapOf()
+        val name: String
+        val user: HashMap<String, Any> = hashMapOf()
         val account = Paper.book().read<User>("user")
-        if (account != null){
-            name = account.firstName + " "+account.lastName
+        if (account != null) {
+            name = account.firstName + " " + account.lastName
             user["id"] = account.id.toString()
             user["username"] = name
             db.collection("user").document(account.id.toString()).set(user)
-        }else{
-            name = Utils.user_current?.firstName+ " " + Utils.user_current?.lastName
+        } else {
+            name = Utils.user_current?.firstName + " " + Utils.user_current?.lastName
             user["id"] = Utils.user_current?.id.toString()
             user["username"] = name
             db.collection("user").document(Utils.user_current?.id.toString()).set(user)
         }
 
-    }
-
-    private fun onClickChat() {
-        binding.btnSend.setOnClickListener {
-            sendToFirebase()
-        }
     }
 
     private fun sendToFirebase() {
@@ -108,12 +102,12 @@ class ChatActivity : AppCompatActivity() {
                 .add(message)
                 .addOnSuccessListener { documentReference ->
                     /*Log.d(TAG, " ${documentReference.id}")*/
-                    val fullName = if (account == null){
+                    val fullName = if (account == null) {
                         Utils.user_current?.firstName + " " + Utils.user_current?.lastName
-                    }else {
+                    } else {
                         account.firstName + " " + account.lastName
                     }
-                    pushNotification(fullName,binding.txtChat.text.toString())
+                    pushNotification(fullName, binding.txtChat.text.toString())
                 }
                 .addOnFailureListener { e ->
                     /*Log.w(TAG, "Error", e)*/
@@ -122,7 +116,8 @@ class ChatActivity : AppCompatActivity() {
         binding.txtChat.setText("")
         /*Toast.makeText(applicationContext, list.toString(), Toast.LENGTH_SHORT).show()*/
     }
-    private fun pushNotification(fullName:String,chat:String) {
+
+    private fun pushNotification(fullName: String, chat: String) {
         getTokenFCM(5) { token ->
             if (token == null) {
                 Log.e("pushNotification", "Failed to retrieve FCM token")
@@ -217,24 +212,13 @@ class ChatActivity : AppCompatActivity() {
                     list.add(chatMessage)
                 }
             }
-            list.sortWith(Comparator { obj1, obj2 -> obj1.dateObj.compareTo(obj2.dateObj)})
+            list.sortWith(Comparator { obj1, obj2 -> obj1.dateObj.compareTo(obj2.dateObj) })
             if (count == 0) {
                 adapter.notifyDataSetChanged()
             } else {
                 adapter.notifyItemRangeInserted(list.size, list.size)
                 binding.rvChat.smoothScrollToPosition(list.size - 1)
             }
-        } else {
-           /* Log.d("list", "data: null")*/
         }
-    }
-
-   
-
-    @Deprecated("Deprecated in Java",
-        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
-    )
-    override fun onBackPressed() {
-        super.onBackPressed()
     }
 }

@@ -47,7 +47,7 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.firebase:firebase-auth:23.0.0")
-    implementation("com.google.firebase:firebase-messaging:24.0.1")
+    implementation("com.google.firebase:firebase-messaging:24.0.2")
     implementation("com.google.firebase:firebase-firestore:25.1.0")
     implementation(fileTree(mapOf(
         "dir" to "D:\\ZPDK-Android",
@@ -76,7 +76,7 @@ dependencies {
     //Events Bus
     implementation ("org.greenrobot:eventbus:3.3.1")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
     //ImageSLide
     implementation ("com.github.denzcoskun:ImageSlideshow:0.1.2")
@@ -97,7 +97,7 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.12.0")
     //ViewPager 2
     implementation ("androidx.viewpager2:viewpager2:1.1.0")
-    implementation ("com.fasterxml.jackson.core:jackson-databind:2.13.3")
+    implementation ("com.fasterxml.jackson.core:jackson-databind:2.17.2")
     //SpinKit(Custom progressBar)
     implementation ("com.github.ybq:Android-SpinKit:1.4.0")
     //Pie Chart
@@ -106,14 +106,16 @@ dependencies {
     //viewModel
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
     implementation ("androidx.lifecycle:lifecycle-service:2.8.6")
-    implementation ("androidx.activity:activity-ktx:1.9.2")
+    implementation ("androidx.activity:activity-ktx:1.9.3")
 
     //LiveData
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
     //Fragment
-    implementation ("androidx.fragment:fragment-ktx:1.8.3")
+    implementation ("androidx.fragment:fragment-ktx:1.8.4")
     //Material
     implementation ("com.google.android.material:material:1.12.0")
+    //Lottie Animation
+    implementation ("com.airbnb.android:lottie:6.5.2")
 
 
 }

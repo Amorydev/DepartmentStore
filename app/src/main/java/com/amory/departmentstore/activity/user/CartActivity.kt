@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amory.departmentstore.R
@@ -11,19 +12,37 @@ import com.amory.departmentstore.Utils.Utils
 import com.amory.departmentstore.adapter.RvSanPhamTrongGioHang
 import com.amory.departmentstore.databinding.ActivityGioHangBinding
 import com.amory.departmentstore.model.EventBus.TinhTongEvent
+import com.amory.departmentstore.viewModel.CartViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.text.NumberFormat
 import java.util.Locale
 
-class GioHangActivity : AppCompatActivity() {
+class CartActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGioHangBinding
+    private val viewModel : CartViewModel by viewModels()
+    private var _totalMoney:Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityGioHangBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        initViews()
+        setUpObserver()
+        OnClickBack()
+        onClickCbTatCa()
+        onShowProgress()
 
+    }
+
+    private fun setUpObserver() {
+        viewModel.totalMoney.observe(this){totalMoney ->
+            _totalMoney = totalMoney
+        }
+    }
+
+    private fun initViews() {
         if (Utils.manggiohang.size == 0) {
             binding.imvNoProducts.visibility = View.VISIBLE
             binding.txtNoProducts.visibility = View.VISIBLE
@@ -34,17 +53,16 @@ class GioHangActivity : AppCompatActivity() {
             binding.rvSanphamTronggiohang.visibility = View.VISIBLE
             onCLickMuaHang()
             tienHang()
-            /* Toast.makeText(this,tinhTongTienHang().toString(),Toast.LENGTH_SHORT).show()*/
-            val adapter = RvSanPhamTrongGioHang(Utils.manggiohang)
-            binding.rvSanphamTronggiohang.adapter = adapter
-            binding.rvSanphamTronggiohang.layoutManager =
-                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            renderRvCarts()
         }
 
-        OnClickBack()
-        onClickCbTatCa()
-        onShowProgress()
+    }
 
+    private fun renderRvCarts() {
+        val adapter = RvSanPhamTrongGioHang(Utils.manggiohang)
+        binding.rvSanphamTronggiohang.adapter = adapter
+        binding.rvSanphamTronggiohang.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 
     private fun onShowProgress() {
@@ -58,18 +76,12 @@ class GioHangActivity : AppCompatActivity() {
         binding.cbTatca.setOnCheckedChangeListener { _, isChecked ->
             for (i in 0 until binding.rvSanphamTronggiohang.childCount) {
                 val viewHolder =
-                    binding.rvSanphamTronggiohang.findViewHolderForAdapterPosition(i) as RvSanPhamTrongGioHang.viewHolder?
+                    binding.rvSanphamTronggiohang.findViewHolderForAdapterPosition(i) as RvSanPhamTrongGioHang.ViewHolder?
                 viewHolder?.binding?.checkboxSanpham?.isChecked = isChecked
                 val sanPham = Utils.manggiohang[i]
-                if (isChecked) {
-                    if (!Utils.mangmuahang.contains(sanPham)) {
-                        Utils.mangmuahang.add(sanPham)
-                    }
-                } else {
-                    Utils.mangmuahang.remove(sanPham)
-                }
+                viewModel.toggleSelectAll(isChecked)
             }
-            val totalAmount = tinhTongTienHang().toFloat()
+            val totalAmount = _totalMoney.toFloat()
             binding.niftySlider.valueTo = 300000F
             binding.niftySlider.setValue(totalAmount)
             onShowProgress()
@@ -134,11 +146,4 @@ class GioHangActivity : AppCompatActivity() {
         tienHang()
     }
 
-    @Deprecated(
-        "Deprecated in Java",
-        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
-    )
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
 }

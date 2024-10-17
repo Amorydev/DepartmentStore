@@ -128,7 +128,7 @@ class HomeFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun renderProducts(listProduct: MutableList<Product>?) {
-        val list = listProduct!!.shuffled().take(12) as MutableList<Product>
+        val list = listProduct!!.take(12) as MutableList<Product>
         adapter = RvProducts(object : OnClickRvSanPham {
             override fun onClickSanPham(position: Int) {
                 startChiTietSanPham(list[position])

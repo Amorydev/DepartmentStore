@@ -16,8 +16,8 @@ import java.text.NumberFormat
 import java.util.Locale
 
 class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
-    RecyclerView.Adapter<RvSanPhamTrongGioHang.viewHolder>() {
-    inner class viewHolder(var binding: LayoutChitietGiohangBinding) :
+    RecyclerView.Adapter<RvSanPhamTrongGioHang.ViewHolder>() {
+    inner class ViewHolder(var binding: LayoutChitietGiohangBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private var gioHang = Utils.manggiohang
 
@@ -36,19 +36,9 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
             val giaGoc = gioHangItem.giasanphamgiohang / (gioHangItem.soluongsanphamgiohang)
             binding.txtGiagoc.text = "x1 " + formatAmount(giaGoc)
             binding.txtCongSanpham.setOnClickListener {
-                val soluongmoi = gioHangItem.soluongsanphamgiohang + 1
-                gioHangItem.soluongsanphamgiohang = soluongmoi
-
-                val tongGiaTriSanPham =
-                    gioHangItem.giasanphamgiohang / (soluongmoi - 1) * soluongmoi
-                gioHangItem.giasanphamgiohang = tongGiaTriSanPham
-
-                binding.soluongsanpham.text = gioHangItem.soluongsanphamgiohang.toString()
-                binding.txtTonggiasanpham.text = formatAmount(gioHangItem.giasanphamgiohang)
                 EventBus.getDefault().postSticky(TinhTongEvent())
             }
             binding.txtTruSanpham.setOnClickListener {
-
                 val soluongmoi = gioHangItem.soluongsanphamgiohang - 1
                 if (soluongmoi >= 1) {
                     gioHangItem.soluongsanphamgiohang = soluongmoi
@@ -62,7 +52,7 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
                     ds.removeAt(position)
                     notifyItemRemoved(position)
                     notifyItemRangeChanged(position, ds.size)
-                    updateUtilsMangGioHang()
+                    updateListCarts()
                     EventBus.getDefault().postSticky(TinhTongEvent())
 
                 }
@@ -86,7 +76,7 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
 
     }
 
-    private fun updateUtilsMangGioHang() {
+    private fun updateListCarts() {
         if (ds.isNotEmpty()) {
             Utils.manggiohang.clear()
             Utils.manggiohang.addAll(ds)
@@ -100,17 +90,17 @@ class RvSanPhamTrongGioHang(private var ds: MutableList<GioHang>) :
         return "${fomart.format(number)}đ"
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             LayoutChitietGiohangBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return viewHolder(binding)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
         return ds.size
     }
 
-    override fun onBindViewHolder(holder: viewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(ds[position])
     }
 }

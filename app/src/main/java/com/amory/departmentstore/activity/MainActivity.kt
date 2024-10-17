@@ -23,7 +23,7 @@ import com.amory.departmentstore.activity.user.ChatActivity
 import com.amory.departmentstore.activity.user.ChiTietDonHangActivity
 import com.amory.departmentstore.activity.user.RegisterActivity
 import com.amory.departmentstore.activity.user.LoginActivity
-import com.amory.departmentstore.activity.user.GioHangActivity
+import com.amory.departmentstore.activity.user.CartActivity
 import com.amory.departmentstore.activity.user.LienHeActivity
 import com.amory.departmentstore.activity.user.SearchActivity
 import com.amory.departmentstore.fragment.HomeFragment
@@ -182,7 +182,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.cart -> {
                     val user = Paper.book().read<User>("user")
                     if (user != null || Utils.user_current != null) {
-                        val intent = Intent(this, GioHangActivity::class.java)
+                        val intent = Intent(this, CartActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     } else {
@@ -268,7 +268,7 @@ class MainActivity : AppCompatActivity() {
         binding.imvGiohang.setOnClickListener {
             val user = Paper.book().read<User>("user")
             if (user != null || Utils.user_current != null) {
-                val intent = Intent(this, GioHangActivity::class.java)
+                val intent = Intent(this, CartActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             } else {

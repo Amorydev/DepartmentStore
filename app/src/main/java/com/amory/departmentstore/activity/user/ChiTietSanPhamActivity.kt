@@ -118,7 +118,7 @@ class ChiTietSanPhamActivity : AppCompatActivity() {
     }
 
     private fun goToCart() {
-        val intent = Intent(this, GioHangActivity::class.java)
+        val intent = Intent(this, CartActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }

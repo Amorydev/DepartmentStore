@@ -136,7 +136,7 @@
             android:name=".activity.user.SanPhamTheoLoaiActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.user.GioHangActivity"
+            android:name=".activity.user.CartActivity"
             android:exported="false" />
         <activity
             android:name=".activity.user.ChiTietSanPhamActivity"
